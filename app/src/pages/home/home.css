@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+.home {
+
+    height: 100vh;
+    background-image: url("https://wvexplorer.com/wp-content/uploads/2023/07/The-New-River-Gorge-Bridge-in-West-Virginia.jpg");
+    ;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.128);
+    background-blend-mode: lighten;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+
+    .container {
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 40vw;
+        gap: 20vh;
+
+        .top {
+
+            font-family: "Pacifico", serif;
+            font-size: 6rem;
+            text-shadow: 5px 5px black;
+            text-align: center;
+            line-height: 6rem;
+
+            color: rgb(85, 120, 85);
+
+        }
+
+        .bottom {
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .item {
+
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                button {
+                    width: 100px;
+                    height: 40px;
+                    border-radius: 20px;
+                    background-color: white;
+                    border: none;
+
+                    font-weight: bold;
+                    color: rgb(48, 33, 7)
+                }
+            }
+        }
+
+    }
+}
