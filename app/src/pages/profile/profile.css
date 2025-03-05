@@ -11,4 +11,6 @@ body {
 
 img {
     border-radius: 50%; /* NOTE: image must be square */
+    margin-left: 300px;
+    margin-top: 50px;
 }
