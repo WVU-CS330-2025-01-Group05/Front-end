@@ -7,4 +7,5 @@ body {
     background-attachment: fixed; /* Keep the background fixed when scrolling */
     background-repeat: no-repeat; /* Background image will not repeat */
     color: #333;
+    opacity: 0.75;
 }
