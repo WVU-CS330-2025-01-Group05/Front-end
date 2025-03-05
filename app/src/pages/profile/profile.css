@@ -8,3 +8,7 @@ body {
     background-repeat: no-repeat;
     color: #333;
 }
+
+img {
+    border-radius: 50%; /* NOTE: image must be square */
+}
