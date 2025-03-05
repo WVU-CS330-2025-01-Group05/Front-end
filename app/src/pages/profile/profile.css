@@ -1,1 +1,9 @@
 
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('profilebackgroundimage.png'); /* Set the background image */
+    background-size: cover; /* Make sure the background covers the entire page */
+    background-position: center; /* Center the background image */
+    background-attachment: fixed; /* Keep the background fixed when scrolling */
+    color: #333;
+}
