@@ -6,11 +6,25 @@ body {
     background-position: center; /* Center the background image */
     background-attachment: fixed; /* Keep the background fixed when scrolling */
     background-repeat: no-repeat;
-    color: #333;
+    color: #fff;
 }
 
 img {
     border-radius: 50%; /* NOTE: image must be square */
     margin-left: 300px;
     margin-top: 50px;
+}
+
+p, label {
+    margin-left: 600px;
+    font-size: 20px;
+}
+
+#name {
+    font-size: 50px;
+    margin-top: -200px;
+}
+
+#username{
+    margin-top: -20px;
 }
