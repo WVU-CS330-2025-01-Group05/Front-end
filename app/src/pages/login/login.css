@@ -1,8 +1,9 @@
 body {
   background-image: url('https://whatstates.com/wp-content/uploads/2023/01/New-River-Gorge-Bridge.jpg');
   background-size: cover;
-  backgroung-position: center;
+  background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
   font-family: Areal, sans-serif;
 }
 
