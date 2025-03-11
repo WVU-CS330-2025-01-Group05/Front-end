@@ -37,32 +37,7 @@
 
         }
 
-        .bottom {
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            .item {
-
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-
-                button {
-                    width: 100px;
-                    height: 40px;
-                    border-radius: 20px;
-                    background-color: white;
-                    border: none;
-
-                    font-weight: bold;
-                    color: rgb(48, 33, 7)
-                }
-            }
-        }
+       
 
     }
 }
