@@ -33,3 +33,38 @@ p, label {
 #username{
     margin-top: -20px;
 }
+
+input {
+    border: none;
+    color: #494949;
+    font-family: Arial, sans-serif;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: #494949;
+    color: white;
+    border: 2px solid #151515;
+    border-radius: 25px; /* rounds the border */
+}
+
+input:hover {
+    background-color: #151515;
+    color: white;
+}
+
+#back {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+#edit {
+    position: fixed;
+    top: 0;
+    right: 0;
+}
