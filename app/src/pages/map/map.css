@@ -80,21 +80,21 @@
 
             .stats{
 
-                .item{
-                    display:flex;
-                    flex-direction: row;
-                    max-width: 100px;
-
-
-                    
-                }
-
-
+                
+                
                 display:flex;
                 flex-direction:row;
                 justify-content: center;
                 gap:20%;
-
+                .item{
+                    display:flex;
+                    flex-direction: row;
+                    max-width: 100px;
+                    gap:10px;
+                   
+                    
+                }
+                
                 .left-stats{
                     display:flex;
                     flex-direction:column;
