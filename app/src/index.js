@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import Home from "./pages/home/home"
 import Map from "./pages/map/map"
 import Friends from "./pages/friends/friends"
-import Profile from './pages/profile/profile'
+import Profile from "./pages/profile/profile"
 
 
 
