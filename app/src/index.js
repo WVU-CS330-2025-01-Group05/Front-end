@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import Home from "./pages/home/home"
 import Map from "./pages/map/map"
 import Friends from "./pages/friends/friends"
+import Profile from './pages/friends/friends'
 
 
 
@@ -18,6 +19,7 @@ root.render(
         <Route path="/" element={<Home />}/>
         <Route path='/map' element={<Map />}/>
         <Route path='/friends' element={<Friends />} />
+        <Route path='/profile' element={<Profile />} />
       </Routes>
     </BrowserRouter>
 );
