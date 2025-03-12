@@ -23,70 +23,65 @@
         display:flex;
         flex-direction:row;
         padding:20px;
+        max-height:90vh;
         
 
         .left{
 
-            flex-grow:2;
             display:flex;
             flex-direction:column;
-            gap:30px;
-            padding:20px;
+            justify-content: center;
+            flex-grow:2;
+            gap:20px;
+            
+            .filters{
+                display:flex;
+                flex-direction:column;
+                align-items:center;
 
-            .filter{
-                display:block;
-                width:30%;
-                text-align:center;
-
-                .select{
+                .filter{
+                    display:flex;
+                    flex-direction:column;
+                    width:30%;
+                    justify-content: center;
+                    text-align:center;  
                     
-                    overflow:hidden;
-                    
-
-                    .selected-option{
-                        background:white;
-                        z-index:2 !important;
-                        
-                    }
-                    .options{
-                        position:relative;
+                    .select{
+                        height: fit-content;
                         display:flex;
-                        flex-direction:column;
-                        overflow:scroll;
-                        z-index:-1 !important;
-                        transition:200ms;
-                        
-                        
-                        height:150px;
-                        bottom:100px ;
-                        background:rgb(128, 128, 128);
-                        
-                        -ms-overflow-style: none;
-                        scrollbar-width: none;  
-                        
-                        
-                        ::-webkit-scrollbar {
-                            display: none;
+                        flex-direction: column;
+                        justify-content: center;
+
+                        .selected-option{
+                            background:white;
+                            height:fit-content;
                         }
-                        
-                        
-                        .selected-option:hover + .options{
-                            bottom:0px;
+                        .options{
+                            
+                            display:flex;
+                            flex-direction:column;
+                            justify-content: center;
+                            
+                            background:grey;
+                            visibility:hidden;
+                            
+                            
                         }
-                        
                     }
+                
                 }
-
             }
-
+            
             .temp{
-
+                display:flex;
+                justify-content: center;
             }
 
             .stats{
 
                 display:flex;
                 flex-direction:row;
+                justify-content: center;
                 gap:20%;
 
                 .left-stats{
@@ -104,8 +99,17 @@
         }
 
         .right{
-            flex-grow:5;
+            flex-grow:6;
+            display:flex;
+            flex-direction:row;
+            justify-content: center;
+            max-width:70vw;
+            padding:20px;
 
+
+            .map-image{
+                max-width:100%;
+            }
         }
     }
 }
