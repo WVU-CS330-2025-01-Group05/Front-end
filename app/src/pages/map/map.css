@@ -2,6 +2,7 @@
     background:rgb(88, 148, 88);
     height:100vh;
     display:flex;
+    width:100vw;
     flex-direction:column;
 
 
@@ -78,6 +79,16 @@
             }
 
             .stats{
+
+                .item{
+                    display:flex;
+                    flex-direction: row;
+                    max-width: 100px;
+
+
+                    
+                }
+
 
                 display:flex;
                 flex-direction:row;

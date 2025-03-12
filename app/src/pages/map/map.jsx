@@ -7,17 +7,21 @@ function Map(){
     const now = new Date();
     const hours = now.getHours();
     const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
 
-    function dropDownMenu(){
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  
 
-    }
-
+    document.addEventListener("DOMContentLoaded", function() {
+        var element = document.getElementById('time');
+        element.innerHTML = "This worked";
+    })
 
     return(
     <div className='map'>
         <div className='header'>
-            <span>Time: </span>
-            <span>Plan Your Hike</span>
+            <span id='time'></span>
+            <span>Plan Your Hike </span>
             <span>Account</span>
         </div>
         <div className='bottom'>
@@ -58,7 +62,8 @@ function Map(){
                 <div className='stats'>
                     <div className='left-stats'>
                         <div className='item'>
-                            <span>Stat</span>
+                            <svg src='./icons/cloud.svg'></svg>
+                            <span>Cloud</span>
                         </div>
                         <div className='item'>
                             <span>Stat</span>

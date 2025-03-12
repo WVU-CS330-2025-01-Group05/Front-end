@@ -3,6 +3,7 @@
 .home {
 
     height: 100vh;
+    width:100vw;
     background-image: url("https://wvexplorer.com/wp-content/uploads/2023/07/The-New-River-Gorge-Bridge-in-West-Virginia.jpg");
     ;
     background-size: cover;
@@ -25,7 +26,7 @@
         max-width: 40vw;
         gap: 20vh;
 
-        .top {
+        .home-top {
 
             font-family: "Pacifico", serif;
             font-size: 6rem;
@@ -34,6 +35,38 @@
             line-height: 6rem;
 
             color: rgb(85, 120, 85);
+
+        }
+        .bottom{
+            display:flex;
+            flex-direction: column;
+            gap:20px;
+            align-items: center;
+            justify-content: center;
+
+
+
+            .item{
+                display:flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                color:rgb(67, 39, 7);
+                font-weight: 600;
+
+
+                button{
+
+                    width:150px;
+                    height:40px;
+                    border:none;
+                    border-radius: 20px;
+
+
+
+                }
+            }
+
 
         }
 

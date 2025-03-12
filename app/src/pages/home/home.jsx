@@ -4,7 +4,7 @@ function Home(){
     return(
     <div className='home'>
         <div className='container'>
-            <div className='top'>
+            <div className='home-top'>
                 Hike of the Day
             </div>
             <div className='bottom'>
