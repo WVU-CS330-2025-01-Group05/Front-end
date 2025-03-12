@@ -7,6 +7,11 @@ body {
     background-attachment: fixed; /* Keep the background fixed when scrolling */
     background-repeat: no-repeat;
     color: #fff;
+    display: flex; 
+    overflow: scroll;
+    overflow-x: hidden;
+    min-height: 100vh;
+    height: 100%;
 }
 
 img {
