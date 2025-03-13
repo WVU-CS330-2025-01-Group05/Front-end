@@ -37,7 +37,7 @@
         margin-top: -20px;
     }
     
-    input {
+    button {
         border: none;
         color: #494949;
         font-family: Arial, sans-serif;
@@ -55,7 +55,7 @@
         border-radius: 25px; /* rounds the border */
     }
     
-    input:hover {
+    button:hover {
         background-color: #151515;
         color: white;
     }
