@@ -9,7 +9,7 @@ function Profile() {
   const bio = "bio goes here"; 
 
   return (
-    <div>
+    <div className='profile'>
       <img src="test profile.jpg" alt="profile image" />
 
       <input id="back" type="button" value="Back to Home Page" />
