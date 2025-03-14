@@ -74,7 +74,7 @@ function Map(){
                         </div>
                         <div className='item'>
                             <img src={leaf} className='icon'/>
-                            <span>Stat</span>
+                            <span>Leaf</span>
                         </div>
                     </div>
                 </div>
