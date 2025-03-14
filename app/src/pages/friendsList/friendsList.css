@@ -1,0 +1,49 @@
+.friends-page {
+    background-image: url("https://as1.ftcdn.net/jpg/05/24/39/98/1000_F_524399837_FIwRVE6kb6mU9UPzjFqumIm5OHNkPRZ0.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    flex-direction:row;
+    justify-content: center;
+    align-items: center;
+    font-family: "Roboto";
+    width:100vw;
+    
+    .friends-container {
+        background: rgba(238, 238, 238);
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        width: 300px;
+        font-family: "Roboto";
+    }
+    
+    h2 {
+        margin-bottom: 15px;
+        font-family: "Roboto";
+    }
+    
+    ul {
+        padding: 0;
+    }
+    
+    .friend-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        margin: 15px 0;
+        padding: 10px;
+        border-radius: 15px;
+    }
+    
+    button {
+        background: rgb(169, 169, 169);
+        color: black;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+    
+}
