@@ -1,21 +1,9 @@
 .profile{
 
     
-    body {
-        font-family: Arial, sans-serif;
-        background-image: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), /* Dark overlay */
-        url('profilebackgroundimage.png'); /* Set the background image */
-        background-size: cover; /* Make sure the background covers the entire page */
-        background-position: center; /* Center the background image */
-        background-attachment: fixed; /* Keep the background fixed when scrolling */
-        background-repeat: no-repeat;
-        color: #fff;
-        display: flex; 
-        overflow: scroll;
-        overflow-x: hidden;
-        min-height: 100vh;
-        height: 100%;
-    }
+
+    
+    
     
     img {
         border-radius: 50%; /* NOTE: image must be square */

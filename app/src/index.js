@@ -10,6 +10,7 @@ import Friends from "./pages/friends/friends"
 import Profile from "./pages/profile/profile"
 import Login from './pages/login/login'
 import Signup from './pages/signup/signup'
+import FriendsList from './pages/friendsList/friendsList'
 
 
 
@@ -24,11 +25,9 @@ root.render(
         <Route path='/map' element={<Map />}/>
         <Route path='/friends' element={<Friends />} />
         <Route path='/profile' element={<Profile />} />
+        <Route path='/friends_list' element={<FriendsList />} />
       </Routes>
     </BrowserRouter>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
