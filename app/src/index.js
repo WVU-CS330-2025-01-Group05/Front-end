@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 
 import Home from "./pages/home/home"
 import Map from "./pages/map/map"
-import Friends from "./pages/friends/friends"
+
 import Profile from "./pages/profile/profile"
 import Login from './pages/login/login'
 import Signup from './pages/signup/signup'
@@ -23,7 +23,6 @@ root.render(
         <Route path="/login" element={<Login />}/>
         <Route path="/signup" element={<Signup />}/>
         <Route path='/map' element={<Map />}/>
-        <Route path='/friends' element={<Friends />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/friends_list' element={<FriendsList />} />
       </Routes>
