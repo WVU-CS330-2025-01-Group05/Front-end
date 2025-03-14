@@ -9,11 +9,11 @@ function Home(){
             </div>
             <div className='bottom'>
                 <div className='item'>
-                    <a><button className='sign-up'>Sign Up</button></a>
+                    <a href='/signup'><button className='sign-up'>Sign Up</button></a>
                 </div>
                 <div className='item'>
                     <span>Already have an account?</span>
-                    <a><button className='login'>Login</button></a>
+                    <a href='/login'><button className='login'>Login</button></a>
                 </div>
                 <div className='item'>
                     <a href='/map'><button className='skip'>Skip To map</button></a>

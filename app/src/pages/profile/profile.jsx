@@ -9,11 +9,11 @@ function Profile() {
   const bio = "bio goes here"; 
 
   return (
-    <div>
+    <div className='profile'>
       <img src="test profile.jpg" alt="profile image" />
 
-      <input id="back" type="button" value="Back to Home Page" />
-      <input id="edit" type="button" value="Edit Profile" />
+      <a href='/'><button id='back'>Back to Home Page</button></a>
+      <a href='/'><button id='edit'>Edit Profile</button></a>
 
       <div>
         <p id="name">{name}</p>

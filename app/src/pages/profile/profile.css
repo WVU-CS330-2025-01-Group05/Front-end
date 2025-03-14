@@ -1,35 +1,74 @@
-body {
-    font-family: Arial, sans-serif;
-    background-image: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), /* Dark overlay */
-    url('profilebackgroundimage.png'); /* Set the background image */
-    background-size: cover; /* Make sure the background covers the entire page */
-    background-position: center; /* Center the background image */
-    background-attachment: fixed; /* Keep the background fixed when scrolling */
-    background-repeat: no-repeat;
-    color: #fff;
-    display: flex; 
-    overflow: scroll;
-    overflow-x: hidden;
-    min-height: 100vh;
-    height: 100%;
-}
+.profile{
 
-img {
-    border-radius: 50%; /* NOTE: image must be square */
-    margin-left: 300px;
-    margin-top: 50px;
-}
-
-p, label {
-    margin-left: 600px;
-    font-size: 20px;
-}
-
-#name {
-    font-size: 50px;
-    margin-top: -200px;
-}
-
-#username{
-    margin-top: -20px;
+    
+    body {
+        font-family: Arial, sans-serif;
+        background-image: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), /* Dark overlay */
+        url('profilebackgroundimage.png'); /* Set the background image */
+        background-size: cover; /* Make sure the background covers the entire page */
+        background-position: center; /* Center the background image */
+        background-attachment: fixed; /* Keep the background fixed when scrolling */
+        background-repeat: no-repeat;
+        color: #fff;
+        display: flex; 
+        overflow: scroll;
+        overflow-x: hidden;
+        min-height: 100vh;
+        height: 100%;
+    }
+    
+    img {
+        border-radius: 50%; /* NOTE: image must be square */
+        margin-left: 300px;
+        margin-top: 50px;
+    }
+    
+    p, label {
+        margin-left: 600px;
+        font-size: 20px;
+    }
+    
+    #name {
+        font-size: 50px;
+        margin-top: -200px;
+    }
+    
+    #username{
+        margin-top: -20px;
+    }
+    
+    button {
+        border: none;
+        color: #494949;
+        font-family: Arial, sans-serif;
+        padding: 16px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 20px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+        background-color: #494949;
+        color: white;
+        border: 2px solid #151515;
+        border-radius: 25px; /* rounds the border */
+    }
+    
+    button:hover {
+        background-color: #151515;
+        color: white;
+    }
+    
+    #back {
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+    
+    #edit {
+        position: fixed;
+        top: 0;
+        right: 0;
+    }
 }
