@@ -17,7 +17,7 @@ function Signup(){
           <input type="text" id="username" name="username"/><br/>
           <label for="password">Password:</label><br/>
           <input type="password" id="password" name="password"/><br/>
-          <a href='/'><button id="back" type="button">Back</button></a>
+          <a href='/home'><button id="back" type="button">Back</button></a>
           <a href='/map'><button id="login" type="button">Sign Up</button></a>
         </form>
         </div>
