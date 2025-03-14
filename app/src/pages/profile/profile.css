@@ -1,17 +1,8 @@
 body {
     font-family: Arial, sans-serif;
-    background-image: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), /* Dark overlay */
-    url('profilebackgroundimage.png'); /* Set the background image */
-    background-size: cover; /* Make sure the background covers the entire page */
-    background-position: center; /* Center the background image */
-    background-attachment: fixed; /* Keep the background fixed when scrolling */
-    background-repeat: no-repeat;
     color: #fff;
-    display: flex; 
-    overflow: scroll;
     overflow-x: hidden;
-    min-height: 100vh;
-    height: 100%;
+    background-color: #799a84;
 }
 
 img {
@@ -21,8 +12,8 @@ img {
 }
 
 p, label {
-    margin-left: 600px;
     font-size: 20px;
+    margin-left: 600px;
 }
 
 #name {
@@ -68,3 +59,18 @@ input:hover {
     top: 0;
     right: 0;
 }
+
+.completedHike {
+    color: black;
+    border-style: 5px solid grey;
+    border-radius: 5px;
+    background-color: white;
+    padding: 20px;
+}
+
+.hikes {
+    width: 70%;
+}
+
+
+
