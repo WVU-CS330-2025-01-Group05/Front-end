@@ -3,11 +3,7 @@ import './login.css'
 function Login(){
 
 
-<<<<<<< HEAD
     
-=======
-
->>>>>>> 703ba289ea954315dbca3be7aec6b9169fc9259c
 
 
 
