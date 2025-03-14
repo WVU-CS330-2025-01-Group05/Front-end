@@ -3,7 +3,7 @@ import './login.css'
 function Login(){
 
 
-    //document.getElementId("login").addEventListener('click', function() {window.locaton.href = "http://localhost:3000/map" });
+
 
 
 
@@ -17,7 +17,7 @@ function Login(){
           <input type="text" id="username" name="username"/><br/>
           <label for="password">Password:</label><br/>
           <input type="password" id="password" name="password"/><br/>
-          <a href='/'><button id="back" type="button">Back</button></a>
+          <a href='/home'><button id="back" type="button">Back</button></a>
           <a href='/map'><button id="login" type="button">Login</button></a>
         </form>
         </div>
