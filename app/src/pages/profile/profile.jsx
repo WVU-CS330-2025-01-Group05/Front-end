@@ -16,8 +16,8 @@ function Profile() {
       <img src={require ("./test profile.jpg")} alt="profile image" />
 
       <a href='/map'><button id='back'>Back to Home Page</button></a>
-      <a href='/friends_list'><button id='edit'>Friends List</button></a>
-      
+      <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
+      <a href='/edit'><button id='editProfile'>Edit Profile</button></a>
 
       <div>
         <p id="name">{name}</p>
