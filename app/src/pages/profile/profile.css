@@ -56,10 +56,16 @@
         left: 0;
     }
     
-    #edit {
+    #friendsList {
         position: fixed;
         top: 0;
         right: 0;
+    }
+
+    #editProfile {
+        position: fixed;
+        top: 300px;
+        left: 330px;
     }
 
     .completedHike {
