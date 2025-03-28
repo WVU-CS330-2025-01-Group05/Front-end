@@ -1,5 +1,6 @@
 import React from 'react';
 import './profile.css';
+import'./profile.js';
 
 function Profile() {
     //examples
@@ -16,6 +17,7 @@ function Profile() {
 
       <a href='/map'><button id='back'>Back to Home Page</button></a>
       <a href='/friends_list'><button id='edit'>Friends List</button></a>
+      
 
       <div>
         <p id="name">{name}</p>
