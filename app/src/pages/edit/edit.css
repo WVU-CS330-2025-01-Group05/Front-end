@@ -1,0 +1,14 @@
+.edit {
+    body {
+        font-family: Arial, sans-serif;
+        color: #fff;
+        overflow-x: hidden;
+        background-color: #799a84;
+    }
+
+    img {
+        border-radius: 50%; /* NOTE: image must be square */
+        margin-left: 300px;
+        margin-top: 50px;
+    }
+}

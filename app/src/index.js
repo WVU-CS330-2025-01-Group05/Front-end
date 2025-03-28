@@ -11,6 +11,7 @@ import Profile from "./pages/profile/profile"
 import Login from './pages/login/login'
 import Signup from './pages/signup/signup'
 import FriendsList from './pages/friendsList/friendsList'
+import Edit from './pages/edit/edit';
 
 
 
@@ -25,6 +26,7 @@ root.render(
         <Route path='/map' element={<Map />}/>
         <Route path='/profile' element={<Profile />} />
         <Route path='/friends_list' element={<FriendsList />} />
+        <Route path='/edit' element={<Edit />}/>
       </Routes>
     </BrowserRouter>
 );
