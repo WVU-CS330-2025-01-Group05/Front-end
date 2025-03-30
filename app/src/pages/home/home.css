@@ -51,7 +51,7 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                color:rgb(67, 39, 7);
+                color: white;
                 font-weight: 600;
 
 
@@ -62,9 +62,14 @@
                     border:none;
                     border-radius: 20px;
                     background:white;
+                    border: 2px solid lightslategray;
 
 
+                }
 
+                button:hover {
+                    background-color: lightslategray;
+                    color: black;
                 }
             }
 
