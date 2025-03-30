@@ -10,6 +10,8 @@
         border-radius: 50%; /* NOTE: image must be square */
         margin-left: 300px;
         margin-top: 50px;
+        height: 250px;
+        width: 250px;
     }
     
     p, label {
@@ -65,7 +67,7 @@
     #editProfile {
         position: fixed;
         top: 300px;
-        left: 330px;
+        left: 340px;
     }
 
     .completedHike {

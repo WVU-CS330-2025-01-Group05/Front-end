@@ -12,7 +12,7 @@ function Profile() {
 
   return (
     <div className='profile'>
-      <img src={require ("./test profile.jpg")} alt="profile image" />
+      <img src={require ("./default pfp.jpg")} alt="profile image" />
 
       <a href='/map'><button id='back'>Back to Home Page</button></a>
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
