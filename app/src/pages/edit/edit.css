@@ -14,7 +14,7 @@
         width: 250px;
     }
 
-    input, button {
+    #file, button, #submit {
         /* style of button */
         border: none;
         color: #494949;
@@ -23,6 +23,7 @@
         text-align: center;
         text-decoration: none;
         display: inline-block;
+        margin: 4px 2px;
         transition-duration: 0.4s;
         cursor: pointer;
         background-color: #494949;
@@ -31,15 +32,11 @@
         border-radius: 25px; /* rounds the border */
     }
 
-    input {
-        font-size: 12px;
-    }
-
-    button {
+    button, #submit {
         font-size: 20px;
     }
     
-    input:hover {
+    #file:hover {
         background-color: #151515;
         color: white;
     }
@@ -49,10 +46,16 @@
         color: white;
     }
 
-    #pfp {
+    #submit:hover {
+        background-color: #151515;
+        color: white;
+    }
+
+    #file {
         position: fixed; 
         top: 340px;
         left: 280px;
+        font-size: 12px;
     }
 
     .pfp {
@@ -65,5 +68,24 @@
         position: fixed;
         top: 0;
         left: 0;
+    }
+
+    .inputs {
+        margin-top: -200px;
+        margin-left: 680px;
+        font-size: 20px;
+        color: white;
+        display: block;
+    }
+
+    #submit {
+        position: fixed;
+        top: 450px;
+        left: 670px;
+    }
+
+    p {
+        font-size: 15px;
+        color: darkred; /* assumes invalid username, use green for valid */
     }
 }
