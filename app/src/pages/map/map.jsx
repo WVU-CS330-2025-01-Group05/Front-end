@@ -20,7 +20,7 @@ function Map(){
         <div className='header'>
             <Clock/>
             <span>Plan Your Hike</span>
-            <a href='/profile'><span>Account</span></a>
+            <a href='/profile'><button id="account">Account</button></a>
         </div>
         <div className='bottom'>
             <div className='left'>

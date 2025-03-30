@@ -63,7 +63,7 @@
                     border-radius: 20px;
                     background:white;
                     border: 2px solid lightslategray;
-
+                    transition-duration: 0.4s;
 
                 }
 

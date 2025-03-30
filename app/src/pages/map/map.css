@@ -15,7 +15,25 @@
 
         span{
             font-size:2rem;
-            color:white;
+            color: white;
+        }
+
+        button{
+
+            width:150px;
+            height:40px;
+            border:none;
+            border-radius: 20px;
+            background: #494949;
+            border: 2px solid  #151515;
+            font-size: 20px;
+            color: white;
+            transition-duration: 0.4s;
+        }
+
+        button:hover {
+            background-color: #151515;
+            color: white;
         }
     }
 
