@@ -17,8 +17,11 @@
     justify-content: center;
     align-items: center;
 
+    overflow-y: hidden;
+    overflow-x: hidden;
 
-    .container {
+
+    .home-container {
 
         display: flex;
         flex-direction: column;
