@@ -1,19 +1,34 @@
-.login{
+.login {
+  width: 100vw;
+  height: 100vh;
+  position: relative; /* Ensure positioning for the pseudo-element */
+  background: #799a84ff; /* Fallback background color */
+}
 
-  width:100vw;
-  height:100vh;
-
-  background:#799a84ff;
-
-  .container {
-    background-color: white;
-    width: 300px;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, .1);
-    margin: 100px auto;
-    text-align: center;
-  }
+.login::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('forestimage.png') no-repeat center center;
+  background-size: 100%;
+  opacity: 0.1; /* 50% transparency */
+  z-index: 0; /* Ensure it stays behind other elements */
+  background-position: center 17%; 
+}
+.container {
+  position: relative; /* Ensure it stays above the background */
+  background-color: white;
+  width: 300px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 100px auto;
+  text-align: center;
+  z-index: 1; /* Layer above the background */
+}
 
   h1 {
     font-family: 'Verdana', sans-serif;
@@ -40,4 +55,3 @@
   button:hover {
     background-color: #c0c0c0;
   }
-}
