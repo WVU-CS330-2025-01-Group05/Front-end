@@ -85,7 +85,7 @@
         border-radius: 25px;
     }
 
-    button #friendProf {
+    #friendProf {
         background: rgb(169, 169, 169);
         color: black;
         padding: 5px 10px;
