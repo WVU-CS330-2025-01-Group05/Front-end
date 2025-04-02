@@ -23,7 +23,7 @@ function FriendsList() {
           {friendsData.map((friend) => (
             <li key={friend.id} className="friend-item">
               <span>{friend.name}</span>
-              <button>View Profile</button>
+              <button id='firendProf'>View Profile</button>
             </li>
           ))}
         </ul>
