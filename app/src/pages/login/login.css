@@ -23,7 +23,7 @@
 }
 .container {
   position: relative; /* Ensure it stays above the background */
-  background-color:  rgb(221, 230, 224);
+  background-color:  rgb(223, 234, 227);
   width: 300px;
   padding: 20px;
   border-radius: 10px;
