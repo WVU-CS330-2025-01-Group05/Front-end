@@ -12,6 +12,8 @@
     
     .friends-container {
         background: rgba(238, 238, 238);
+        position: relative;
+        margin: 100px auto;
         padding: 20px;
         border-radius: 10px;
         text-align: center;
