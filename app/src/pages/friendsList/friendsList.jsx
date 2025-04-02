@@ -15,6 +15,8 @@ const friendsData = [
 function FriendsList() {
   return (
     <div className="friends-page">
+        <a href='/map'><button id='back'>Back to Home Page</button></a>
+        <a href='/profile'><button id='profile'>Your Profile</button></a>
       <div className="friends-container">
         <h2>Friends List</h2>
         <ul id="friends-list">
