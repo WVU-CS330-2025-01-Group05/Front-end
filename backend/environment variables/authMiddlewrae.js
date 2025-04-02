@@ -1,4 +1,4 @@
-cconst jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 /**
  * Middleware to protect routes by verifying JWT in cookies.
