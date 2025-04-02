@@ -19,7 +19,7 @@ function Map(){
     <div className='map'>
         <div className='header'>
             <Clock/>
-            <span>Plan Your Hike</span>
+            <span id="plan">Plan Your Hike</span>
             <a href='/profile'><button id="account">Account</button></a>
         </div>
         <div className='bottom'>

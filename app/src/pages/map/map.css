@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+
 .map{
     background:#799a84ff;
     height:100vh;
@@ -17,6 +20,12 @@
         span{
             font-size:2rem;
             color: white;
+        }
+
+        #plan {
+            font-family: "Pacifico", serif;
+            font-size: 4rem;
+            text-shadow: 5px 5px #525252;
         }
 
         button{
