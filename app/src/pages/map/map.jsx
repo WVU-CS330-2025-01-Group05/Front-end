@@ -2,6 +2,13 @@ import Clock from './clock';
 import './map.css';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import { default as rain } from './icons/rain.svg';
+import { default as clouds } from './icons/clouds.svg';
+import { default as moon } from './icons/moon.svg';
+import { default as humidity } from './icons/humidity.svg';
+import { default as uv } from './icons/uv.svg';
+import { default as leaf } from './icons/leaf.svg';
+
 
 function Map() {
     return (
@@ -34,7 +41,35 @@ function Map() {
                         </div>
                     </div>
                     <div className='stats'>
-                        {/* Weather Stats Section */}
+                    <div className='left-stats'>
+                        <div className='item'>
+                            <img src={rain} className='icon'/>
+                            <span>% Rain</span>
+                        </div>
+                        <div className='item'>
+                            <img src={moon} className='icon'/>
+                            <span>Moon</span>
+                        </div>
+                        <div className='item'>
+                            <img src={clouds} className='icon'/>
+                            <span>% Cloud</span>
+                        </div>
+                        <div className='right-stats'>
+                        <div className='item'>
+                            <img src={humidity} className='icon'/>
+                            <span>Humidity: </span>
+                        </div>
+                        <div className='item'>
+                            <img src={uv} className='icon'/>
+                            <span>UV: </span>
+                        </div>
+                        <div className='item'>
+                            <img src={leaf} className='icon'/>
+                            <span>Leaf</span>
+                        </div>
+                    </div>
+
+                    </div>
                     </div>
                 </div>
                 <div className='right' style={{ height: "80vh", width: "70vw" }}>
