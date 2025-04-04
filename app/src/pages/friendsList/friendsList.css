@@ -1,19 +1,18 @@
 .friends-page {
-    background-image: url("https://as1.ftcdn.net/jpg/05/24/39/98/1000_F_524399837_FIwRVE6kb6mU9UPzjFqumIm5OHNkPRZ0.jpg");
     background-size: cover;
     background-position: center;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction:row;
     justify-content: center;
     align-items: center;
     font-family: "Roboto";
     width:100vw;
+    padding-top: 100px ;
     
     .friends-container {
         background: rgba(238, 238, 238);
         position: relative;
-        margin: 100px auto;
         padding: 20px;
         border-radius: 10px;
         text-align: center;
