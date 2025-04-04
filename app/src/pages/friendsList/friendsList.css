@@ -10,6 +10,7 @@
     width:100vw;
     padding-top: 100px ;
     
+
     .friends-container {
         background: rgba(238, 238, 238);
         position: relative;
@@ -64,6 +65,11 @@
         border: 2px solid #151515;
         border-radius: 25px;
     }
+
+    #back:hover {
+        background-color: #151515;
+        color: white;
+    }
     
     #profile {
         position: fixed;
@@ -84,6 +90,11 @@
         color: white;
         border: 2px solid #151515;
         border-radius: 25px;
+    }
+
+    #profile:hover {
+        background-color: #151515;
+        color: white;
     }
 
     #friendProf {
