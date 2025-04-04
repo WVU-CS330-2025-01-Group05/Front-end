@@ -46,7 +46,7 @@ const map = useMapEvents({
   
     
     useEffect(() => {
-      map.locate({ setView: true, timeout: 20000, enableHighAccuracy: true });
+      map.locate({ setView: true, timeout: 20000});
     }, [map]);
   
     return null;
