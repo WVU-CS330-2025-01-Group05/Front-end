@@ -6,7 +6,7 @@ function Edit() {
         <div className="edit">
             <img src={require ("./default pfp.jpg")} alt="profile image" />
 
-            <a href="/profile"><button id="back">Back to Account</button></a>
+            <a href="/profile"><button id="back">Back to Profile</button></a>
 
             <form>
                 <div className="pfp">
