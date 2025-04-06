@@ -10,6 +10,8 @@ const friendsData = [
   { id: 6, name: "Carter Wright" },
   { id: 7, name: "Blake Rogers" },
   { id: 8, name: "Mark Khairullah" },
+  { id: 9, name: "Mark Khairullah" }, 
+  { id: 10, name: "Mark Khairullah" } 
 ];
 
 function FriendsList() {
