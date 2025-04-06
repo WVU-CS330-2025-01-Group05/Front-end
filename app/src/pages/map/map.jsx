@@ -10,9 +10,11 @@ import { default as humidity } from './icons/humidity.svg';
 import { default as uv } from './icons/uv.svg';
 import { default as leaf } from './icons/leaf.svg';
 import L from 'leaflet';
+import { GeoJSON } from 'react-leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
 
 const customIcon = L.icon({
     iconUrl: markerIcon,
@@ -52,9 +54,20 @@ const map = useMapEvents({
     return null;
   }
 
+
 function Map() {
     const [position, setPosition] = useState(null);
-  
+  // new
+  const [geojsonData, setGeojsonData] = useState(null);
+
+  useEffect(() => {
+    fetch('/data/trail_lines.geojson')
+      .then((res) => res.json())
+      .then((data) => setGeojsonData(data))
+      .catch((err) => console.error('GeoJSON load error:', err));
+  }, []);
+
+// end
 
     return (
         <div className='map'>
@@ -124,6 +137,8 @@ function Map() {
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
                          <LocationHandler setPosition={setPosition} />
+
+                         
                     
                 {position && (
                     <Marker position={position} icon= {customIcon}>
@@ -131,6 +146,23 @@ function Map() {
                     </Marker>
                 )} 
                 
+                    {/* new */}
+                    {geojsonData && (
+                <GeoJSON
+                    data={geojsonData}
+                    style={() => ({
+                    color: '#006400',
+                    weight: 3,
+                    })}
+                    onEachFeature={(feature, layer) => {
+                    if (feature.properties && feature.properties.name) {
+                        layer.bindPopup(feature.properties.name);
+                    }
+                    }}
+                />
+)}
+
+                    {/* end */}
                     </MapContainer>
                 </div>
             </div>
