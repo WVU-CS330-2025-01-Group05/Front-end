@@ -9,7 +9,8 @@ import Map from "./pages/map/map"
 
 import Profile from "./pages/profile/profile"
 import Login from './pages/login/login'
-import Signup from './pages/signup/signup'
+// import Signup from './pages/signup/signup'
+import Register from './pages/Register'
 import FriendsList from './pages/friendsList/friendsList'
 import Edit from './pages/edit/edit';
 
@@ -22,7 +23,8 @@ root.render(
       <Routes>
         <Route path="/" element={<Home />}/>
         <Route path="/login" element={<Login />}/>
-        <Route path="/signup" element={<Signup />}/>
+      {/* <Route path="/signup" element={<Signup />}/> */}
+        <Route path="/Register" element={<Register />}/>
         <Route path='/map' element={<Map />}/>
         <Route path='/profile' element={<Profile />} />
         <Route path='/friends_list' element={<FriendsList />} />
