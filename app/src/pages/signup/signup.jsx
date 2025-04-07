@@ -1,28 +1,29 @@
-import './signup.css'
+import './signup.css';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import react-router-dom for redirection
 
 function Signup() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate(); // For navigating after successful signup
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     
     try {
-      const response = await fetch('/auth/signup', {
+      const response = await fetch('http://localhost:5000/auth/register', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
-      });
+    });
 
       const data = await response.json();
 
       if (response.ok) {
-        //either or show success message
         alert(data.message);
-        //may also redirect or perform other actions
+        navigate('/login'); // Redirect to login page after successful registration
       } else {
         alert(data.error);
       }
@@ -54,7 +55,7 @@ function Signup() {
             onChange={(e) => setPassword(e.target.value)}
             required
           /><br />
-          <button id="back" type="button">Back</button>
+          <button id="back" type="button" onClick={() => navigate('/login')}>Back</button>
           <button id="signup" type="submit">Sign Up</button>
         </form>
       </div>
