@@ -5,17 +5,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 
 
-import Home from "./pages/home/home"
-import Map from "./pages/map/map"
 import App from './App';
 
-import Profile from "./pages/profile/profile"
-import Login from './pages/Login';
 
-// import Signup from './pages/signup/signup'
-import Register from './pages/Register'
-import FriendsList from './pages/friendsList/friendsList'
-import Edit from './pages/edit/edit';
+
 
 
 
@@ -25,6 +18,7 @@ root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
+  
 );
 
 reportWebVitals();

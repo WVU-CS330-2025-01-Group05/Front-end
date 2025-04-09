@@ -50,6 +50,8 @@ function App() {
           }
         />
 
+        
+
         {/* Register Route */}
         <Route
           path="/register"
