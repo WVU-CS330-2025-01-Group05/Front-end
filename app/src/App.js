@@ -35,8 +35,20 @@ function App() {
         {/* Redirect to /login if not authenticated; otherwise to /map */}
         <Route
           path="/"
-          element={<Navigate to={authenticated ? "/map" : "/login"} replace />}
+          element={<Navigate to={authenticated ? "home" : "/login"} replace />}
         />
+
+        {/* home page route */}
+<Route
+        path="/home"
+        element={
+          authenticated ? (
+            <Profile />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
 
         {/* Login Route */}
         <Route
@@ -49,7 +61,30 @@ function App() {
             )
           }
         />
+ {/* Friends List Page Route */}
+ <Route
+        path="/friends_list"
+        element={
+          authenticated ? (
+            <FriendsList />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
 
+
+      {/* Profile Page Route */}
+      <Route
+        path="/profile"
+        element={
+          authenticated ? (
+            <Profile />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
         
 
         {/* Register Route */}
