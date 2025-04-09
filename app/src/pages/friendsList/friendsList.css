@@ -9,7 +9,7 @@
     font-family: "Roboto";
     width:100vw;
     padding-top: 50px;
-    overflow-x: hidden;
+    overflow-x: auto;
     
     .friends-container {
         background: rgba(238, 238, 238);
