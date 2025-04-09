@@ -2,7 +2,7 @@
     background: #799a84;
     width: 100vw;
     height: 100vh;
-    position: relative; /* Ensure positioning for the pseudo-element */
+    position: absolute; /* Ensure positioning for the pseudo-element */
 
     body {
         font-family: Arial, sans-serif;
@@ -69,9 +69,15 @@
     }
 
     #editProfile {
-        position: fixed;
+        position: absolute;
         top: 300px;
         left: 340px;
+    }
+
+    #logOut {
+        position: fixed;
+        bottom: 0;
+        left: 0;
     }
 
     .completedHike {
@@ -89,7 +95,7 @@
 
 .profile::before {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
   
     left: 0;
