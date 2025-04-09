@@ -7,7 +7,6 @@
     body {
         font-family: Arial, sans-serif;
         color: #fff;
-        overflow-x: hidden;
     }
     
     img {
@@ -69,9 +68,15 @@
     }
 
     #editProfile {
-        position: fixed;
+        position: absolute;
         top: 300px;
         left: 340px;
+    }
+
+    #logOut {
+        position: fixed;
+        bottom: 0;
+        left: 0;
     }
 
     .completedHike {
@@ -89,7 +94,7 @@
 
 .profile::before {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
   
     left: 0;

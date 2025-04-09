@@ -55,6 +55,8 @@ function LocationHandler({ setPosition }) {
 }
 
 
+
+
 function Map() {
     const [position, setPosition] = useState(null);
     // new
@@ -68,6 +70,17 @@ function Map() {
     }, []);
 
     // end
+
+    //testing python 
+    const [message, setMessage] = useState("");
+
+    const runPythonScript = async () => {
+        const res = await fetch("http://localhost:5000/run-script", {
+            method: "POST",
+        });
+        const data = await res.json();
+        setMessage(data.output || data.status);
+    };
 
     return (
         <div className='map'>
@@ -98,6 +111,7 @@ function Map() {
                             </select>
                         </div>
                     </div>
+                    <button onClick={runPythonScript}>{message}</button>
                     <div className='stats'>
 
                         <div className='item'>
@@ -114,18 +128,18 @@ function Map() {
                         </div>
 
 
-                            <div className='item'>
-                                <img src={humidity} className='icon' />
-                                <span>Humidity: </span>
-                            </div>
-                            <div className='item'>
-                                <img src={uv} className='icon' />
-                                <span>UV: </span>
-                            </div>
-                            <div className='item'>
-                                <img src={leaf} className='icon' />
-                                <span>Pollen:</span>
-                            </div>
+                        <div className='item'>
+                            <img src={humidity} className='icon' />
+                            <span>Humidity: </span>
+                        </div>
+                        <div className='item'>
+                            <img src={uv} className='icon' />
+                            <span>UV: </span>
+                        </div>
+                        <div className='item'>
+                            <img src={leaf} className='icon' />
+                            <span>Pollen:</span>
+                        </div>
 
 
                     </div>

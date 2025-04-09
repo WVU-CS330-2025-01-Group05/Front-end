@@ -38,6 +38,7 @@
             color: white;
             border-radius: 20px;
             position: relative;
+            border:solid black 2px ;
             z-index: 2;
 
             &:hover {
