@@ -27,10 +27,10 @@
         flex-direction: column;
         align-items: center;
         max-width: 40vw;
-        gap: 10vh;
+        gap: 30vh;
 
         .home-top {
-            margin-top: 250px;
+            margin-top: 100px;
             font-family: "Pacifico", serif;
             font-size: 6rem;
             text-shadow: 5px 5px black;
