@@ -9,7 +9,6 @@
     font-family: "Roboto";
     width:100vw;
     padding-top: 50px;
-    overflow-x: auto;
     
     .friends-container {
         background: rgba(238, 238, 238);
@@ -41,11 +40,7 @@
         border-radius: 15px;
     }
     
-    button:hover {
-        background-color: #151515;
-        color: white;
-    }
-    
+
     #back {
         position: fixed;
         top: 0;
@@ -65,6 +60,11 @@
         color: white;
         border: 2px solid #151515;
         border-radius: 25px;
+    }
+
+    #back:hover {
+        background-color: #151515;
+        color: white;
     }
     
     #profile {
@@ -88,6 +88,11 @@
         border-radius: 25px;
     }
 
+    #profile:hover {
+        background-color: #151515;
+        color: white;
+    }
+
     #friendProf {
         background: rgb(169, 169, 169);
         color: black;
@@ -96,5 +101,8 @@
         border-radius: 10px;
     }
 
-    
+    #friendProf:hover {
+        background-color: #151515;
+        color: white;
+    }
 }

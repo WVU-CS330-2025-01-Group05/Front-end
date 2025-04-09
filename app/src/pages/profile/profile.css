@@ -2,12 +2,11 @@
     background: #799a84;
     width: 100vw;
     height: 100vh;
-    position: absolute; /* Ensure positioning for the pseudo-element */
+    position: relative; /* Ensure positioning for the pseudo-element */
 
     body {
         font-family: Arial, sans-serif;
         color: #fff;
-        overflow-x: hidden;
     }
     
     img {
