@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Clock from './clock';
 import './map.css';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { default as rain } from './icons/rain.svg';
 import { default as clouds } from './icons/clouds.svg';
@@ -20,54 +20,54 @@ const customIcon = L.icon({
     iconUrl: markerIcon,
     iconRetinaUrl: markerIcon2x,
     shadowUrl: markerShadow,
-    iconSize: [25, 41], 
+    iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowSize: [41, 41],
-  });
+});
 
 const defaultCenter = [39.6295, -79.9559];
 
 
 function LocationHandler({ setPosition }) {
-    
-const map = useMapEvents({
-    locationfound(e) {
-    setPosition(e.latlng);
-    map.flyTo(e.latlng, map.getZoom());
-      },
+
+    const map = useMapEvents({
+        locationfound(e) {
+            setPosition(e.latlng);
+            map.flyTo(e.latlng, map.getZoom());
+        },
         locationerror(e) {
-        alert(`Unable to determine location: ${e.message}`);
-      },
-      
-    // trigger on click (if needed)
-    // click() {
-    //   map.locate();
-    //   },
+            alert(`Unable to determine location: ${e.message}`);
+        },
+
+        // trigger on click (if needed)
+        // click() {
+        //   map.locate();
+        //   },
     });
-  
-    
+
+
     useEffect(() => {
-      map.locate({ setView: true, timeout: 20000});
+        map.locate({ setView: true, timeout: 20000 });
     }, [map]);
-  
+
     return null;
-  }
+}
 
 
 function Map() {
     const [position, setPosition] = useState(null);
-  // new
-  const [geojsonData, setGeojsonData] = useState(null);
+    // new
+    const [geojsonData, setGeojsonData] = useState(null);
 
-  useEffect(() => {
-    fetch('/data/trail_lines.geojson')
-      .then((res) => res.json())
-      .then((data) => setGeojsonData(data))
-      .catch((err) => console.error('GeoJSON load error:', err));
-  }, []);
+    useEffect(() => {
+        fetch('/data/trail_lines.geojson')
+            .then((res) => res.json())
+            .then((data) => setGeojsonData(data))
+            .catch((err) => console.error('GeoJSON load error:', err));
+    }, []);
 
-// end
+    // end
 
     return (
         <div className='map'>
@@ -99,70 +99,70 @@ function Map() {
                         </div>
                     </div>
                     <div className='stats'>
-                    <div className='left-stats'>
+
                         <div className='item'>
-                            <img src={rain} className='icon'/>
+                            <img src={rain} className='icon' />
                             <span>% Rain:</span>
                         </div>
                         <div className='item'>
-                            <img src={moon} className='icon'/>
+                            <img src={moon} className='icon' />
                             <span>Moon:</span>
                         </div>
                         <div className='item'>
-                            <img src={clouds} className='icon'/>
+                            <img src={clouds} className='icon' />
                             <span>% Cloud:</span>
                         </div>
-                        <div className='right-stats'>
-                        <div className='item'>
-                            <img src={humidity} className='icon'/>
-                            <span>Humidity: </span>
-                        </div>
-                        <div className='item'>
-                            <img src={uv} className='icon'/>
-                            <span>UV: </span>
-                        </div>
-                        <div className='item'>
-                            <img src={leaf} className='icon'/>
-                            <span>Pollen:</span>
-                        </div>
-                    </div>
 
-                    </div>
+
+                            <div className='item'>
+                                <img src={humidity} className='icon' />
+                                <span>Humidity: </span>
+                            </div>
+                            <div className='item'>
+                                <img src={uv} className='icon' />
+                                <span>UV: </span>
+                            </div>
+                            <div className='item'>
+                                <img src={leaf} className='icon' />
+                                <span>Pollen:</span>
+                            </div>
+
+
                     </div>
                 </div>
                 <div className='right' style={{ height: "80vh", width: "70vw" }}>
-                <MapContainer center={defaultCenter} zoom={13} style={{ height: "100%", width: "100%" }}>
+                    <MapContainer center={defaultCenter} zoom={13} style={{ height: "100%", width: "100%" }}>
 
                         <TileLayer
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
-                         <LocationHandler setPosition={setPosition} />
+                        <LocationHandler setPosition={setPosition} />
 
-                         
-                    
-                {position && (
-                    <Marker position={position} icon= {customIcon}>
-                        <Popup>You are here</Popup>
-                    </Marker>
-                )} 
-                
-                    {/* new */}
-                    {geojsonData && (
-                <GeoJSON
-                    data={geojsonData}
-                    style={() => ({
-                    color: '#006400',
-                    weight: 3,
-                    })}
-                    onEachFeature={(feature, layer) => {
-                    if (feature.properties && feature.properties.name) {
-                        layer.bindPopup(feature.properties.name);
-                    }
-                    }}
-                />
-)}
 
-                    {/* end */}
+
+                        {position && (
+                            <Marker position={position} icon={customIcon}>
+                                <Popup>You are here</Popup>
+                            </Marker>
+                        )}
+
+                        {/* new */}
+                        {geojsonData && (
+                            <GeoJSON
+                                data={geojsonData}
+                                style={() => ({
+                                    color: '#006400',
+                                    weight: 3,
+                                })}
+                                onEachFeature={(feature, layer) => {
+                                    if (feature.properties && feature.properties.name) {
+                                        layer.bindPopup(feature.properties.name);
+                                    }
+                                }}
+                            />
+                        )}
+
+                        {/* end */}
                     </MapContainer>
                 </div>
             </div>
