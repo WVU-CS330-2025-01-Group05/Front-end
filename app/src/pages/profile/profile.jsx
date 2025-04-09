@@ -17,6 +17,7 @@ function Profile() {
       <a href='/map'><button id='back'>Back to Home Page</button></a>
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
       <a href='/edit'><button id='editProfile'>Edit Profile</button></a>
+      <a href='/'><button id='logOut'>Log Out</button></a>
 
       <div>
         <p id="name">{name}</p>
@@ -27,6 +28,10 @@ function Profile() {
       </div>
 
       <div className="hikes">
+        <p className="completedHike">{name} completed {hikeName} on {day}!</p>
+        <p className="completedHike">{name} completed {hikeName} on {day}!</p>
+        <p className="completedHike">{name} completed {hikeName} on {day}!</p>
+        <p className="completedHike">{name} completed {hikeName} on {day}!</p>
         <p className="completedHike">{name} completed {hikeName} on {day}!</p>
       </div>
     </div>
