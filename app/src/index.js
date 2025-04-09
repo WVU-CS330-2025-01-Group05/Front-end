@@ -9,7 +9,7 @@ import Home from "./pages/home/home"
 import Map from "./pages/map/map"
 
 import Profile from "./pages/profile/profile"
-import Login from './pages/login/login'
+import Login from './pages/logins/Login.js'
 // import Signup from './pages/signup/signup'
 import Register from './pages/Register'
 import FriendsList from './pages/friendsList/friendsList'
