@@ -9,7 +9,7 @@ function Home(){
             </div>
             <div className='bottom'>
                 <div className='item'>
-                    <a href='/signup'><button className='sign-up-button'>Sign Up</button></a>
+                    <a href='/Register'><button className='sign-up-button'>Sign Up</button></a>
                 </div>
                 <div className='item'>
                     <span>Already have an account?</span>
@@ -22,8 +22,7 @@ function Home(){
             </div>
 
         </div>
-       
-        
+           
     </div>
     )
 }
