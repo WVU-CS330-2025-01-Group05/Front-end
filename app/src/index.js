@@ -4,6 +4,7 @@ import './index.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 
+
 import Home from "./pages/home/home"
 import Map from "./pages/map/map"
 
@@ -22,7 +23,7 @@ root.render(
   <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />}/>
-        <Route path="/login" element={<Login />}/>
+        <Route path="/Login" element={<Login />}/>
       {/* <Route path="/signup" element={<Signup />}/> */}
         <Route path="/Register" element={<Register />}/>
         <Route path='/map' element={<Map />}/>
