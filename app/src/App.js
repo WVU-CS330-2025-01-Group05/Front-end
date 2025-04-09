@@ -7,9 +7,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import MapPage from './pages/MapPage';
+import Map from './pages/map/map';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import FriendsList from './pages/friendsList/friendsList';
+import Profile from './pages/profile/profile';
+import Edit from './pages/edit/edit';
 
 /**
  * Main application component that manages routes and authentication state.
@@ -64,7 +67,7 @@ function App() {
           path="/map"
           element={
             authenticated ? (
-              <MapPage setAuthenticated={setAuthenticated} />
+              <Map setAuthenticated={setAuthenticated} />
             ) : (
               <Navigate to="/login" replace />
             )
