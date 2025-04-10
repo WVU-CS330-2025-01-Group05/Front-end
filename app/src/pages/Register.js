@@ -7,7 +7,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import './Register.css';
 /**
  * Register component allows new users to create an account.
  * @returns {JSX.Element} The registration form.
@@ -42,6 +42,8 @@ const Register = () => {
   };
 
   return (
+    <div className="register">
+      <div className="register-container">
     <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', maxWidth: '300px' }}>
       <h2>Register</h2>
       <input
@@ -58,6 +60,8 @@ const Register = () => {
       />
       <button type="submit">Register</button>
     </form>
+    </div>
+    </div>
   );
 };
 
