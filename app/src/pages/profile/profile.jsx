@@ -22,19 +22,21 @@ function Profile() {
   const day = "2/14/2025";
 
 
-  const handleLogout = async() => {
+  //const handleLogout = async() => {
 
-    try {
-      await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
-      alert('Logout successful');
+    //try {
+    //  await axios.post(`${API_URL}/auth/logout`, {}, { method: "POST", withCredentials: true });
+      ////localStorage.setItem('token', null); // Clear the token from local storage
+      //localStorage.setItem('authenticated', false); // Update authenticated state
+      //alert('Logout successful');
       console.log(`${API_URL}/auth/logout`);
 
-    } catch (error) {
-      console.error('Logout failed:', error);
-      alert('Error logging out');
-    }
+   // } catch (error) {
+      //console.error('Logout failed:', error);
+      //alert('Error logging out');
+  //  }
    
-  }
+//  }
 
 
 
@@ -46,7 +48,7 @@ function Profile() {
       <a href='/map'><button id='back'>Back to Map</button></a>
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
       <a href='/edit'><button id='editProfile'>Edit Profile</button></a>
-      <a href='/'><button id='logOut' onClick={handleLogout}>Log Out</button></a>
+      <a href='/'><button id='logOut' /*onClick={handleLogout}*/>Log Out</button></a>
 
       <div>
         <p id="name">{name}</p>
