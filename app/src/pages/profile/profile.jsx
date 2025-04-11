@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 function Profile() {
 
-  const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_BACKEND_API_URl; // Fallback for local development
+  const navigate = useNavigate(); // For navigating
+  const API_URL = process.env.REACT_APP_BACKEND_API_URL; // Fallback for local development
 
 
 
@@ -23,16 +23,10 @@ function Profile() {
   const handleLogout = async() => {
 
     try {
-      const response = await axios.post(
-        API_URL + '/auth/logout',
-        {},
-        { withCredentials: true }
-      );
-      if (response.data.message === 'Logout successful') {
-        navigate('/login'); // Redirect to login page
-      } else {
-        alert('Logout failed. Please try again.');
-      }
+      await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
+      alert('Logout successful');
+      console.log(`${API_URL}/auth/logout`);
+
     } catch (error) {
       console.error('Logout failed:', error);
       alert('Error logging out');
