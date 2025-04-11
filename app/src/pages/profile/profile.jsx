@@ -5,6 +5,7 @@ import axios from 'axios';
 
 function Profile() {
 
+  const navigate = useNavigate(); // For navigating
   const API_URL = process.env.REACT_APP_BACKEND_API_URl; // Fallback for local development
 
 
@@ -20,9 +21,8 @@ function Profile() {
 
 
   const handleLogout = async() => {
-    
+   
   }
-
 
 
 
