@@ -32,75 +32,13 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Redirect to /login if not authenticated; otherwise to /map */}
-        <Route
-          path="/"
-          element={<Navigate to={authenticated ? "home" : "/login"} replace />}
-        />
-
-        {/* home page route */}
-        <Route
-          path="/home"
-          element={
-  
-              <Home />
-            
-          }
-        />
-
-        {/* Login Route */}
-        <Route
-          path="/login"
-          element={
-            authenticated ? (
-              <Navigate to="/map" replace />
-            ) : (
-              <Login setAuthenticated={setAuthenticated} />
-            )
-          }
-        />
-        {/* Friends List Page Route */}
-        <Route
-          path="/friends_list"
-          element={
-
-            <FriendsList />
-
-          }
-        />
-
-
-        {/* Profile Page Route */}
-        <Route
-          path="/profile"
-          element={
-
-            <Profile />
-
-          }
-        />
-
-
-        {/* Register Route */}
-        <Route
-          path="/register"
-          element={
-            authenticated ? (
-              <Navigate to="/map" replace />
-            ) : (
-              <Register />
-            )
-          }
-        />
-
-        {/* Map Page Route */}
-        <Route
-          path="/map"
-          element={
-
-            <Map setAuthenticated={setAuthenticated} />
-          }
-        />
+        <Route path="/" element={<Navigate to={authenticated ? "home" : "/login"} replace />}/>
+        <Route path="/home"element={<Home/>}/>
+        <Route path="/login" element={authenticated ? (<Navigate to="/map" replace />) : (<Login setAuthenticated={setAuthenticated} />)}/>
+        <Route path="/friends_list" element={<FriendsList />}/>
+        <Route path="/profile" element={<Profile />}/>
+        <Route path="/register" element={authenticated ? (<Navigate to="/map" replace />) : (<Register />)}/>
+        <Route path="/map" element={<Map setAuthenticated={setAuthenticated} />}/>
       </Routes>
     </Router>
   );
