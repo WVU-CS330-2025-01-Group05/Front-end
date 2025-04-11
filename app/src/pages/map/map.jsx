@@ -75,6 +75,8 @@ function Map() {
     const [message, setMessage] = useState("");
     const [distance, setDistance] = useState(0);
 
+
+
     const runPythonScript = async () => {
         const res = await fetch("http://localhost:5000/run-script", {
             method: "POST",
@@ -103,16 +105,16 @@ function Map() {
                             </select>
                         </div>
                         <div className='filter'>
-                            <label htmlFor='filter2'>Select Trail:</label>
-                            <select id='filter2'>
-                                <option>Location 1</option>
-                                <option>Location 2</option>
-                                <option>Location 3</option>
-                                <option>Location 4</option>
+                            <label htmlFor='filter2'>Filter:</label>
+                            <select id='filter2' defaultValue={position} onChange={setDistance(EventTarget.value)}>
+                                <option value={5}>5 Miles</option>
+                                <option value={10}>10 Miles</option>
+                                <option value={25}>25 Miles</option>
+                                <option value={50}>50 Miles</option>
                             </select>
                         </div>
                     </div>
-                    <button onClick={runPythonScript}>{message}</button>
+                    <button onClick={runPythonScript}>{distance}</button>
                     <div className='stats'>
 
                         <div className='item'>
