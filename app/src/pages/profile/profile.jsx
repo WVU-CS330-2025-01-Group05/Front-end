@@ -3,6 +3,7 @@ import './profile.css';
 
 function Profile() {
     //examples
+    //need to do (grace): fix variables to match database variables. issue: database variables are in a different file nested in a
   const name = "Lauren Taylor"; 
   const username = "LaurenKate25"; 
   const numOfHikes = 25; 
@@ -10,6 +11,11 @@ function Profile() {
   const hikeName = "Seneca Rocks";
   const day = "2/14/2025";
 
+
+  const handleLogout = () => {
+    
+    
+  }
   return (
     <div className='profile'>
       <img src={require ("./default pfp.jpg")} alt="profile" />
@@ -17,7 +23,7 @@ function Profile() {
       <a href='/map'><button id='back'>Back to Home Page</button></a>
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
       <a href='/edit'><button id='editProfile'>Edit Profile</button></a>
-      <a href='/'><button id='logOut'>Log Out</button></a>
+      <a href='/'><button id='logOut' onClick={handleLogout}>Log Out</button></a>
 
       <div>
         <p id="name">{name}</p>
