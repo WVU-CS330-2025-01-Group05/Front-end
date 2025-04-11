@@ -1,9 +1,15 @@
 import React from 'react';
 import './profile.css';
+import axios from 'axios';
+
 
 function Profile() {
 
   const navigate = useNavigate(); // For navigating
+const API_URL = process.env.REACT_APP_BACKEND_API_URl; // Fallback for local development
+
+
+
     //examples
     //need to do (grace): fix variables to match database variables. issue: database variables are in a different file nested in a
   const name = "Lauren Taylor"; 
