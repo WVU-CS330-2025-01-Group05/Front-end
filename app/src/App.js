@@ -12,6 +12,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import FriendsList from './pages/friendsList/friendsList';
 import Profile from './pages/profile/profile';
+import Home from './pages/home/home';
 
 /**
  * Main application component that manages routes and authentication state.
@@ -38,16 +39,14 @@ function App() {
         />
 
         {/* home page route */}
-<Route
-        path="/home"
-        element={
-          authenticated ? (
-            <Profile />
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
+        <Route
+          path="/home"
+          element={
+  
+              <Home />
+            
+          }
+        />
 
         {/* Login Route */}
         <Route
@@ -60,31 +59,27 @@ function App() {
             )
           }
         />
- {/* Friends List Page Route */}
- <Route
-        path="/friends_list"
-        element={
-          authenticated ? (
+        {/* Friends List Page Route */}
+        <Route
+          path="/friends_list"
+          element={
+
             <FriendsList />
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
+
+          }
+        />
 
 
-      {/* Profile Page Route */}
-      <Route
-        path="/profile"
-        element={
-          authenticated ? (
+        {/* Profile Page Route */}
+        <Route
+          path="/profile"
+          element={
+
             <Profile />
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-        
+
+          }
+        />
+
 
         {/* Register Route */}
         <Route
@@ -102,11 +97,8 @@ function App() {
         <Route
           path="/map"
           element={
-            authenticated ? (
-              <Map setAuthenticated={setAuthenticated} />
-            ) : (
-              <Navigate to="/login" replace />
-            )
+
+            <Map setAuthenticated={setAuthenticated} />
           }
         />
       </Routes>
