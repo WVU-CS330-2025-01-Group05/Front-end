@@ -3,12 +3,9 @@ import './profile.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-
-
-
 function Profile() {
 
-  
+  const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_BACKEND_API_URl; // Fallback for local development
 
 

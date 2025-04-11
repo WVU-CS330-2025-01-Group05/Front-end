@@ -95,7 +95,7 @@
 
 .profile::before {
     content: '';
-    position: fixed;
+    position: absolute;
     top: 0;
   
     left: 0;
@@ -104,9 +104,9 @@
     background: url('forestshadow.png') no-repeat center center;
     background-size: 100%;
     opacity: 0.2; /* 50% transparency */
-    z-index: -1; /* Ensure it stays behind other elements */
+    z-index: 0; /* Ensure it stays behind other elements */
     background-position: cover;
-    
+    background-attachment: fixed;
   }
 
   
