@@ -5,9 +5,9 @@
   background: #799a84ff; /* Fallback background color */
   overflow-y: hidden;
   overflow-x: hidden;
+}
   
-  
-  .container {
+  .login-container {
     position: relative; /* Ensure it stays above the background */
     background-color:  rgb(223, 234, 227);
     width: 300px;
@@ -19,13 +19,13 @@
     z-index: 1; /* Layer above the background */
   }
   
-  h1 {
+  .login h2 {
     font-family: 'Verdana', sans-serif;
     color: darkgreen;
     text-shadow: 1px 1px 2px #999;
   }
   
-  input[type="text"], input[type="password"] {
+  .login input[type="text"], input[type="password"] {
     width: 90%;
     padding: 10px;
     margin: 10px;
@@ -33,7 +33,7 @@
     border-radius: 10px;
   }
   
-  button {
+  .login button {
     background-color: #d9d9d9;
     padding: 10px 20px;
     border-radius: 10px;
@@ -41,10 +41,9 @@
     font-size: 16px;
   }
   
-  button:hover {
+  .login button:hover {
     background-color: #c0c0c0;
   }
-}
 
 .login::before {
   content: '';
