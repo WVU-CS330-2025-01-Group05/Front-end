@@ -1,6 +1,8 @@
 import React from 'react';
 import './profile.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 
 
@@ -21,10 +23,29 @@ function Profile() {
   const day = "2/14/2025";
 
 
-  const handleLogout = () => {
-    
+  const handleLogout = async() => {
 
+    try {
+      const response = await axios.post(
+        API_URL + '/auth/logout',
+        {},
+        { withCredentials: true }
+      );
+      if (response.data.message === 'Logout successful') {
+        navigate('/login'); // Redirect to login page
+      } else {
+        alert('Logout failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+      alert('Error logging out');
+    }
+   
   }
+
+
+
+
   return (
     <div className='profile'>
       <img src={require ("./default pfp.jpg")} alt="profile" />
