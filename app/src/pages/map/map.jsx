@@ -37,7 +37,7 @@ function LocationHandler({ setPosition }) {
             map.flyTo(e.latlng, map.getZoom());
         },
         locationerror(e) {
-            alert(`Unable to determine location: ${e.message}`);
+         
         },
 
         // trigger on click (if needed)
@@ -63,7 +63,7 @@ function Map() {
     const [geojsonData, setGeojsonData] = useState(null);
 
     useEffect(() => {
-        fetch('/data/trail_lines.geojson')
+        fetch('/data/randomTrailsSelection/trail_lines.geojson')
             .then((res) => res.json())
             .then((data) => setGeojsonData(data))
             .catch((err) => console.error('GeoJSON load error:', err));
@@ -73,6 +73,7 @@ function Map() {
 
     //testing python 
     const [message, setMessage] = useState("");
+    const [distance, setDistance] = useState(0);
 
     const runPythonScript = async () => {
         const res = await fetch("http://localhost:5000/run-script", {
