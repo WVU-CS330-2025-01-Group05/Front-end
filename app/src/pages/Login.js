@@ -8,6 +8,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import './Login.css';
 
 /**
  * Login component allows users to enter credentials to access the app.
@@ -52,28 +53,32 @@ const Login = ({ setAuthenticated }) => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '300px' }}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
-      </form>
+    <div className="login">
+      <div className="login-container">
+        <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '300px' }}>
+          <h2>Login</h2>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button type="submit">Login</button>
+          </form>
 
-      {/* Link to the Register page */}
-      <p style={{ marginTop: '10px' }}>
-        Don’t have an account? <Link to="/register">Register here</Link>
-      </p>
+          {/* Link to the Register page */}
+          <p style={{ marginTop: '10px' }}>
+            Don’t have an account? <Link to="/register">Register here</Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,12 +1,14 @@
 import React from 'react';
 import './profile.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 
 function Profile() {
 
   const navigate = useNavigate(); // For navigating
-const API_URL = process.env.REACT_APP_BACKEND_API_URl; // Fallback for local development
+  const API_URL = process.env.REACT_APP_BACKEND_API_URl; // Fallback for local development
 
 
 
@@ -20,15 +22,34 @@ const API_URL = process.env.REACT_APP_BACKEND_API_URl; // Fallback for local dev
   const day = "2/14/2025";
 
 
-  const handleLogout = () => {
-    
+  const handleLogout = async() => {
 
+    try {
+      const response = await axios.post(
+        API_URL + '/auth/logout',
+        {},
+        { withCredentials: true }
+      );
+      if (response.data.message === 'Logout successful') {
+        navigate('/login'); // Redirect to login page
+      } else {
+        alert('Logout failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+      alert('Error logging out');
+    }
+   
   }
+
+
+
+
   return (
     <div className='profile'>
       <img src={require ("./default pfp.jpg")} alt="profile" />
 
-      <a href='/map'><button id='back'>Back to Home Page</button></a>
+      <a href='/map'><button id='back'>Back to Map</button></a>
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
       <a href='/edit'><button id='editProfile'>Edit Profile</button></a>
       <a href='/'><button id='logOut' onClick={handleLogout}>Log Out</button></a>
