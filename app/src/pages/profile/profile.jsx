@@ -13,7 +13,8 @@ function Profile() {
 
 
   const handleLogout = () => {
-    //(grace) need to implement logout functionality
+    
+    
   }
   return (
     <div className='profile'>
