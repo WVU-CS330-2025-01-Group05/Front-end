@@ -1,6 +1,5 @@
 import React from 'react';
 import './profile.css';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function Profile() {
@@ -27,7 +26,7 @@ function Profile() {
       ////localStorage.setItem('token', null); // Clear the token from local storage
       //localStorage.setItem('authenticated', false); // Update authenticated state
       //alert('Logout successful');
-      console.log(`${API_URL}/auth/logout`);
+      //console.log(`${API_URL}/auth/logout`);
 
    // } catch (error) {
       //console.error('Logout failed:', error);
@@ -46,7 +45,7 @@ function Profile() {
       <a href='/map'><button id='back'>Back to Map</button></a>
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
       <a href='/edit'><button id='editProfile'>Edit Profile</button></a>
-      <a href='/'><button id='logOut' /*onClick={handleLogout}*/>Log Out</button></a>
+      <a href='/home'><button id='logOut' /*onClick={handleLogout}*/>Log Out</button></a>
 
       <div>
         <p id="name">{name}</p>
