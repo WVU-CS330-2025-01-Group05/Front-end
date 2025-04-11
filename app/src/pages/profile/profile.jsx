@@ -2,6 +2,8 @@ import React from 'react';
 import './profile.css';
 
 function Profile() {
+
+  const navigate = useNavigate(); // For navigating
     //examples
     //need to do (grace): fix variables to match database variables. issue: database variables are in a different file nested in a
   const name = "Lauren Taylor"; 
@@ -14,7 +16,7 @@ function Profile() {
 
   const handleLogout = () => {
     
-    
+
   }
   return (
     <div className='profile'>
