@@ -2,9 +2,12 @@ import './signup.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import react-router-dom for redirection
 import axios from 'axios';
+import { username, setUsername } from './login.js'; // Import username and setUsername from login.js
+
 
 function Signup() {
 
+  
   const navigate = useNavigate(); // For navigating after successful signup
 
 

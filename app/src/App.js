@@ -12,7 +12,6 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import FriendsList from './pages/friendsList/friendsList';
 import Profile from './pages/profile/profile';
-import Edit from './pages/edit/edit';
 
 /**
  * Main application component that manages routes and authentication state.
