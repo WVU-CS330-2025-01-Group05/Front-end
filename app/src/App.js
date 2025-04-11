@@ -13,6 +13,7 @@ import Register from './pages/Register';
 import FriendsList from './pages/friendsList/friendsList';
 import Profile from './pages/profile/profile';
 import Home from './pages/home/home';
+import Edit from './pages/edit/edit';
 
 /**
  * Main application component that manages routes and authentication state.
@@ -37,6 +38,7 @@ function App() {
         <Route path="/login" element={authenticated ? (<Navigate to="/map" replace />) : (<Login setAuthenticated={setAuthenticated} />)}/>
         <Route path="/friends_list" element={<FriendsList />}/>
         <Route path="/profile" element={<Profile />}/>
+        <Route path="/edit" element={<Edit />}/>
         <Route path="/register" element={authenticated ? (<Navigate to="/map" replace />) : (<Register />)}/>
         <Route path="/map" element={<Map setAuthenticated={setAuthenticated} />}/>
       </Routes>
