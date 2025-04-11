@@ -1,9 +1,5 @@
-// backend/config/database.js
-require('dotenv').config();
-
 const mysql = require('mysql2');
-console.log('DB_USER:', process.env.DB_USER); // This should output "root"
-
+require('dotenv').config();
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,

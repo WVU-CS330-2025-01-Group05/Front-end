@@ -1,14 +1,14 @@
 .friends-page {
+    background-image: url("https://as1.ftcdn.net/jpg/05/24/39/98/1000_F_524399837_FIwRVE6kb6mU9UPzjFqumIm5OHNkPRZ0.jpg");
     background-size: cover;
     background-position: center;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction:row;
     justify-content: center;
     align-items: center;
     font-family: "Roboto";
     width:100vw;
-    padding-top: 50px;
     
     .friends-container {
         background: rgba(238, 238, 238);
@@ -40,7 +40,11 @@
         border-radius: 15px;
     }
     
-
+    button:hover {
+        background-color: #151515;
+        color: white;
+    }
+    
     #back {
         position: fixed;
         top: 0;
@@ -60,11 +64,6 @@
         color: white;
         border: 2px solid #151515;
         border-radius: 25px;
-    }
-
-    #back:hover {
-        background-color: #151515;
-        color: white;
     }
     
     #profile {
@@ -88,11 +87,6 @@
         border-radius: 25px;
     }
 
-    #profile:hover {
-        background-color: #151515;
-        color: white;
-    }
-
     #friendProf {
         background: rgb(169, 169, 169);
         color: black;
@@ -101,8 +95,5 @@
         border-radius: 10px;
     }
 
-    #friendProf:hover {
-        background-color: #151515;
-        color: white;
-    }
+    
 }

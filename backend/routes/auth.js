@@ -1,26 +1,21 @@
-// backend/auth.js
-
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const pool = require('../config/database'); // Using our MySQL pool
+const pool = require('../config/database'); // Note: Using ../config since auth.js is in the routes folder
 const router = express.Router();
 
 /**
- * Registers a new user by hashing the password and storing user data in the database.
- * @route POST /auth/register
- * @param {string} username - The username of the user.
- * @param {string} password - The password of the user (will be hashed before storing).
- * @returns {JSON} Success message or error message.
+ * Registers a new user.
+ * Hashes the password using bcrypt and stores the user in the database.
  */
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
   
   try {
-    // Hash the user's password
+    // Hash the user's password with a salt round of 10
     const hashedPassword = await bcrypt.hash(password, 10);
     
-    // Use the promise API to execute the INSERT query
+    // Insert the user into the database using parameterized queries to avoid SQL injection
     const [result] = await pool.promise().execute(
       'INSERT INTO users (username, password) VALUES (?, ?)',
       [username, hashedPassword]
@@ -34,11 +29,8 @@ router.post('/register', async (req, res) => {
 });
 
 /**
- * Authenticates a user by verifying the password and generates a JWT for session management.
- * @route POST /auth/login
- * @param {string} username - The username of the user.
- * @param {string} password - The password of the user (plain text).
- * @returns {JSON} Success message with JWT cookie or error message.
+ * Logs in a user.
+ * Verifies credentials, generates a JWT if valid, and sends it in an HTTP-only cookie.
  */
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
@@ -51,11 +43,16 @@ router.post('/login', async (req, res) => {
     );
     const user = rows[0];
     
-    // If user exists and the password matches, generate a JWT
+    // Check if the user exists and if the password is correct
     if (user && await bcrypt.compare(password, user.password)) {
-      const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      // Create a JWT payload containing user details
+      const token = jwt.sign(
+        { id: user.id, username: user.username },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+      );
       
-      // Set JWT in an HTTP-only cookie
+      // Set the token in an HTTP-only cookie to protect it from client-side scripts
       res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
       res.json({ message: 'Login successful' });
     } else {
