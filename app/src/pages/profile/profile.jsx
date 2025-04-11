@@ -5,8 +5,7 @@ import axios from 'axios';
 
 function Profile() {
 
-  const navigate = useNavigate(); // For navigating
-const API_URL = process.env.REACT_APP_BACKEND_API_URl; // Fallback for local development
+  const API_URL = process.env.REACT_APP_BACKEND_API_URl; // Fallback for local development
 
 
 
@@ -20,10 +19,14 @@ const API_URL = process.env.REACT_APP_BACKEND_API_URl; // Fallback for local dev
   const day = "2/14/2025";
 
 
-  const handleLogout = () => {
+  const handleLogout = async() => {
     
-
   }
+
+
+
+
+
   return (
     <div className='profile'>
       <img src={require ("./default pfp.jpg")} alt="profile" />
