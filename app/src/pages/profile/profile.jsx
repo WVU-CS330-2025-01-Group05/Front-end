@@ -1,6 +1,8 @@
 import React from 'react';
 import './profile.css';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 function Profile() {
 
@@ -19,21 +21,25 @@ function Profile() {
   const day = "2/14/2025";
 
 
-  //const handleLogout = async() => {
+  const handleLogout = async() => {
 
-    //try {
-    //  await axios.post(`${API_URL}/auth/logout`, {}, { method: "POST", withCredentials: true });
-      ////localStorage.setItem('token', null); // Clear the token from local storage
-      //localStorage.setItem('authenticated', false); // Update authenticated state
-      //alert('Logout successful');
-      //console.log(`${API_URL}/auth/logout`);
+    try {
+      //make a POST request to the backend logout endpoint
+      await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
 
-   // } catch (error) {
-      //console.error('Logout failed:', error);
-      //alert('Error logging out');
-  //  }
-   
-//  }
+
+      // Clear authentication-related data
+    localStorage.removeItem('token'); // Remove token from local storage
+    localStorage.setItem('authenticated', false); // Update authenticated state
+    //alert when successful
+    console.log('Logout successful');
+    alert('Logout successful');
+    navigate('/home'); //redirect to home page
+  } catch (error) {
+    console.error('Logout failed:', error);
+    alert('Error logging out');
+  }
+};
 
 
 

@@ -15,8 +15,8 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-
-const customIcon = L.icon({
+/* Sets properties for the icon layer */
+const userIcon = L.icon({
     iconUrl: markerIcon,
     iconRetinaUrl: markerIcon2x,
     shadowUrl: markerShadow,
@@ -26,9 +26,18 @@ const customIcon = L.icon({
     shadowSize: [41, 41],
 });
 
+/*  Sets center to Morgantown*/
 const defaultCenter = [39.6295, -79.9559];
 
+/*@param setPosition is the position that we are setting from user location
 
+Const map- sets up event listeners for the map, zooming in on the correct location
+@param e is the location that is returned by leaflet
+locationfound is triggered when leaflet finds the user location
+locationerror happens if leaflet returns an error
+useEffect sets the map view to center on the user location
+
+ */
 function LocationHandler({ setPosition }) {
 
     const map = useMapEvents({
@@ -37,13 +46,10 @@ function LocationHandler({ setPosition }) {
             map.flyTo(e.latlng, map.getZoom());
         },
         locationerror(e) {
-         
+            alert(`Unable to determine location: ${e.message}`);
         },
 
-        // trigger on click (if needed)
-        // click() {
-        //   map.locate();
-        //   },
+
     });
 
 
@@ -58,32 +64,36 @@ function LocationHandler({ setPosition }) {
 
 
 function Map() {
+    /* 
+  
+    sets state of the position and state to null 
+    useEffect sets trails to null 
+    then the response is sent, and then the data is pulled and is set
+    @catch throws error if data doesn't show up
+    */
     const [position, setPosition] = useState(null);
-    // new
     const [geojsonData, setGeojsonData] = useState(null);
 
     useEffect(() => {
-        fetch('/data/randomTrailsSelection/trail_lines.geojson')
+        fetch('/data/trail_lines.geojson')
             .then((res) => res.json())
             .then((data) => setGeojsonData(data))
             .catch((err) => console.error('GeoJSON load error:', err));
     }, []);
 
-    // end
+
 
     //testing python 
-    const [message, setMessage] = useState("");
-    const [distance, setDistance] = useState(0);
+    //  const [message, setMessage] = useState("");
 
+    //  const runPythonScript = async () => {
+    //      const res = await fetch("http://localhost:5000/run-script", {
+    //     method: "POST",
+    //      });
+    //      const data = await res.json();
+    //     setMessage(data.output || data.status);
 
-
-    const runPythonScript = async () => {
-        const res = await fetch("http://localhost:5000/run-script", {
-            method: "POST",
-        });
-        const data = await res.json();
-        setMessage(data.output || data.status);
-    };
+    //  };
 
     return (
         <div className='map'>
@@ -105,16 +115,16 @@ function Map() {
                             </select>
                         </div>
                         <div className='filter'>
-                            <label htmlFor='filter2'>Filter:</label>
-                            <select id='filter2' defaultValue={position} onChange={setDistance(EventTarget.value)}>
-                                <option value={5}>5 Miles</option>
-                                <option value={10}>10 Miles</option>
-                                <option value={25}>25 Miles</option>
-                                <option value={50}>50 Miles</option>
+                            <label htmlFor='filter2'>Select Trail:</label>
+                            <select id='filter2'>
+                                <option>Location 1</option>
+                                <option>Location 2</option>
+                                <option>Location 3</option>
+                                <option>Location 4</option>
                             </select>
                         </div>
                     </div>
-                    <button onClick={runPythonScript}>{distance}</button>
+                    {/* <button onClick={runPythonScript}>{message}</button>  */}
                     <div className='stats'>
 
                         <div className='item'>
@@ -158,12 +168,12 @@ function Map() {
 
 
                         {position && (
-                            <Marker position={position} icon={customIcon}>
+                            <Marker position={position} icon={userIcon}>
                                 <Popup>You are here</Popup>
                             </Marker>
                         )}
 
-                        {/* new */}
+                        {/*displays the geojson data and applies a style on each line*/}
                         {geojsonData && (
                             <GeoJSON
                                 data={geojsonData}
@@ -171,15 +181,11 @@ function Map() {
                                     color: '#006400',
                                     weight: 3,
                                 })}
-                                onEachFeature={(feature, layer) => {
-                                    if (feature.properties && feature.properties.name) {
-                                        layer.bindPopup(feature.properties.name);
-                                    }
-                                }}
+                                
                             />
                         )}
 
-                        {/* end */}
+                       
                     </MapContainer>
                 </div>
             </div>
