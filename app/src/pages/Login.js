@@ -70,7 +70,10 @@ const Login = ({ setAuthenticated }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button type="submit">Login</button>
+            <div className="button-group">
+              <button type="button" onClick={() => navigate('/')}>Back</button>
+              <button type="submit">Login</button>
+            </div>
           </form>
 
           {/* Link to the Register page */}
