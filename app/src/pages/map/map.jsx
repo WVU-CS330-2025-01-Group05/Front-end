@@ -75,7 +75,7 @@ function Map() {
     const [geojsonData, setGeojsonData] = useState(null);
 
     useEffect(() => {
-        fetch('/data/trail_lines.geojson')
+        fetch('/data/randomTrailsSelection/trail_lines.geojson')
             .then((res) => res.json())
             .then((data) => setGeojsonData(data))
             .catch((err) => console.error('GeoJSON load error:', err));
