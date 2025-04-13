@@ -1,14 +1,13 @@
 import React from 'react';
 import './profile.css';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 
 
 function Profile() {
 
   const navigate = useNavigate(); // For navigating
-  const API_URL = process.env.REACT_APP_BACKEND_API_URl; // Fallback for local development
+  const API_URL = process.env.REACT_APP_BACKEND_API_URL; // Fallback for local development
 
 
 
@@ -25,22 +24,22 @@ function Profile() {
   const handleLogout = async() => {
 
     try {
-      const response = await axios.post(
-        API_URL + '/auth/logout',
-        {},
-        { withCredentials: true }
-      );
-      if (response.data.message === 'Logout successful') {
-        navigate('/login'); // Redirect to login page
-      } else {
-        alert('Logout failed. Please try again.');
-      }
-    } catch (error) {
-      console.error('Logout failed:', error);
-      alert('Error logging out');
-    }
-   
+      //make a POST request to the backend logout endpoint
+      await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
+
+
+      // Clear authentication-related data
+    localStorage.removeItem('token'); // Remove token from local storage
+    localStorage.setItem('authenticated', false); // Update authenticated state
+    //alert when successful
+    console.log('Logout successful');
+    alert('Logout successful');
+    navigate('/home'); //redirect to home page
+  } catch (error) {
+    console.error('Logout failed:', error);
+    alert('Error logging out');
   }
+};
 
 
 
@@ -52,7 +51,7 @@ function Profile() {
       <a href='/map'><button id='back'>Back to Map</button></a>
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
       <a href='/edit'><button id='editProfile'>Edit Profile</button></a>
-      <a href='/'><button id='logOut' onClick={handleLogout}>Log Out</button></a>
+      <a href='/home'><button id='logOut' /*onClick={handleLogout}*/>Log Out</button></a>
 
       <div>
         <p id="name">{name}</p>
