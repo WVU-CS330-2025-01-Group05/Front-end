@@ -68,11 +68,7 @@ router.post('/login', async (req, res) => {
 });
 
 
-//setup to query the database for username 
-router.post('/profile', authMiddleware, async (req, res) => {
-  const { username, password } = req.body;
 
-});
 
 
 module.exports = router;
