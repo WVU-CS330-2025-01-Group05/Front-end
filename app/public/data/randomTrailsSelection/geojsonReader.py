@@ -33,6 +33,7 @@ def haversine(lat1, lon1, lat2, lon2):
     return 2 * r * asin(sqrt(a))
 
 
+# Generated Bounding box function
 # Convert mile distance to degree bounding box around lat/lon
 def bounding_box(lat, lon, radius_miles):
     miles_per_deg_lat = 69.0
@@ -46,7 +47,8 @@ def bounding_box(lat, lon, radius_miles):
         lon + delta_lon  # max_lon
     )
 
-
+# Python goin crazy rn seriously, Lat,Long parameters pulled from bounding_box stored for
+# future use
 min_lat, min_lon, max_lat, max_lon = bounding_box(user_lat, user_lon, radius)
 
 # GeoJSON file calling
@@ -61,6 +63,7 @@ with open(filename, 'r', encoding='utf-8') as f:
     data = json.load(f)
 
 # Reprojection function to get distance in meters (WGS84 to UTM)
+# which means that this is focused on west virginia
 project = pyproj.Transformer.from_crs("EPSG:4326", "EPSG:32617", always_xy=True).transform
 
 filtered = []
