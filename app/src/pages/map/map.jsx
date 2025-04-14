@@ -84,16 +84,16 @@ function Map() {
 
 
     //testing python 
-    //  const [message, setMessage] = useState("");
+     const [message, setMessage] = useState("");
 
-    //  const runPythonScript = async () => {
-    //      const res = await fetch("http://localhost:5000/run-script", {
-    //     method: "POST",
-    //      });
-    //      const data = await res.json();
-    //     setMessage(data.output || data.status);
+     const runPythonScript = async () => {
+         const res = await fetch("http://localhost:5000/run-script", {
+        method: "POST",
+         });
+         const data = await res.json();
+        setMessage(data.output || data.status);
 
-    //  };
+     };
 
     return (
         <div className='map'>
@@ -124,7 +124,7 @@ function Map() {
                             </select>
                         </div>
                     </div>
-                    {/* <button onClick={runPythonScript}>{message}</button>  */}
+                 
                     <div className='stats'>
 
                         <div className='item'>
@@ -157,7 +157,10 @@ function Map() {
 
                     </div>
                 </div>
-                <div className='right' style={{ height: "80vh", width: "70vw" }}>
+                <div className='right' style={{ height: "80vh", width: "70vw" }}>  
+                
+                 <button onClick={runPythonScript}>Get Trails</button> 
+                  
                     <MapContainer center={defaultCenter} zoom={13} style={{ height: "100%", width: "100%" }}>
 
                         <TileLayer
