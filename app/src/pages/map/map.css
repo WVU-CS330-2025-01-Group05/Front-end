@@ -58,10 +58,12 @@
             
         } 
 
-
-        .map button:hover {
-                background-color: #151515;
+        /* DO NOT CHANGE THIS OR MOVE IT!!! IT WILL NOT WORK */
+        button:hover {
+            background-color: #151515;
+            color: white;
         }
+        
     }
 
 

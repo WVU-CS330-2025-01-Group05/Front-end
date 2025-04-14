@@ -34,11 +34,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to={authenticated ? "/home" : "/login"} replace />}/>
+        <Route path="/" element={<Navigate to={authenticated ? "/map" : "/home"} replace />}/>
         <Route path="/home"element={<Home/>}/>
         <Route path="/login" element={authenticated ? (<Navigate to="/map" replace />) : (<Login setAuthenticated={setAuthenticated} />)}/>
         <Route path="/friends_list" element={<FriendsList />}/>
-        <Route path="/profile" element={<Profile />}/>
+        <Route path="/profile" element={<Navigate to={authenticated ? (<Profile />) : "/login2view"} replace />}/>
         <Route path="/edit" element={<Edit />}/>
         <Route path="/register" element={authenticated ? (<Navigate to="/map" replace />) : (<Register />)}/>
         <Route path="/map" element={<Map setAuthenticated={setAuthenticated} />}/>
