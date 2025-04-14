@@ -1,49 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './profile.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-
 function Profile() {
-
   const navigate = useNavigate(); // For navigating
-  const API_URL = process.env.REACT_APP_BACKEND_API_URL; // Fallback for local development
+  const API_URL = process.env.REACT_APP_BACKEND_API_URL; // Backend API URL
 
+  // State to store user data
+  const [userData, setUserData] = useState({
+    username: '',
+    numOfHikes: 0,
+    bio: '',
+    nameVar: '',
+  });
 
+  // Fetch user data on component load
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/auth/profile`, {
+          withCredentials: true, // Include cookies for authentication
+        });
+        setUserData(response.data); // Update state with user data
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        alert('Failed to fetch user data. Please log in again.');
+        navigate('/login'); // Redirect to login if unauthorized
+      }
+    };
 
-    //examples
-    //need to do (grace): fix variables to match database variables. issue: database variables are in a different file nested in a
-  const name = "Lauren Taylor"; 
-  const username = "LaurenKate25"; 
-  const numOfHikes = 25; 
-  const bio = "bio goes here"; 
-  const hikeName = "Seneca Rocks";
-  const day = "2/14/2025";
+    fetchUserData();
+  }, [API_URL, navigate]);
 
-
-  const handleLogout = async(e) => {
+  // Logout function
+  const handleLogout = async (e) => {
     e.preventDefault();
 
     try {
-      // Clear authentication-related data
-    localStorage.removeItem('authToken'); // Remove token from local storage
-    localStorage.setItem('authenticated', false); // Update authenticated state
-    //alert when successful
-    console.log('Logout successful');
-    alert('Logout successful');
-    navigate('/home'); //redirect to home page
-  } catch (error) {
-    console.error('Logout failed:', error);
-    alert('Error logging out');
-  }
-};
-
-
-
+      await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
+      localStorage.removeItem('authenticated'); // Clear authentication state
+      alert('Logout successful');
+      navigate('/login'); // Redirect to login page
+    } catch (error) {
+      console.error('Logout failed:', error);
+      alert('Error logging out');
+    }
+  };
 
   return (
     <div className='profile'>
-      <img src={require ("./default pfp.jpg")} alt="profile" />
+      <img src={require('./default pfp.jpg')} alt="profile" />
 
       <a href='/map'><button id='back'>Back to Map</button></a>
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
@@ -51,19 +58,15 @@ function Profile() {
       <a href='/home'><button id='logOut' onClick={handleLogout}>Log Out</button></a>
 
       <div>
-        <p id="name">{name}</p>
-        <p id="username">@{username}</p>
-        <p id="hikes">Hikes Completed: {numOfHikes}</p>
+        <p id="name">{userData.name}</p>
+        <p id="username">@{userData.username}</p>
+        <p id="hikes">Hikes Completed: {userData.numOfHikes}</p>
         <label htmlFor="bio">Bio:</label>
-        <p id="biography">{bio}</p>
+        <p id="biography">{userData.bio}</p>
       </div>
 
       <div className="hikes">
-        <p className="completedHike">{name} completed {hikeName} on {day}!</p>
-        <p className="completedHike">{name} completed {hikeName} on {day}!</p>
-        <p className="completedHike">{name} completed {hikeName} on {day}!</p>
-        <p className="completedHike">{name} completed {hikeName} on {day}!</p>
-        <p className="completedHike">{name} completed {hikeName} on {day}!</p>
+        <p className="completedHike">{userData.name} completed {userData.numOfHikes} hikes!</p>
       </div>
     </div>
   );

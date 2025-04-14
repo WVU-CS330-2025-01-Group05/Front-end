@@ -1,9 +1,8 @@
-// backend/auth.js
-
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/database'); // Using our MySQL pool
+const authMiddleware = require('../environment variables/authMiddleware'); // Import authMiddleware
 const router = express.Router();
 
 /**
@@ -14,21 +13,21 @@ const router = express.Router();
  * @returns {JSON} Success message or error message.
  */
 router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-  
+  const { username, password, bio, name } = req.body;
+
   try {
     // Hash the user's password
     const hashedPassword = await bcrypt.hash(password, 10);
-    
-    // Use the promise API to execute the INSERT query
+
+    // Insert the new user into the database
     const [result] = await pool.promise().execute(
-      'INSERT INTO users (username, password) VALUES (?, ?)',
-      [username, hashedPassword]
+      'INSERT INTO users (username, password, bio, name) VALUES (?, ?, ?, ?)',
+      [username, hashedPassword, bio, name]
     );
-    
+
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
-    console.error("Error during user registration:", error);
+    console.error('Error during user registration:', error);
     res.status(500).json({ error: 'Failed to register user' });
   }
 });
@@ -42,7 +41,7 @@ router.post('/register', async (req, res) => {
  */
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  
+
   try {
     // Query the database for the user by username
     const [rows] = await pool.promise().execute(
@@ -50,11 +49,11 @@ router.post('/login', async (req, res) => {
       [username]
     );
     const user = rows[0];
-    
+
     // If user exists and the password matches, generate a JWT
     if (user && await bcrypt.compare(password, user.password)) {
       const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
-      
+
       // Set JWT in an HTTP-only cookie
       res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
       res.json({ message: 'Login successful' });
@@ -62,13 +61,44 @@ router.post('/login', async (req, res) => {
       res.status(401).json({ error: 'Invalid credentials' });
     }
   } catch (error) {
-    console.error("Error during login:", error);
+    console.error('Error during login:', error);
     res.status(500).json({ error: 'Failed to login' });
   }
 });
 
+/**
+ * Fetches the logged-in user's profile.
+ * @route GET /auth/profile
+ * @returns {JSON} User's profile data or error message.
+ */
+router.get('/profile', authMiddleware, async (req, res) => {
+  try {
+    // Query the database for the user's data using their ID
+    const [rows] = await pool.promise().execute(
+      'SELECT username, numOfHikes, bio, nameVar FROM users WHERE id = ?',
+      [req.user.id] // `req.user.id` is set by the authMiddleware
+    );
 
+    const user = rows[0];
+    if (user) {
+      res.json(user); // Return the user's data
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    res.status(500).json({ error: 'Failed to fetch user profile' });
+  }
+});
 
-
+/**
+ * Logs out the user by clearing the authentication cookie.
+ * @route POST /auth/logout
+ * @returns {JSON} Success message.
+ */
+router.post('/logout', (req, res) => {
+  res.clearCookie('token'); // Clear the authentication cookie
+  res.status(200).json({ message: 'Logout successful' });
+});
 
 module.exports = router;
