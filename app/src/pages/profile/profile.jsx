@@ -66,7 +66,7 @@ function Profile() {
       </div>
 
       <div className="hikes">
-        <p className="completedHike">{userData.name} completed {userData.numOfHikes} hikes!</p>
+        <p className="completedHike">{userData.name} Completed {userData.numOfHikes} hikes!</p>
       </div>
     </div>
   );
