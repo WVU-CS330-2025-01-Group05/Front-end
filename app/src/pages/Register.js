@@ -24,7 +24,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    try {
+    try { 
       const response = await axios.post(
         API_URL + '/auth/register',
         { username, password },
@@ -33,7 +33,7 @@ const Register = () => {
 
       if (response.data.message === 'User registered successfully') {
         alert('Registration successful');
-        navigate('/'); // Navigate to login page after registration
+        navigate('/map'); // Navigate to map page after registration
       }
     } catch (error) {
       console.error('Registration failed:', error);

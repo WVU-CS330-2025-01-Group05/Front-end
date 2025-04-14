@@ -33,7 +33,7 @@ const Login = ({ setAuthenticated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
+    try { 
       const response = await axios.post(
         API_URL + '/auth/login',
         { username, password },
