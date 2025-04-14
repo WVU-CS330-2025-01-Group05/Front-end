@@ -102,7 +102,6 @@
     }
 
     #friendProf:hover {
-        background-color: #151515;
-        color: white;
+        background-color: #c0c0c0;
     }
 }

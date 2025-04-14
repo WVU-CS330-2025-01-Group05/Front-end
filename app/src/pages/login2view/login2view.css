@@ -38,7 +38,7 @@
       gap: 10px;
     }
     
-    .login button:hover {
+    button:hover {
       background-color: #c0c0c0;
     }
   
