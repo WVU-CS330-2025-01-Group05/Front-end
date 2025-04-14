@@ -9,7 +9,7 @@ CORS(app)  # Allow requests from different origins (React runs on another port)
 def run_script():
     try:
         result = subprocess.run(
-            ["python", "func.py"],
+            ["python", "/public/data/randomTrailsSelection/geojsonReader.py"],
             capture_output=True,
             text=True
         )

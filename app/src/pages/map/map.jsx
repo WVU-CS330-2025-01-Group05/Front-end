@@ -75,7 +75,8 @@ function Map() {
     const [geojsonData, setGeojsonData] = useState(null);
 
     useEffect(() => {
-        fetch('/data/randomTrailsSelection/trail_lines.geojson')
+       
+        fetch("/data/randomTrailsSelection/trail_lines.geojson")
             .then((res) => res.json())
             .then((data) => setGeojsonData(data))
             .catch((err) => console.error('GeoJSON load error:', err));
@@ -158,8 +159,10 @@ function Map() {
                     </div>
                 </div>
                 <div className='right' style={{ height: "80vh", width: "70vw" }}>  
-                
-                 <button onClick={runPythonScript}>Get Trails</button> 
+                {/* Button to run script to get random trails */}
+                 <button onClick={runPythonScript}>Get Trails</button> \
+                 
+
                   
                     <MapContainer center={defaultCenter} zoom={13} style={{ height: "100%", width: "100%" }}>
 
@@ -169,7 +172,7 @@ function Map() {
                         <LocationHandler setPosition={setPosition} />
 
 
-
+                        {/* displays user location on a point on the map with the popup "you are here"  */}
                         {position && (
                             <Marker position={position} icon={userIcon}>
                                 <Popup>You are here</Popup>

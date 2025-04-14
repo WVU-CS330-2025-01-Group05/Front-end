@@ -179,7 +179,10 @@
 
             }
             
-           
+            button:hover {
+                background-color: #151515;
+                color: white;
+            }
             
 
             .leaflet-container {
