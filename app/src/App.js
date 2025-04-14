@@ -14,7 +14,7 @@ import FriendsList from './pages/friendsList/friendsList';
 import Profile from './pages/profile/profile';
 import Home from './pages/home/home';
 import Edit from './pages/edit/edit';
-import Login2View from './pages/login2view/login2view';
+import LoginToView from './pages/loginToView/loginToView';
 
 /**
  * Main application component that manages routes and authentication state.
@@ -38,11 +38,11 @@ function App() {
         <Route path="/home"element={<Home/>}/>
         <Route path="/login" element={authenticated ? (<Navigate to="/map" replace />) : (<Login setAuthenticated={setAuthenticated} />)}/>
         <Route path="/friends_list" element={<FriendsList />}/>
-        <Route path="/profile" element={!authenticated ? (<Navigate to="/login2view" replace />) : (<Profile />)}/> 
+        <Route path="/profile" element={!authenticated ? (<Navigate to="/loginToView" replace />) : (<Profile />)}/> 
         <Route path="/edit" element={<Edit />}/>
         <Route path="/register" element={authenticated ? (<Navigate to="/map" replace />) : (<Register />)}/>
         <Route path="/map" element={<Map setAuthenticated={setAuthenticated} />}/>
-        <Route path="/login2view" element={<Login2View />} />
+        <Route path="/loginToView" element={<LoginToView />} />
       </Routes>
     </Router>
   );

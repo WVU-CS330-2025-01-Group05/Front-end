@@ -1,20 +1,20 @@
 import React from 'react';
-import './login2view.css';
+import './loginToView.css';
 import { useNavigate } from 'react-router-dom';
 
 
-const Login2View = () => {
+const LoginToView = () => {
   const navigate = useNavigate();
   
 
 
   return (
-    <div className="login2view">
-      <div className="login2view-container">
-        <form className="login2view-form">
+    <div className="loginToView">
+      <div className="loginToView-container">
+        <form className="loginToView-form">
           <h2>Login Required</h2>
           <p>Please login to view your profile.</p>
-          <div className="login2view-buttons">
+          <div className="loginToView-buttons">
             <button type="button" onClick={() => navigate('/map')}>Back</button>
             <button type="button" onClick={() => navigate('/login')}>Login</button>
           </div>
@@ -24,4 +24,4 @@ const Login2View = () => {
   );
 };
 
-export default Login2View;
+export default LoginToView;
