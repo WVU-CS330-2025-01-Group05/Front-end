@@ -34,7 +34,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to={authenticated ? "/map" : "/home"} replace />}/>
+        <Route path="/" element={<Navigate to="/home" replace />}/>
         <Route path="/home"element={<Home/>}/>
         <Route path="/login" element={authenticated ? (<Navigate to="/map" replace />) : (<Login setAuthenticated={setAuthenticated} />)}/>
         <Route path="/friends_list" element={<FriendsList />}/>

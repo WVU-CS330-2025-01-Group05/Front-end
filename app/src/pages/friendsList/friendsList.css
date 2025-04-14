@@ -19,6 +19,7 @@
         text-align: center;
         width: 300px;
         font-family: "Roboto";
+        overflow-y: scroll;
     }
     
     h2 {
