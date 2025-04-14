@@ -160,7 +160,7 @@ function Map() {
                 </div>
                 <div className='right' style={{ height: "80vh", width: "70vw" }}>  
                 {/* Button to run script to get random trails */}
-                 <button onClick={runPythonScript}>Get Trails</button> \
+                 <button onClick={runPythonScript}>Get Trails</button> 
                  
 
                   
