@@ -3,6 +3,7 @@
     width: 100vw;
     height: 100vh;
     position: relative; /* Ensure positioning for the pseudo-element */
+    overflow-x: hidden;
 
     body {
         font-family: Arial, sans-serif;
@@ -100,4 +101,8 @@
     opacity: 0.2; /* 50% transparency */
     z-index: 0; /* Ensure it stays behind other elements */
     background-position: cover;
+    background-attachment: fixed;
   }
+
+  
+  

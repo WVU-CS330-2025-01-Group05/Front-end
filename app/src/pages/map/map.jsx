@@ -15,8 +15,8 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-
-const customIcon = L.icon({
+/* Sets properties for the icon layer */
+const userIcon = L.icon({
     iconUrl: markerIcon,
     iconRetinaUrl: markerIcon2x,
     shadowUrl: markerShadow,
@@ -26,9 +26,18 @@ const customIcon = L.icon({
     shadowSize: [41, 41],
   });
 
+/*  Sets center to Morgantown*/
 const defaultCenter = [39.6295, -79.9559];
 
+/*@param setPosition is the position that we are setting from user location
 
+Const map- sets up event listeners for the map, zooming in on the correct location
+@param e is the location that is returned by leaflet
+locationfound is triggered when leaflet finds the user location
+locationerror happens if leaflet returns an error
+useEffect sets the map view to center on the user location
+
+ */
 function LocationHandler({ setPosition }) {
     
 const map = useMapEvents({
@@ -37,13 +46,10 @@ const map = useMapEvents({
     map.flyTo(e.latlng, map.getZoom());
       },
         locationerror(e) {
-        alert(`Unable to determine location: ${e.message}`);
-      },
-      
-    // trigger on click (if needed)
-    // click() {
-    //   map.locate();
-    //   },
+            alert(`Unable to determine location: ${e.message}`);
+        },
+
+
     });
   
     
@@ -56,18 +62,37 @@ const map = useMapEvents({
 
 
 function Map() {
+    /* 
+  
+    sets state of the position and state to null 
+    useEffect sets trails to null 
+    then the response is sent, and then the data is pulled and is set
+    @catch throws error if data doesn't show up
+    */
     const [position, setPosition] = useState(null);
-  // new
-  const [geojsonData, setGeojsonData] = useState(null);
+    const [geojsonData, setGeojsonData] = useState(null);
 
-  useEffect(() => {
-    fetch('/data/randomTrailsSelection/trail_lines.geojson')
-      .then((res) => res.json())
-      .then((data) => setGeojsonData(data))
-      .catch((err) => console.error('GeoJSON load error:', err));
-  }, []);
+    useEffect(() => {
+       
+        fetch("/data/randomTrailsSelection/trail_lines.geojson")
+            .then((res) => res.json())
+            .then((data) => setGeojsonData(data))
+            .catch((err) => console.error('GeoJSON load error:', err));
+    }, []);
 
-// end
+
+
+    //testing python 
+     const [message, setMessage] = useState("");
+
+     const runPythonScript = async () => {
+         const res = await fetch("http://localhost:5000/run-script", {
+        method: "POST",
+         });
+         const data = await res.json();
+        setMessage(data.output || data.status);
+
+     };
 
     return (
         <div className='map'>
@@ -98,6 +123,7 @@ function Map() {
                             </select>
                         </div>
                     </div>
+                 
                     <div className='stats'>
                     <div className='left-stats'>
                         <div className='item'>
@@ -130,8 +156,13 @@ function Map() {
                     </div>
                     </div>
                 </div>
-                <div className='right' style={{ height: "80vh", width: "70vw" }}>
-                <MapContainer center={defaultCenter} zoom={13} style={{ height: "100%", width: "100%" }}>
+                <div className='right' style={{ height: "80vh", width: "70vw" }}>  
+                {/* Button to run script to get random trails */}
+                 <button onClick={runPythonScript}>Get Trails</button> 
+                 
+
+                  
+                    <MapContainer center={defaultCenter} zoom={13} style={{ height: "100%", width: "100%" }}>
 
                         <TileLayer
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -162,7 +193,26 @@ function Map() {
                 />
 )}
 
-                    {/* end */}
+                        {/* displays user location on a point on the map with the popup "you are here"  */}
+                        {position && (
+                            <Marker position={position} icon={userIcon}>
+                                <Popup>You are here</Popup>
+                            </Marker>
+                        )}
+
+                        {/*displays the geojson data and applies a style on each line*/}
+                        {geojsonData && (
+                            <GeoJSON
+                                data={geojsonData}
+                                style={() => ({
+                                    color: '#006400',
+                                    weight: 3,
+                                })}
+                                
+                            />
+                        )}
+
+                       
                     </MapContainer>
                 </div>
             </div>
