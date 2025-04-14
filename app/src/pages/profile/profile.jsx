@@ -25,19 +25,6 @@ function Profile() {
     e.preventDefault();
 
     try {
-      //make a POST request to the backend logout endpoint
-      /*
-      const response = await axios.post(
-        API_URL + '/auth/logout', 
-        {}, 
-        { withCredentials: true }
-      );
-
-      if (response.data.message === "User logged out successfully") {
-        alert("Logout successful");
-        navigate("/home");
-      }
-      */
       // Clear authentication-related data
     localStorage.removeItem('authToken'); // Remove token from local storage
     localStorage.setItem('authenticated', false); // Update authenticated state
