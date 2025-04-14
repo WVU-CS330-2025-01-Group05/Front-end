@@ -24,7 +24,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    try {
+    try { 
       const response = await axios.post(
         API_URL + '/auth/register',
         { username, password },
@@ -33,7 +33,7 @@ const Register = () => {
 
       if (response.data.message === 'User registered successfully') {
         alert('Registration successful');
-        navigate('/'); // Navigate to login page after registration
+        navigate('/map'); // Navigate to map page after registration
       }
     } catch (error) {
       console.error('Registration failed:', error);
@@ -44,23 +44,26 @@ const Register = () => {
   return (
     <div className="register">
       <div className="register-container">
-    <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', maxWidth: '300px' }}>
-      <h2>Register</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button type="submit">Register</button>
-    </form>
-    </div>
+        <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', maxWidth: '300px' }}>
+          <h2>Register</h2>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <div className="buttons">
+          <button type="button" id="back" onClick={() => navigate('/')}>Back</button>
+          <button type="submit">Register</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

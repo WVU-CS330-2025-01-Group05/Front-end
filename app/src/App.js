@@ -12,6 +12,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import FriendsList from './pages/friendsList/friendsList';
 import Profile from './pages/profile/profile';
+import Home from './pages/home/home';
+import Edit from './pages/edit/edit';
+import Login2View from './pages/login2view/login2view';
 
 /**
  * Main application component that manages routes and authentication state.
@@ -31,84 +34,15 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Redirect to /login if not authenticated; otherwise to /map */}
-        <Route
-          path="/"
-          element={<Navigate to={authenticated ? "home" : "/login"} replace />}
-        />
-
-        {/* home page route */}
-<Route
-        path="/home"
-        element={
-          authenticated ? (
-            <Profile />
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-
-        {/* Login Route */}
-        <Route
-          path="/login"
-          element={
-            authenticated ? (
-              <Navigate to="/map" replace />
-            ) : (
-              <Login setAuthenticated={setAuthenticated} />
-            )
-          }
-        />
- {/* Friends List Page Route */}
- <Route
-        path="/friends_list"
-        element={
-          authenticated ? (
-            <FriendsList />
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-
-
-      {/* Profile Page Route */}
-      <Route
-        path="/profile"
-        element={
-          authenticated ? (
-            <Profile />
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-        
-
-        {/* Register Route */}
-        <Route
-          path="/register"
-          element={
-            authenticated ? (
-              <Navigate to="/map" replace />
-            ) : (
-              <Register />
-            )
-          }
-        />
-
-        {/* Map Page Route */}
-        <Route
-          path="/map"
-          element={
-            authenticated ? (
-              <Map setAuthenticated={setAuthenticated} />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
+        <Route path="/" element={<Navigate to={authenticated ? "/map" : "/home"} replace />}/>
+        <Route path="/home"element={<Home/>}/>
+        <Route path="/login" element={authenticated ? (<Navigate to="/map" replace />) : (<Login setAuthenticated={setAuthenticated} />)}/>
+        <Route path="/friends_list" element={<FriendsList />}/>
+        <Route path="/profile" element={!authenticated ? (<Navigate to="/login2view" replace />) : (<Profile />)}/> 
+        <Route path="/edit" element={<Edit />}/>
+        <Route path="/register" element={authenticated ? (<Navigate to="/map" replace />) : (<Register />)}/>
+        <Route path="/map" element={<Map setAuthenticated={setAuthenticated} />}/>
+        <Route path="/login2view" element={<Login2View />} />
       </Routes>
     </Router>
   );
