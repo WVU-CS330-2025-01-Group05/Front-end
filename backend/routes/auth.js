@@ -13,16 +13,17 @@ const router = express.Router();
  * @returns {JSON} Success message or error message.
  */
 router.post('/register', async (req, res) => {
-  const { username, password, bio, name } = req.body;
+  const { username, password, bio = 'No Bio', nameVar = 'John Doe' } = req.body;
 
+  
   try {
     // Hash the user's password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Insert the new user into the database
     const [result] = await pool.promise().execute(
-      'INSERT INTO users (username, password, bio, name) VALUES (?, ?, ?, ?)',
-      [username, hashedPassword, bio, name]
+      'INSERT INTO users (username, password, bio, nameVar) VALUES (?, ?, ?, ?)',
+      [username, hashedPassword, bio, nameVar]
     );
 
     res.status(201).json({ message: 'User registered successfully' });
