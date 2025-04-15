@@ -1,4 +1,4 @@
-.login2view {
+.loginToView {
     width: 100vw;
     height: 100vh;
     position: relative; /* Ensure positioning for the pseudo-element */
@@ -6,7 +6,7 @@
     overflow: hidden;
   }
     
-    .login2view-container {
+    .loginToView-container {
       position: relative; /* Ensure it stays above the background */
       background-color:  rgb(223, 234, 227);
       width: 300px;
@@ -18,13 +18,13 @@
       z-index: 1; /* Layer above the background */
     }
     
-    .login2view h2 {
+    .loginToView h2 {
       font-family: 'Verdana', sans-serif;
       color: darkgreen;
       text-shadow: 1px 1px 2px #999;
     }
     
-    .login2view button {
+    .loginToView button {
       background-color: #d9d9d9;
       padding: 10px 20px;
       border-radius: 10px;
@@ -32,24 +32,24 @@
       font-size: 16px;
     }
     
-    .button-group {
+    .loginToView-buttons {
       display: flex;
       justify-content: center;
-      gap: 10px;
+      gap: 20px;
     }
     
     button:hover {
       background-color: #c0c0c0;
     }
   
-  .login2view::before {
+  .loginToView::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* background: url('forestshadow.png') no-repeat center center; */
+    background: url('forestshadow.png') no-repeat center center;
     background-size: cover;
     opacity: 0.2; /* 50% transparency */
     z-index: 0; /* Ensure it stays behind other elements */
