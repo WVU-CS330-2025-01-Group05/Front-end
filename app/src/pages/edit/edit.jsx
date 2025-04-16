@@ -1,31 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './edit.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Edit() {
+    const navigate = useNavigate();
+    const API_URL = process.env.REACT_APP_BACKEND_API_URL; //Backend API URL
+    const [nameVar, setNameVar] = useState('');
+    const [bio, setBio] = useState('');
+
+    const handleEdit = async (e) => {
+        e.preventDefault();
+
+    }
+
     return (
         <div className="edit">
             <img src={require ("./default pfp.jpg")} alt="profile image" />
-
             <a href="/profile"><button id="back">Back to Account</button></a>
 
-            <form>
+            <div className="edit-container">
+            <form onSubmit={handleEdit}>
                 <div className="pfp">
                     <label for="pfp">Edit Profile Picture (upload SQUARE PNG, JPEG, or JPG)</label>
                     <input type="file" id="file" accept="image/png, image/jpeg, image/jpg" ></input>
                 </div>
 
-                <div className="inputs">
-                    <label for="name">Enter Name: <br></br></label>
-                    <input type="text" id="name" size="53"></input><br></br><br></br>
-                    <label for="username">Enter New Username: <br></br></label>
-                    <input type="text" id="username" size="53"></input>
-                    <p>USERNAME IS ALREADY TAKEN</p>
-                    <label for="bio">Enter Bio: <br></br></label>
-                    <textarea id="bio" name="bio" rows="5" cols="50"></textarea>
-                </div>
+                <input 
+                    type="text"
+                    placeholder="Name"
+                    value={nameVar}
+                    onChange={(e) => setNameVar(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Bio"
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                />
 
-                <input type="submit" id="submit"></input>
+                <input type="submit" id="submit" onClick={() => navigate('/profile')}></input>
             </form>
+            </div>
         </div>
     );
 }

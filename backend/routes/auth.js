@@ -13,9 +13,8 @@ const router = express.Router();
  * @returns {JSON} Success message or error message.
  */
 router.post('/register', async (req, res) => {
-  const { username, password, bio = 'No Bio', nameVar = 'John Doe' } = req.body;
+  const { username, password, bio, nameVar } = req.body;
 
-  
   try {
     // Hash the user's password
     const hashedPassword = await bcrypt.hash(password, 10);

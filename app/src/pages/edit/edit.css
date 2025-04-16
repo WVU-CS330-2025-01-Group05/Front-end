@@ -1,9 +1,11 @@
 .edit {
     body {
-        font-family: Arial, sans-serif;
-        color: #fff;
+        width: 100vw;
+        height: 100vh;
+        position: relative; /* Ensure positioning for the pseudo-element */
+        background: #799a84ff; /* Fallback background color */
+        overflow-y: hidden;
         overflow-x: hidden;
-        background-color: #799a84;
     }
 
     img {
@@ -70,22 +72,33 @@
         left: 0;
     }
 
-    .inputs {
-        margin-top: -200px;
-        margin-left: 680px;
-        font-size: 20px;
-        color: white;
-        display: block;
-    }
-
     #submit {
         position: fixed;
         top: 450px;
         left: 670px;
     }
 
+    /*
     p {
         font-size: 15px;
         color: darkred; /* assumes invalid username, use green for valid */
+    
+    .edit-container {
+        position: fixed;
+        width: 400px;
+        border-radius: 10px;
+        margin: auto;
+        text-align: center;
+        z-index: 1; /* Layer above the background */
+        margin-left: 650px;
+        margin-top: -160px;
     }
+
+    input[type="text"] {
+        width: 90%;
+        padding: 10px;
+        margin: 25px;
+        border: 2px solid #000;
+        border-radius: 10px;
+      }
 }

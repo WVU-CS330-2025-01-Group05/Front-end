@@ -12,7 +12,7 @@ function Profile() {
     username: '',
     numOfHikes: 0,
     bio: '',
-    nameVar: '',
+    nameVar: ''
   });
 
   // Fetch user data on component load
@@ -26,7 +26,7 @@ function Profile() {
       } catch (error) {
         console.error('Error fetching user data:', error);
         alert('Failed to fetch user data. Please log in again.');
-        navigate('/login'); // Redirect to login if unauthorized
+        //navigate('/login'); // Redirect to login if unauthorized
       }
     };
 
@@ -41,7 +41,7 @@ function Profile() {
       await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
       localStorage.removeItem('authenticated'); // Clear authentication state
       alert('Logout successful');
-      navigate('/login'); // Redirect to login page
+      navigate('/home'); // Redirect to login page
     } catch (error) {
       console.error('Logout failed:', error);
       alert('Error logging out');
@@ -58,7 +58,7 @@ function Profile() {
       <a href='/home'><button id='logOut' onClick={handleLogout}>Log Out</button></a>
 
       <div>
-        <p id="name">{userData.name}</p>
+        <p id="name">{userData.nameVar}</p>
         <p id="username">{userData.username}</p>
         <p id="hikes">Hikes Completed: {userData.numOfHikes}</p>
         <label htmlFor="bio">Bio:</label>
@@ -66,7 +66,7 @@ function Profile() {
       </div>
 
       <div className="hikes">
-        <p className="completedHike">{userData.name} Completed {userData.numOfHikes} hikes!</p>
+        <p className="completedHike">{userData.nameVar} completed {userData.numOfHikes} hikes!</p>
       </div>
     </div>
   );
