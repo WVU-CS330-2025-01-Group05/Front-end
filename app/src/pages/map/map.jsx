@@ -31,7 +31,7 @@ const defaultCenter = [39.6295, -79.9559];
 
 /*@param setPosition is the position that we are setting from user location
 
-Const map- sets up event listeners for the map, zooming in on the correct location
+const map- sets up event listeners for the map, zooming in on the correct location
 @param e is the location that is returned by leaflet
 locationfound is triggered when leaflet finds the user location
 locationerror happens if leaflet returns an error
@@ -82,15 +82,32 @@ function Map() {
 
 
 
-    //testing python 
-     const [message, setMessage] = useState("");
+/* Function runs python script that generates random trails and updates the map with the newly generated data. 
+const res- sends post request to run python script
+const data- parses data recieved as json
+Then script is checked for execution, and if it excecuted, then a timeout occurs to allow the new file data to load and then fetches and sets the new data
+*/
+   
 
      const runPythonScript = async () => {
          const res = await fetch("http://localhost:5000/run-script", {
         method: "POST",
          });
          const data = await res.json();
-        setMessage(data.output || data.status);
+        
+        console.log("Script response:", data);
+        if (data.status === 'Script executed') {
+            
+            setTimeout(() => {
+                fetch("/data/randomTrailsSelection/trail_lines.geojson")
+                    .then((res) => res.json())
+                    .then((data) => {
+                        setGeojsonData(data);
+                    })
+                    .catch((err) => console.error('GeoJSON load error after script:', err));
+            }, 500); 
+        }
+
 
      };
 
