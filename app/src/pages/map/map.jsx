@@ -172,7 +172,7 @@ function Map() {
                          
                     
                 {position && (
-                    <Marker position={position} icon= {customIcon}>
+                    <Marker position={position} icon= {userIcon}>
                         <Popup>You are here</Popup>
                     </Marker>
                 )} 
