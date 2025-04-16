@@ -20,6 +20,8 @@ import LoginToView from './pages/loginToView/loginToView';
  * Main application component that manages routes and authentication state.
  * @returns {JSX.Element} The rendered application with routes.
  */
+
+
 function App() {
   // Initialize authenticated state from local storage
   const [authenticated, setAuthenticated] = useState(
@@ -30,6 +32,12 @@ function App() {
   useEffect(() => {
     localStorage.setItem('authenticated', JSON.stringify(authenticated));
   }, [authenticated]);
+
+  app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+  }));
+  
 
   return (
     <Router>
