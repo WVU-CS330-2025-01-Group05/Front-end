@@ -43,7 +43,7 @@ function App() {
         <Route path="/friends_list" element={<FriendsList />}/>
         <Route path="/profile" element={!authenticated ? (<Navigate to="/loginToView" replace />) : (<Profile />)}/> 
         <Route path="/edit" element={<Edit />}/>
-        <Route path="/register" element={authenticated ? (<Navigate to="/map" replace />) : (<Register setAuthenticated={setAuthenticated/>)}/>
+        <Route path="/register" element={authenticated ? (<Navigate to="/map" replace />) : (<Register setAuthenticated={setAuthenticated}/>)}/>
         <Route path="/map" element={<Map setAuthenticated={setAuthenticated} />}/>
         <Route path="/loginToView" element={<LoginToView />} />
       </Routes>
