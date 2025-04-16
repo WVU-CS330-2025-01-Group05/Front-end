@@ -13,7 +13,7 @@ const cors = require('cors'); // Import cors
 const authRoutes = require('./routes/auth'); // Authentication routes
 
 const app = express();
-const BACKEND_PORT = process.env.API_PORT;
+const BACKEND_PORT = process.env.BACKEND_PORT;
 
 // Middleware setup
 app.use(express.json()); // Parse incoming JSON requests
@@ -29,6 +29,6 @@ app.use(cors({
 app.use('/auth', authRoutes); // Authentication-related routes
 
 // Start the server
-app.listen(PORT, () => {
+app.listen(BACKEND_PORT, () => {
   console.log(`Server is running on port ${BACKEND_PORT}`);
 });

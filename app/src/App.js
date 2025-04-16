@@ -32,11 +32,6 @@ function App() {
   useEffect(() => {
     localStorage.setItem('authenticated', JSON.stringify(authenticated));
   }, [authenticated]);
-
-  app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true
-  }));
   
 
   return (
