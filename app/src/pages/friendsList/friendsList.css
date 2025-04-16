@@ -1,108 +1,67 @@
-.friends-page {
-    background-size: cover;
-    background-position: center;
-    min-height: 100vh;
-    display: flex;
-    flex-direction:row;
-    justify-content: center;
-    align-items: center;
-    font-family: "Roboto";
+.friends-page{
+    height:100vh;
     width:100vw;
-    padding-top: 50px;
-    
-    .friends-container {
-        background: rgba(238, 238, 238);
-        position: relative;
-        margin: 100px auto;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        width: 300px;
-        font-family: "Roboto";
-    }
-    
-    h2 {
-        margin-bottom: 15px;
-        font-family: "Roboto";
-    }
-    
-    ul {
-        padding: 0;
-    }
-    
-    .friend-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        
-        margin: 15px 0;
-        padding: 10px;
-        border-radius: 15px;
-    }
-    
+    display:grid;
+    place-items:center;
 
-    #back {
-        position: fixed;
-        top: 0;
-        left: 0;
-        border: none;
-        color: #494949;
-        font-family: Arial, sans-serif;
-        padding: 16px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 20px;
-        margin: 4px 2px;
-        transition-duration: 0.4s;
-        cursor: pointer;
-        background-color: #494949;
-        color: white;
-        border: 2px solid #151515;
-        border-radius: 25px;
-    }
 
-    #back:hover {
-        background-color: #151515;
-        color: white;
-    }
-    
-    #profile {
-        position: fixed;
-        top: 0;
-        right: 0;
-        border: none;
-        color: #494949;
-        font-family: Arial, sans-serif;
-        padding: 16px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 20px;
-        margin: 4px 2px;
-        transition-duration: 0.4s;
-        cursor: pointer;
-        background-color: #494949;
-        color: white;
-        border: 2px solid #151515;
-        border-radius: 25px;
-    }
+    background-image:url('https://as1.ftcdn.net/jpg/05/24/39/98/1000_F_524399837_FIwRVE6kb6mU9UPzjFqumIm5OHNkPRZ0.jpg');
+    background-size:100%;
+    .container{
+        height:500px;
+        width:500px;
+        display:flex;
+        flex-direction:column;
+        background-color:white;
+        border-radius:20px;
+        padding:10px;
 
-    #profile:hover {
-        background-color: #151515;
-        color: white;
-    }
 
-    #friendProf {
-        background: rgb(169, 169, 169);
-        color: black;
-        padding: 5px 10px;
-        cursor: pointer;
-        border-radius: 10px;
-    }
+        .friendsHeader{
+           
+            display:flex;
+            height:50px;
+            justify-content: center;
+            align-items: center;
+            font-size:2rem;
 
-    #friendProf:hover {
-        background-color: #151515;
-        color: white;
+
+
+
+        }
+
+
+        .friends{
+            display:block;
+            align-items:center;
+            overflow-y:scroll;
+            overflow-x:hidden;
+            padding:20px;
+           
+           
+
+
+
+
+            .friend{
+                width:100%;
+               
+                color:black;
+                display: flex;
+                flex-direction: row;
+                padding-top:10px;
+                padding-bottom:10px;
+               
+                justify-content: space-between;
+               
+
+
+               
+
+
+
+
+            }
+        }
     }
 }
