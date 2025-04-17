@@ -34,6 +34,7 @@ app.listen(BACKEND_PORT, () => {
   console.log(`Server is running on port ${BACKEND_PORT}`);
 });
 
+//print to terminal when connected to the database. confirmation for Azure connection
 app.listen(DB_HOST, () => {
-console.log(`Connected to database at ${DB_HOST}`);
+console.log(`Connected to database at ${DB_HOST}. \n Make sure your IP is connected to Azure each session!`);
 });
