@@ -14,6 +14,7 @@ const authRoutes = require('./routes/auth'); // Authentication routes
 
 const app = express();
 const BACKEND_PORT = process.env.BACKEND_PORT;
+const DB_HOST = process.env.DB_HOST;
 
 // Middleware setup
 app.use(express.json()); // Parse incoming JSON requests
@@ -31,4 +32,8 @@ app.use('/auth', authRoutes); // Authentication-related routes
 // Start the server
 app.listen(BACKEND_PORT, () => {
   console.log(`Server is running on port ${BACKEND_PORT}`);
+});
+
+app.listen(DB_HOST, () => {
+console.log(`Connected to database at ${DB_HOST}`);
 });
