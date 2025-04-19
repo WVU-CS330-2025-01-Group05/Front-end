@@ -36,7 +36,7 @@ const Register = () => {
 
       if (response.data.message === 'User registered successfully') {
         alert('Registration successful');
-        navigate('/map'); // Navigate to map page after registration
+        navigate('/login'); // Navigate to map page after registration
       }
     } catch (error) {
       console.error('Registration failed:', error);
