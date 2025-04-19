@@ -11,7 +11,7 @@ function Profile() {
   const [userData, setUserData] = useState({
     username: '',
     numOfHikes: 0,
-    bio: '',
+    bio: 'No Bio Available',
     nameVar: ''
   });
 

@@ -13,8 +13,9 @@ const router = express.Router();
  * @returns {JSON} Success message or error message.
  */
 router.post('/register', async (req, res) => {
-  const { username, password, bio, nameVar } = req.body;
+  const { username, password, bio = 'No Bio', nameVar = 'John Doe' } = req.body;
 
+  
   try {
     // Hash the user's password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -100,5 +101,32 @@ router.post('/logout', (req, res) => {
   res.clearCookie('token'); // Clear the authentication cookie
   res.status(200).json({ message: 'Logout successful' });
 });
+
+
+
+/**
+ * Searches for users by username.
+ * @route GET /auth/search-users
+ * @param {string} query - The search query.
+ * @returns {JSON} List of matching users.
+ */
+router.get('/search-users', async (req, res) => {
+  const { query } = req.query;
+
+  try {
+    // Query the database for users matching the search query
+    const [rows] = await pool.promise().execute(
+      'SELECT id, username FROM users WHERE username LIKE ? LIMIT 10',
+      [`%${query}%`]
+    );
+
+    res.json(rows); // Return the matching users
+  } catch (error) {
+    console.error('Error searching users:', error);
+    res.status(500).json({ error: 'Failed to search users' });
+  }
+});
+
+module.exports = router;
 
 module.exports = router;
