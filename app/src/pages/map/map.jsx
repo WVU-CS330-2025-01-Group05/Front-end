@@ -111,6 +111,7 @@ function Map() {
             <div className='bottom'>
                 <div className='left'>
                     <div className='filters'>
+
                         <div className='filter'>
                             <label htmlFor='filter1'>Filter:</label>
                             <select id='filter1'>
@@ -120,6 +121,7 @@ function Map() {
                                 <option>Longest</option>
                             </select>
                         </div>
+
                         {/* Function for making trails red when selecting the button */}
                         {geojsonData && (
                             <div className="trail-buttons">
@@ -153,8 +155,6 @@ function Map() {
                             <img src={clouds} className='icon' />
                             <span>% Cloud:</span>
                         </div>
-
-
                         <div className='item'>
                             <img src={humidity} className='icon' />
                             <span>Humidity: </span>
@@ -167,10 +167,9 @@ function Map() {
                             <img src={leaf} className='icon' />
                             <span>Pollen:</span>
                         </div>
-
-
                     </div>
                 </div>
+
                 <div className='right' style={{ height: "80vh", width: "70vw" }}>
                     <MapContainer center={defaultCenter} zoom={13} style={{ height: "100%", width: "100%" }}>
 
@@ -178,7 +177,6 @@ function Map() {
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
                         <LocationHandler setPosition={setPosition} />
-
 
 
                         {position && (
@@ -207,7 +205,6 @@ function Map() {
                                 }}
                             />
                         )}
-
                        
                     </MapContainer>
                 </div>
