@@ -73,6 +73,12 @@ function Map() {
     */
     const [position, setPosition] = useState(null);
     const [geojsonData, setGeojsonData] = useState(null);
+    const [selectedTrail, setSelectedTrail] = useState(null);
+
+    /* Trail click function */
+    const handleTrailClick = (feature, idx) => {
+        setSelectedTrail(idx);
+    };
 
     useEffect(() => {
         fetch('/data/randomTrailsSelection/trail_lines.geojson')
@@ -114,15 +120,23 @@ function Map() {
                                 <option>Longest</option>
                             </select>
                         </div>
-                        <div className='filter'>
-                            <label htmlFor='filter2'>Select Trail:</label>
-                            <select id='filter2'>
-                                <option>Location 1</option>
-                                <option>Location 2</option>
-                                <option>Location 3</option>
-                                <option>Location 4</option>
-                            </select>
-                        </div>
+                        {/* Function for making trails red when selecting the button */}
+                        {geojsonData && (
+                            <div className="trail-buttons">
+                                {geojsonData.features.map((feature, idx) => (
+                                    <button
+                                        key={idx}
+                                        className={`trail-button ${selectedTrail === idx ? 'active' : ''}`}
+                                        onClick={() => handleTrailClick(feature, idx)}>
+                                        {feature.properties.trailName 
+                                            ? `${feature.properties.trailName} (${feature.properties.trailLength ? feature.properties.trailLength.toFixed(2) : "?"} km)`
+                                            : `Trail ${idx + 1} (${feature.properties.trailLength ? feature.properties.trailLength.toFixed(2) : "?"} km)`
+                                        }
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
                     </div>
                     {/* <button onClick={runPythonScript}>{message}</button>  */}
                     <div className='stats'>
@@ -173,15 +187,24 @@ function Map() {
                             </Marker>
                         )}
 
-                        {/*displays the geojson data and applies a style on each line*/}
+                        {/* displays the geojson data and applies a style on each line.
+                        Covers making trails red when selecting the buttons */}
                         {geojsonData && (
                             <GeoJSON
                                 data={geojsonData}
-                                style={() => ({
-                                    color: '#006400',
-                                    weight: 3,
-                                })}
-                                
+                                style={(feature) => {
+                                    const featureIndex = geojsonData.features.findIndex(f => f === feature);
+                                    return {
+                                        color: featureIndex === selectedTrail ? 'red' : '#006400',
+                                        weight: featureIndex === selectedTrail ? 5 : 3,
+                                    };
+                                }}
+                                onEachFeature={(feature, layer) => {
+                                    const featureIndex = geojsonData.features.findIndex(f => f === feature);
+                                    layer.on({
+                                        click: () => setSelectedTrail(featureIndex),
+                                    });
+                                }}
                             />
                         )}
 

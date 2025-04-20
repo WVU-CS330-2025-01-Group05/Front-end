@@ -79,51 +79,78 @@
         .left {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
 
             flex-grow: 2;
-            gap: 10vh;
+            gap: 5vh;
 
             .filters {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 20px;
-            }
-        }
+                gap: 15px;
 
-        .filter {
-            display: flex;
-            flex-direction: column;
+                select {
+                    border: none;
+                    height: 2rem;
+                    font-size: 1rem;
 
-            select {
-                border: none;
-                height: 2rem;
-                font-size: 1rem;
-
-                option {
-                    background: rgb(221, 221, 221);
+                    option {
+                        background: rgb(221, 221, 221);
+                    }
                 }
             }
+
+            /* Interactive trail higlight buttons */
+            .trail-buttons {
+                margin-top: 0px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .trail-button {
+                background: #f8f8f8;
+                padding: 8px 20px;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: background 0.3s, color 0.3s;
+                font-size: 1rem;
+                width: 80%;
+                max-width: 200px;
+                text-align: center;
+                border: 2px solid #ccc;
+                flex-shrink: 0;
+            }
+
+            .trail-button:hover {
+                background: #e0e0e0;
+            }
+
+            .trail-button.active {
+                background: #4caf50;
+                color: white;
+                font-weight: bold;
+                border-color: #388e3c;
+            }
+
         }
-
-
-
-
 
         .stats {
             display: flex;
 
             flex-direction: column;
             justify-content: center;
-            gap: 20px;
+            gap: 10px;
             align-items: center;
 
             .item {
                 display: flex;
                 flex-direction: row;
                 max-width: 100px;
-                gap: 10px;
+                gap: 50px;
                 align-items: center;
 
                 .icon {
