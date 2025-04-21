@@ -62,6 +62,22 @@ router.get('/profile', authMiddleware, async (req, res) => {
   }
 });
 
+router.post('/edit-profile', authMiddleware, async (req, res) => {
+  const { nameVar, bio } = req.body;
+  try {
+    await pool.promise().execute(
+      `UPDATE users 
+       SET nameVar = ?, bio = ? 
+       WHERE id = ?`
+      [nameVar, bio, req.user.id]
+    );
+    res.status(201).json({ message: "Updated profile successfully."});
+  } catch (error) {
+    console.error('Error updating user data: ', error);
+    res.status(500).json({error: 'Failed to update user data'});
+  }
+});
+
 // Logout
 router.post('/logout', (req, res) => {
   res.clearCookie('token');

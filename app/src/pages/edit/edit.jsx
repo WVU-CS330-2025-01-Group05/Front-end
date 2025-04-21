@@ -8,10 +8,23 @@ function Edit() {
     const API_URL = process.env.REACT_APP_BACKEND_API_URL; //Backend API URL
     const [nameVar, setNameVar] = useState('');
     const [bio, setBio] = useState('');
+    const [updateProfile, setUpdateProfile] = useState(false);
 
     const handleEdit = async (e) => {
         e.preventDefault();
-
+        
+        try {
+            await axios.post(
+                API_URL + 'auth/edit-profile',
+                {nameVar, bio},
+                {withCredentials: true}
+            );
+            setUpdateProfile(true);
+            alert("Profile updated successfully!");
+        } catch (error) {
+            console.error("Error updating profile ", error);
+            alert("Failed to update user profile.");
+        }
     }
 
     return (
