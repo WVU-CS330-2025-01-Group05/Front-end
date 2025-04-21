@@ -1,4 +1,3 @@
-/* General page styling */
 .friends-page {
   height: 100vh;
   width: 100vw;
@@ -19,7 +18,6 @@
   position: relative;
 }
 
-/* Add Friend button styling */
 .add-friend-button {
   position: absolute;
   top: 10px;
@@ -29,10 +27,7 @@
   font-family: Arial, sans-serif;
   padding: 16px 32px;
   text-align: center;
-  text-decoration: none;
   font-size: 20px;
-  margin: 4px 2px;
-  transition-duration: 0.4s;
   cursor: pointer;
   background-color: #494949;
   color: white;
@@ -42,10 +37,8 @@
 
 .add-friend-button:hover {
   background-color: #151515;
-  color: white;
 }
 
-/* Friends header styling */
 .friendsHeader {
   display: flex;
   height: 50px;
@@ -54,7 +47,6 @@
   font-size: 2rem;
 }
 
-/* Friends list styling */
 .friends {
   display: block;
   align-items: center;
@@ -63,7 +55,6 @@
   padding: 20px;
 }
 
-/* Search popup styling */
 .search-popup {
   position: fixed;
   top: 0;
@@ -108,12 +99,10 @@
   background-color: #151515;
 }
 
-/* Search results styling */
 .search-results {
   margin-top: 20px;
 }
 
-/* Individual user in search results */
 .friend {
   display: flex;
   justify-content: space-between;
@@ -124,7 +113,7 @@
 }
 
 .friend:hover {
-  background-color: #d6f5d6; /* Light green hover */
+  background-color: #d6f5d6;
   cursor: pointer;
 }
 
@@ -141,3 +130,19 @@
 .friend button:hover {
   background-color: #151515;
 }
+
+.view-profile-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #e0e0e0;
+  color: #333;
+  transition: background-color 0.3s;
+}
+
+.view-profile-button:hover {
+  background-color: #c2f0c2;
+}
+

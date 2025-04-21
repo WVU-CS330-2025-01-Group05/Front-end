@@ -4,10 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function Profile() {
-  const navigate = useNavigate(); // For navigating
-  const API_URL = process.env.REACT_APP_BACKEND_API_URL; // Backend API URL
+  const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 
-  // State to store user data
   const [userData, setUserData] = useState({
     username: '',
     numOfHikes: 0,
@@ -15,33 +14,30 @@ function Profile() {
     nameVar: ''
   });
 
-  // Fetch user data on component load
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(`${API_URL}/auth/profile`, {
-          withCredentials: true, // Include cookies for authentication
+          withCredentials: true,
         });
-        setUserData(response.data); // Update state with user data
+        setUserData(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);
         alert('Failed to fetch user data. Please log in again.');
-        //navigate('/login'); // Redirect to login if unauthorized
+        // navigate('/login');
       }
     };
 
     fetchUserData();
   }, [API_URL, navigate]);
 
-  // Logout function
   const handleLogout = async (e) => {
     e.preventDefault();
-
     try {
       await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
-      localStorage.removeItem('authenticated'); // Clear authentication state
+      localStorage.removeItem('authenticated');
       alert('Logout successful');
-      navigate('/home'); // Redirect to login page
+      navigate('/home');
     } catch (error) {
       console.error('Logout failed:', error);
       alert('Error logging out');
@@ -56,6 +52,7 @@ function Profile() {
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
       <a href='/edit'><button id='editProfile'>Edit Profile</button></a>
       <a href='/home'><button id='logOut' onClick={handleLogout}>Log Out</button></a>
+      <a href='/friend-requests'><button id='friendRequests'>Friend Requests</button></a>
 
       <div>
         <p id="name">{userData.nameVar}</p>

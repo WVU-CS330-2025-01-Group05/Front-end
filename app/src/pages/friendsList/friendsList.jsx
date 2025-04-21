@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import './friendsList.css';
 
@@ -7,8 +7,25 @@ function FriendsList() {
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchPopup, setShowSearchPopup] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [noResults, setNoResults] = useState(false); // NEW: track no results
+  const [noResults, setNoResults] = useState(false);
+  const [requestSent, setRequestSent] = useState(false);
+  const [friends, setFriends] = useState([]);
   const API_URL = process.env.REACT_APP_BACKEND_API_URL;
+
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/auth/friends`, {
+          withCredentials: true,
+        });
+        setFriends(response.data);
+      } catch (err) {
+        console.error("Error loading friends list:", err);
+      }
+    };
+
+    fetchFriends();
+  }, [API_URL]);
 
   const handleSearch = async () => {
     if (searchQuery.trim() === "") {
@@ -17,17 +34,28 @@ function FriendsList() {
     }
 
     try {
-      setNoResults(false); // Reset on new search
+      setNoResults(false);
       const response = await axios.get(`${API_URL}/auth/search-users`, {
         params: { query: searchQuery },
         withCredentials: true,
       });
-
       setSearchResults(response.data);
-      setNoResults(response.data.length === 0); // Show message if no users
+      setNoResults(response.data.length === 0);
     } catch (error) {
-      console.error("Error searching users:", error.response || error.message || error);
+      console.error("Error searching users:", error);
       alert("Failed to fetch user data. Please try again.");
+    }
+  };
+
+  const handleSendFriendRequest = async () => {
+    try {
+      await axios.post(`${API_URL}/auth/send-request`, {
+        receiverId: selectedUser.id,
+      }, { withCredentials: true });
+      setRequestSent(true);
+    } catch (err) {
+      console.error("Error sending request:", err);
+      alert("Failed to send friend request.");
     }
   };
 
@@ -45,11 +73,19 @@ function FriendsList() {
           <span>Friends</span>
         </div>
         <div className="friends">
-          {/* Friends list will go here */}
+          {friends.length === 0 ? (
+            <p style={{ color: '#999' }}>No friends yet.</p>
+          ) : (
+            friends.map((friend) => (
+              <div key={friend.id} className="friend">
+                <div>{friend.username}</div>
+                <button className="view-profile-button">View Profile</button>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
-      {/* Search popup */}
       {showSearchPopup && !selectedUser && (
         <div className="search-popup">
           <div className="search-popup-content">
@@ -66,26 +102,27 @@ function FriendsList() {
               onClick={() => {
                 setShowSearchPopup(false);
                 setSearchResults([]);
-                setNoResults(false); // Clear error
+                setNoResults(false);
               }}
             >
               Close
             </button>
 
-            {/* No results message */}
             {noResults && (
               <div style={{ color: "red", marginTop: "10px" }}>
                 User not found. Please try again!
               </div>
             )}
 
-            {/* Search results */}
             <div className="search-results">
               {searchResults.map((user) => (
                 <div
                   key={user.id}
                   className="friend"
-                  onClick={() => setSelectedUser(user)}
+                  onClick={() => {
+                    setSelectedUser(user);
+                    setRequestSent(false);
+                  }}
                 >
                   <div>{user.username}</div>
                 </div>
@@ -95,14 +132,19 @@ function FriendsList() {
         </div>
       )}
 
-      {/* Selected user profile popup */}
       {selectedUser && (
         <div className="search-popup">
           <div className="search-popup-content">
             <h2>{selectedUser.username}</h2>
             <p>Would you like to add this user as a friend?</p>
-            <button>Add Friend</button>
+            <button onClick={handleSendFriendRequest}>Add Friend</button>
             <button onClick={() => setSelectedUser(null)}>Back to Search</button>
+
+            {requestSent && (
+              <p style={{ color: "green", marginTop: "10px" }}>
+                Friend request sent!
+              </p>
+            )}
           </div>
         </div>
       )}
