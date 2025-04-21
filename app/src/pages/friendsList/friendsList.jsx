@@ -6,7 +6,8 @@ function FriendsList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchPopup, setShowSearchPopup] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null); // NEW: Track selected user
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [noResults, setNoResults] = useState(false); // NEW: track no results
   const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 
   const handleSearch = async () => {
@@ -16,11 +17,14 @@ function FriendsList() {
     }
 
     try {
+      setNoResults(false); // Reset on new search
       const response = await axios.get(`${API_URL}/auth/search-users`, {
         params: { query: searchQuery },
         withCredentials: true,
       });
+
       setSearchResults(response.data);
+      setNoResults(response.data.length === 0); // Show message if no users
     } catch (error) {
       console.error("Error searching users:", error.response || error.message || error);
       alert("Failed to fetch user data. Please try again.");
@@ -41,10 +45,11 @@ function FriendsList() {
           <span>Friends</span>
         </div>
         <div className="friends">
-          {/* Friends list will be here */}
+          {/* Friends list will go here */}
         </div>
       </div>
 
+      {/* Search popup */}
       {showSearchPopup && !selectedUser && (
         <div className="search-popup">
           <div className="search-popup-content">
@@ -61,18 +66,26 @@ function FriendsList() {
               onClick={() => {
                 setShowSearchPopup(false);
                 setSearchResults([]);
+                setNoResults(false); // Clear error
               }}
             >
               Close
             </button>
 
+            {/* No results message */}
+            {noResults && (
+              <div style={{ color: "red", marginTop: "10px" }}>
+                User not found. Please try again!
+              </div>
+            )}
+
+            {/* Search results */}
             <div className="search-results">
               {searchResults.map((user) => (
                 <div
                   key={user.id}
                   className="friend"
                   onClick={() => setSelectedUser(user)}
-                  style={{ cursor: "pointer" }}
                 >
                   <div>{user.username}</div>
                 </div>
@@ -82,7 +95,7 @@ function FriendsList() {
         </div>
       )}
 
-      {/* Profile-style view of selected user */}
+      {/* Selected user profile popup */}
       {selectedUser && (
         <div className="search-popup">
           <div className="search-popup-content">
