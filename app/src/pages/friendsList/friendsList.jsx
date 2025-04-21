@@ -12,19 +12,23 @@ function FriendsList() {
   const [friends, setFriends] = useState([]);
   const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 
-  useEffect(() => {
-    const fetchFriends = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/auth/friends`, {
-          withCredentials: true,
-        });
-        setFriends(response.data);
-      } catch (err) {
-        console.error("Error loading friends list:", err);
-      }
-    };
+  const fetchFriends = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/auth/friends`, {
+        withCredentials: true,
+      });
+      setFriends(response.data);
+    } catch (err) {
+      console.error("Error loading friends list:", err);
+    }
+  };
 
+  useEffect(() => {
     fetchFriends();
+
+    // Listen for the custom event to refresh the list
+    window.addEventListener("friendsUpdated", fetchFriends);
+    return () => window.removeEventListener("friendsUpdated", fetchFriends);
   }, [API_URL]);
 
   const handleSearch = async () => {

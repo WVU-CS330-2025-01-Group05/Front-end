@@ -32,6 +32,11 @@ function FriendRequests() {
 
       // Remove the handled request from the list
       setRequests(prev => prev.filter(r => r.id !== requestId));
+
+      // If accepted, trigger update on friends list
+      if (action === 'accept') {
+        window.dispatchEvent(new Event("friendsUpdated"));
+      }
     } catch (err) {
       console.error(`Error trying to ${action} request:`, err);
       alert(`Failed to ${action} request`);
