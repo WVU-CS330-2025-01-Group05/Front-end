@@ -3,12 +3,12 @@ import axios from "axios";
 import './friendsList.css';
 
 function FriendsList() {
-  const [searchQuery, setSearchQuery] = useState(""); // State for search input
-  const [searchResults, setSearchResults] = useState([]); // State for search results
-  const [showSearchPopup, setShowSearchPopup] = useState(false); // State to toggle search popup
-  const API_URL = process.env.REACT_APP_BACKEND_API_URL; // Backend API URL
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchPopup, setShowSearchPopup] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null); // NEW: Track selected user
+  const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 
-  // Handle search button click
   const handleSearch = async () => {
     if (searchQuery.trim() === "") {
       alert("Please enter a username to search.");
@@ -17,14 +17,12 @@ function FriendsList() {
 
     try {
       const response = await axios.get(`${API_URL}/auth/search-users`, {
-        params: { query: searchQuery }, // Send search query to backend
+        params: { query: searchQuery },
         withCredentials: true,
       });
-      setSearchResults(response.data); // Update search results
+      setSearchResults(response.data);
     } catch (error) {
-      console.log("API URL:", API_URL);
-
-      console.error("Error searching users:", error);
+      console.error("Error searching users:", error.response || error.message || error);
       alert("Failed to fetch user data. Please try again.");
     }
   };
@@ -32,7 +30,6 @@ function FriendsList() {
   return (
     <div className="friends-page">
       <div className="container">
-        {/* Add Friend button */}
         <button
           className="add-friend-button"
           onClick={() => setShowSearchPopup(true)}
@@ -40,17 +37,15 @@ function FriendsList() {
           Add Friend
         </button>
 
-        {/* Friends list */}
         <div className="friendsHeader">
           <span>Friends</span>
         </div>
         <div className="friends">
-          {/* Friends list will remain blank for now */}
+          {/* Friends list will be here */}
         </div>
       </div>
 
-      {/* Search popup */}
-      {showSearchPopup && (
+      {showSearchPopup && !selectedUser && (
         <div className="search-popup">
           <div className="search-popup-content">
             <h3>Search for Friends</h3>
@@ -65,21 +60,36 @@ function FriendsList() {
               className="close-popup-button"
               onClick={() => {
                 setShowSearchPopup(false);
-                setSearchResults([]); // Clear search results when closing
+                setSearchResults([]);
               }}
             >
               Close
             </button>
-          </div>
 
-          {/* Search results */}
-          <div className="search-results">
-            {searchResults.map((user) => (
-              <div key={user.id} className="friend">
-                <div>{user.username}</div>
-                <button>Add Friend</button>
-              </div>
-            ))}
+            <div className="search-results">
+              {searchResults.map((user) => (
+                <div
+                  key={user.id}
+                  className="friend"
+                  onClick={() => setSelectedUser(user)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <div>{user.username}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Profile-style view of selected user */}
+      {selectedUser && (
+        <div className="search-popup">
+          <div className="search-popup-content">
+            <h2>{selectedUser.username}</h2>
+            <p>Would you like to add this user as a friend?</p>
+            <button>Add Friend</button>
+            <button onClick={() => setSelectedUser(null)}>Back to Search</button>
           </div>
         </div>
       )}

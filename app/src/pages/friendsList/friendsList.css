@@ -1,136 +1,143 @@
 /* General page styling */
 .friends-page {
-    height: 100vh;
-    width: 100vw;
-    display: grid;
-    place-items: center;
-    background-image: url('https://as1.ftcdn.net/jpg/05/24/39/98/1000_F_524399837_FIwRVE6kb6mU9UPzjFqumIm5OHNkPRZ0.jpg');
-    background-size: 100%;
-  }
-  
-  .container {
-    height: 500px;
-    width: 500px;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    border-radius: 20px;
-    padding: 10px;
-    position: relative;
-  }
-  
-  /* Add Friend button styling */
-  .add-friend-button {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    border: none;
-    color: #494949;
-    font-family: Arial, sans-serif;
-    padding: 16px 32px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 20px;
-    margin: 4px 2px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-    background-color: #494949;
-    color: white;
-    border: 2px solid #151515;
-    border-radius: 25px;
-  }
-  
-  .add-friend-button:hover {
-    background-color: #151515;
-    color: white;
-  }
-  
-  /* Friends header styling */
-  .friendsHeader {
-    display: flex;
-    height: 50px;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-  }
-  
-  /* Friends list styling */
-  .friends {
-    display: block;
-    align-items: center;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    padding: 20px;
-  }
-  
-  /* Search popup styling */
-  .search-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .search-popup-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 400px;
-    text-align: center;
-  }
-  
-  .search-popup-content input {
-    width: 80%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .search-popup-content button {
-    margin: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #494949;
-    color: white;
-  }
-  
-  .search-popup-content button:hover {
-    background-color: #151515;
-  }
-  
-  /* Search results styling */
-  .search-results {
-    margin-top: 20px;
-  }
-  
-  .friend {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-  }
-  
-  .friend button {
-    padding: 8px 16px;
-    font-size: 14px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #494949;
-    color: white;
-  }
-  
-  .friend button:hover {
-    background-color: #151515;
-  }
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  place-items: center;
+  background-image: url('https://as1.ftcdn.net/jpg/05/24/39/98/1000_F_524399837_FIwRVE6kb6mU9UPzjFqumIm5OHNkPRZ0.jpg');
+  background-size: 100%;
+}
+
+.container {
+  height: 500px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 20px;
+  padding: 10px;
+  position: relative;
+}
+
+/* Add Friend button styling */
+.add-friend-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border: none;
+  color: #494949;
+  font-family: Arial, sans-serif;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 20px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  background-color: #494949;
+  color: white;
+  border: 2px solid #151515;
+  border-radius: 25px;
+}
+
+.add-friend-button:hover {
+  background-color: #151515;
+  color: white;
+}
+
+/* Friends header styling */
+.friendsHeader {
+  display: flex;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
+
+/* Friends list styling */
+.friends {
+  display: block;
+  align-items: center;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 20px;
+}
+
+/* Search popup styling */
+.search-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.search-popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  text-align: center;
+}
+
+.search-popup-content input {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-popup-content button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #494949;
+  color: white;
+}
+
+.search-popup-content button:hover {
+  background-color: #151515;
+}
+
+/* Search results styling */
+.search-results {
+  margin-top: 20px;
+}
+
+/* Individual user in search results */
+.friend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  transition: background-color 0.3s ease;
+}
+
+.friend:hover {
+  background-color: #d6f5d6; /* Light green hover */
+  cursor: pointer;
+}
+
+.friend button {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #494949;
+  color: white;
+}
+
+.friend button:hover {
+  background-color: #151515;
+}
