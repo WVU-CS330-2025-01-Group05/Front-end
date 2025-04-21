@@ -8,19 +8,20 @@ function Edit() {
     const API_URL = process.env.REACT_APP_BACKEND_API_URL; //Backend API URL
     const [nameVar, setNameVar] = useState('');
     const [bio, setBio] = useState('');
-    const [updateProfile, setUpdateProfile] = useState(false);
+    //const [updateProfile, setUpdateProfile] = useState(false);
 
     const handleEdit = async (e) => {
         e.preventDefault();
         
         try {
             await axios.post(
-                API_URL + 'auth/edit-profile',
-                {nameVar, bio},
-                {withCredentials: true}
+                API_URL + '/auth/edit-profile',
+                { bio, nameVar },
+                { withCredentials: true }
             );
-            setUpdateProfile(true);
+            //setUpdateProfile(true);
             alert("Profile updated successfully!");
+            navigate('/profile');
         } catch (error) {
             console.error("Error updating profile ", error);
             alert("Failed to update user profile.");
@@ -52,7 +53,7 @@ function Edit() {
                     onChange={(e) => setBio(e.target.value)}
                 />
 
-                <input type="submit" id="submit" onClick={() => navigate('/profile')}></input>
+                <input type="submit" id="submit"></input>
             </form>
             </div>
         </div>
