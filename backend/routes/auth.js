@@ -7,7 +7,7 @@ const router = express.Router();
 
 // User Registration
 router.post('/register', async (req, res) => {
-  const { username, password, bio = 'No Bio', nameVar = 'John Doe' } = req.body;
+  const { username, password, bio, nameVar } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     await pool.promise().execute(
@@ -62,14 +62,17 @@ router.get('/profile', authMiddleware, async (req, res) => {
   }
 });
 
+//Edit Profile
 router.post('/edit-profile', authMiddleware, async (req, res) => {
-  const { nameVar, bio } = req.body;
+  const userId = req.user.id;
+  const { bio, nameVar } = req.body;
+
   try {
     await pool.promise().execute(
-      `UPDATE users 
-       SET nameVar = ?, bio = ? 
-       WHERE id = ?`
-      [nameVar, bio, req.user.id]
+      `UPDATE users
+       SET bio = ?, nameVar = ?
+       WHERE id = ?`,
+       [ bio, nameVar, userId ]
     );
     res.status(201).json({ message: "Updated profile successfully."});
   } catch (error) {
