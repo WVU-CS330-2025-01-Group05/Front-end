@@ -22,6 +22,8 @@ function FriendsList() {
       });
       setSearchResults(response.data); // Update search results
     } catch (error) {
+      console.log("API URL:", API_URL);
+
       console.error("Error searching users:", error);
       alert("Failed to fetch user data. Please try again.");
     }
