@@ -9,11 +9,13 @@ CORS(app)  # Allow requests from different origins (React runs on another port)
 
 @app.route("/run-script", methods=["POST"])
 def run_script():
-    # Get the directory where the current script is located
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    # Navigate to the project root and then to the script
-    script_path = os.path.join(current_dir, "..", "public", "data", "randomTrailsSelection", "geojsonReader.py")
-    # Normalize the path to handle any ../ properly
+  # This gets the absolute path to this file
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+
+    # Navigate relative to this file: ../../../public/data/randomTrailsSelection/geojsonReader.py
+    script_path = os.path.join(base_dir, "..", "..", "..", "public", "data", "randomTrailsSelection", "geojsonReader.py")
+    
+    # Normalize path (fixes issues with "..")
     script_path = os.path.normpath(script_path)
     try:
 
