@@ -10,8 +10,9 @@ function Profile() {
   const [userData, setUserData] = useState({
     username: '',
     numOfHikes: 0,
-    bio: 'No Bio Available',
-    nameVar: ''
+    bio: 'No Bio',
+    nameVar: '',
+    img: './default pfp.jpg'
   });
 
   useEffect(() => {
@@ -45,7 +46,7 @@ function Profile() {
 
   return (
     <div className='profile'>
-      <img src={require('./default pfp.jpg')} alt="profile" />
+      <img src={require ('./default pfp.jpg')} alt="profile" />
 
       <a href='/map'><button id='back'>Back to Map</button></a>
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>

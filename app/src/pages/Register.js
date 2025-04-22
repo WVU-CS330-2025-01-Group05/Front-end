@@ -18,6 +18,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [nameVar, setNameVar] = useState('');
   const [bio, setBio] = useState('No Bio');
+  const [img, setImg] = useState('/default pfp.jpg');
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_BACKEND_API_URL; // Fallback for local development
   /**
@@ -30,7 +31,7 @@ const Register = () => {
     try { 
       const response = await axios.post(
         API_URL + '/auth/register',
-        { username, password, bio, nameVar },
+        { username, password, bio, nameVar, img },
         { withCredentials: true }
       );
 

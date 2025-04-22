@@ -7,12 +7,12 @@ const router = express.Router();
 
 // User Registration
 router.post('/register', async (req, res) => {
-  const { username, password, bio, nameVar } = req.body;
+  const { username, password, bio, nameVar, img } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     await pool.promise().execute(
-      'INSERT INTO users (username, password, bio, nameVar) VALUES (?, ?, ?, ?)',
-      [username, hashedPassword, bio, nameVar]
+      'INSERT INTO users (username, password, bio, nameVar, img) VALUES (?, ?, ?, ?, ?)',
+      [username, hashedPassword, bio, nameVar, img]
     );
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
 router.get('/profile', authMiddleware, async (req, res) => {
   try {
     const [rows] = await pool.promise().execute(
-      'SELECT username, numOfHikes, bio, nameVar FROM users WHERE id = ?',
+      'SELECT username, numOfHikes, bio, nameVar, img FROM users WHERE id = ?',
       [req.user.id]
     );
     const user = rows[0];

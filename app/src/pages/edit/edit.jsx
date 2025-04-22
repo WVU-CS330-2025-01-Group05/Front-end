@@ -28,6 +28,22 @@ function Edit() {
         }
     }
 
+    const handleImage = async (e) => {
+        e.preventDefault();
+
+        const file = e.target.files[0];
+        const img = new Image();
+
+        img.onload = () => {
+            if (img.width === img.height) {
+                img.src = URL.createObjectURL(file);
+            }
+            else {
+                alert("Image must be a square.");
+            }
+        }
+    }
+
     return (
         <div className="edit">
             <img src={require ("./default pfp.jpg")} alt="profile image" />
@@ -37,7 +53,7 @@ function Edit() {
             <form onSubmit={handleEdit}>
                 <div className="pfp">
                     <label for="pfp">Edit Profile Picture (upload SQUARE PNG, JPEG, or JPG)</label>
-                    <input type="file" id="file" accept="image/png, image/jpeg, image/jpg" ></input>
+                    <input type="file" id="file" accept="image/png, image/jpeg, image/jpg"  onChange={handleImage}></input>
                 </div>
 
                 <input 
