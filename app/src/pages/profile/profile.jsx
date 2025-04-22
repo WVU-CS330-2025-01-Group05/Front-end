@@ -11,7 +11,8 @@ function Profile() {
     username: '',
     numOfHikes: 0,
     bio: 'No Bio Available',
-    nameVar: ''
+    nameVar: '',
+    img: null
   });
 
   useEffect(() => {
@@ -45,7 +46,10 @@ function Profile() {
 
   return (
     <div className='profile'>
-      <img src={require('./default pfp.jpg')} alt="profile" />
+      <img
+        src={userData.img ? userData.img : require('./default pfp.jpg')}
+        alt="profile"
+      />
 
       <a href='/map'><button id='back'>Back to Map</button></a>
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
