@@ -7,6 +7,7 @@
  */
 
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors'); // Import cors
@@ -37,4 +38,7 @@ app.listen(BACKEND_PORT, () => {
 //print to terminal when connected to the database. confirmation for Azure connection
 app.listen(DB_HOST, () => {
 console.log(`Connected to database at ${DB_HOST}. \n Make sure your IP is connected to Azure each session!`);
+});
+app.get('/api/trails', (req, res) => {
+  res.sendFile(path.join(__dirname, 'path/to/trail_lines_full.geojson'));
 });
