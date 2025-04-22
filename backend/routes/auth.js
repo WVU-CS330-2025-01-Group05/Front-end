@@ -14,7 +14,26 @@ router.post('/logout', (req, res) => {
   res.status(200).json({ message: 'Logout successful' });
 });
 
+router.post('/register', async (req, res) => {
+  const { username, password, bio = 'No Bio', nameVar = 'John Doe' } = req.body;
 
+  
+  try {
+    // Hash the user's password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Insert the new user into the database
+    const [result] = await pool.promise().execute(
+      'INSERT INTO users (username, password, bio, nameVar) VALUES (?, ?, ?, ?)',
+      [username, hashedPassword, bio, nameVar]
+    );
+
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    console.error('Error during user registration:', error);
+    res.status(500).json({ error: 'Failed to register user' });
+  }
+});
 
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
