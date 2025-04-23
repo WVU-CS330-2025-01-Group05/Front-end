@@ -116,6 +116,8 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
             <div className='header'>
                 <Clock />
                 <span id="plan">Plan Your Hike</span>
+                 {/* Button to run script to get random trails */}
+                 <button onClick={runPythonScript}>Get Trails</button> 
                 <a href='/profile'><button id="account">Account</button></a>
             </div>
             <div className='bottom'>
@@ -174,8 +176,7 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
                     </div>
                 </div>
                 <div className='right' style={{ height: "80vh", width: "70vw" }}>  
-                {/* Button to run script to get random trails */}
-                 <button onClick={runPythonScript}>Get Trails</button> 
+               
                  
 
                   
