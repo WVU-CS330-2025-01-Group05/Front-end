@@ -24,7 +24,7 @@ if ((d.getFullYear() % 4 === 0 && d.getFullYear() % 100 !== 0) || (d.getFullYear
 }
 
 const tokenFromNoaa = "zRJaCOXTyBqXhvrDQMFapLNnZiFBGoNe";
-const zipKey = "1deae9cf9cd74ef0b825b997814ef02d";
+const zipKey = "2db231e368124778ae3517c281ea41aa";
 
 async function getZipCode() {
     try {
