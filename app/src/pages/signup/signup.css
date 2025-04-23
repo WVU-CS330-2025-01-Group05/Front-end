@@ -1,0 +1,60 @@
+.signup {
+  width: 100vw;
+  height: 100vh;
+  position: relative; /* Ensure positioning for the pseudo-element */
+  background: #799a84ff; /* Fallback background color */
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.signup::before {
+  content: '';
+  position: absolute;
+  top: 0;
+
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('forestshadow.png') no-repeat center center;
+  background-size: 100%;
+  opacity: 0.2; /* 50% transparency */
+  z-index: 0; /* Ensure it stays behind other elements */
+  background-position: cover;
+}
+.container {
+  position: relative; /* Ensure it stays above the background */
+  background-color:  rgb(223, 234, 227);
+  width: 300px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 100px auto;
+  text-align: center;
+  z-index: 1; /* Layer above the background */
+}
+
+  h1 {
+    font-family: 'Verdana', sans-serif;
+    color: darkgreen;
+    text-shadow: 1px 1px 2px #999;
+  }
+
+  input[type="text"], input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin: 10px;
+    border: 2px solid #000;
+    border-radius: 10px;
+  }
+
+  button {
+    background-color: #d9d9d9;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin: 10px;
+    font-size: 16px;
+  }
+
+  button:hover {
+    background-color: #c0c0c0;
+  }
