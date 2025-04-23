@@ -45,6 +45,8 @@ function FriendRequests() {
 
   return (
     <div className="friend-requests-page">
+      <a href='/profile'><button className='friendReq-back'>Account</button></a>
+
       <div className="request-popup">
         <h2>Friend Requests</h2>
 

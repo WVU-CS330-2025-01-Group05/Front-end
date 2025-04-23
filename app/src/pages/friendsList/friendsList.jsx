@@ -65,6 +65,8 @@ function FriendsList() {
 
   return (
     <div className="friends-page">
+              <a href='/profile'><button className='friend-back'>Account</button></a>
+
       <div className="container">
         <button
           className="add-friend-button"
