@@ -163,8 +163,8 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
                                     <option value="" disabled>Select a trail</option>
                                     {geojsonData.features.map((feature, idx) => (
                                         <option key={idx} value={idx}>
-                                            {feature.properties.trailName
-                                                ? `${feature.properties.trailName} (${feature.properties.miles?.toFixed(2) || "?"} mi)`
+                                            {feature.properties.Name
+                                                ? `${feature.properties.Name} (${feature.properties.miles?.toFixed(2) || "?"} mi)`
                                                 : `Trail ${idx + 1} (${feature.properties.miles?.toFixed(2) || "?"} mi)`}
                                         </option>
                                     ))}
