@@ -66,6 +66,27 @@
         
     }
 
+    .stats .item {
+        display: flex;
+        flex-direction: row;
+        max-width: 100px;
+        gap: 20px;
+        align-items: center;
+        margin-bottom: 5px; /* Add this to reduce vertical spacing */
+    }
+    
+    /* Add a new class for temperature details */
+    .temperature-item {
+        margin-bottom: 0 !important; /* Override the regular item spacing */
+        margin-top: 0 !important;
+    }
+    
+    /* Remove default margin from paragraphs inside temperature items */
+    .temperature-item p {
+        margin: 0;
+        padding: 0;
+
+    }
 
 
     .bottom {
@@ -151,17 +172,19 @@
             flex-direction: column;
             justify-content: center;
             gap: 10px;
-            align-items: center;
+            
+            align-items: flex-start !important; /* Changed from center to flex-start */
+            padding-left: 60px;
 
             .item {
                 display: flex;
                 flex-direction: row;
                 max-width: 100px;
-                gap: 50px;
+                gap: 10px;
                 align-items: center;
 
                 .icon {
-                    height: 30px;
+                    height: 40px;
                 }
             }
         }
@@ -191,5 +214,35 @@
     a {
         text-decoration: none;
     }
+
+    .bold-value {
+        font-weight: bold;
+    }
+
+    .col {
+        font-weight: bold;
+        color: #0f5100; 
+    }
+
+    .therm-icon {
+        height: 50px !important;
+    }
+
+    .prcp-icon {
+        height: 43px !important;
+    }
+
+    .hum-icon{
+        height: 38px !important;
+    }
+
+    .label-text {
+        font-weight: bold;
+    }
+
+    .temperature-label {
+        padding-left: 20px;
+    }
+
 
 }

@@ -4,6 +4,7 @@ import './map.css';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { default as rain } from './icons/rain.svg';
+import { default as thermometer } from './icons/thermometer.png';
 import { default as clouds } from './icons/clouds.svg';
 import { default as moon } from './icons/moon.svg';
 import { default as humidity } from './icons/humidity.svg';
@@ -14,6 +15,7 @@ import { GeoJSON } from 'react-leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import { getClimateData } from './request.js';
 
 const userIcon = L.icon({
     iconUrl: markerIcon,
@@ -46,15 +48,50 @@ function LocationHandler({ setPosition }) {
 }
 
 function Map() {
+    /* 
+    Set up states for position, trails, and climate data
+    */
     const [position, setPosition] = useState(null);
     const [geojsonData, setGeojsonData] = useState(null);
     const [selectedTrail, setSelectedTrail] = useState(null);
+    const [climateData, setClimateData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
+    /* Trail click function */
+    const handleTrailClick = (feature, idx) => {
+        setSelectedTrail(idx);
+    };
+
+    // Fetch climate data when component mounts
+    useEffect(() => {
+        async function fetchClimateData() {
+            try {
+                setIsLoading(true);
+                setError(null);
+                const data = await getClimateData();
+                setClimateData(data);
+                console.log("Climate data fetched:", data);
+            } catch (error) {
+                console.error("Error fetching climate data:", error);
+                setError("Failed to load climate data");
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        
+        fetchClimateData();
+    }, []);
+
+    // Fetch trail data when component mounts
     useEffect(() => {
         fetch('/data/randomTrailsSelection/trail_lines.geojson')
             .then((res) => res.json())
             .then((data) => setGeojsonData(data))
-            .catch((err) => console.error('GeoJSON load error:', err));
+            .catch((err) => {
+                console.error('GeoJSON load error:', err);
+                // Handle GeoJSON error if needed
+            });
     }, []);
 
     return (
@@ -67,7 +104,6 @@ function Map() {
             <div className='bottom'>
                 <div className='left'>
                     <div className='filters'>
-
                         <div className='filter'>
                             <label htmlFor='filter1'>Filter:</label>
                             <select id='filter1'>
@@ -99,31 +135,37 @@ function Map() {
                         )}
                     </div>
 
-                    <div className='stats'>
-                        <div className='item'>
-                            <img src={rain} className='icon' />
-                            <span>% Rain:</span>
-                        </div>
-                        <div className='item'>
-                            <img src={moon} className='icon' />
-                            <span>Moon:</span>
-                        </div>
-                        <div className='item'>
-                            <img src={clouds} className='icon' />
-                            <span>% Cloud:</span>
-                        </div>
-                        <div className='item'>
-                            <img src={humidity} className='icon' />
-                            <span>Humidity: </span>
-                        </div>
-                        <div className='item'>
-                            <img src={uv} className='icon' />
-                            <span>UV: </span>
-                        </div>
-                        <div className='item'>
-                            <img src={leaf} className='icon' />
-                            <span>Pollen:</span>
-                        </div>
+                    {/* Basic Weather Stats Section */}
+                    
+
+                    {/* Climate Data Section */}
+                    <div className='climate-data'>
+                        {error ? (
+                            <div className="error-message">{error}</div>
+                        ) : (
+                            <>
+                                <h3>{isLoading ? "Loading climate data..." : `Climate Averages for ${climateData?.month}`}</h3>
+                                {climateData?.status && <div className="status-message">{climateData.status}</div>}
+                                <div className='item'>
+                                    <img src={rain} className='prcp-icon' alt="Rain" />
+                                    <span><span className="label-text">Precipitation</span> {isLoading ? "Loading..." : <span className="col">{climateData?.precipitation} ml/day</span>}</span>
+                                </div>
+                                <div className='item temperature-item'>
+                                    <img src={thermometer} className='therm-icon' alt="Thermometer" />
+                                    <h4>Temperature</h4>
+                                </div>
+                                <div className='item temperature-item'>
+                                    <p className="temperature-label">Average: {isLoading ? "Loading..." : <span className="col">{climateData?.temperature?.average}°C</span>}</p>
+                                </div>
+                                <div className='item temperature-item'>
+                                    <p className="temperature-label" style={{ whiteSpace: 'nowrap' }}>Range: {isLoading ? "Loading..." : <span className="col">{climateData?.temperature?.min}°C - {climateData?.temperature?.max}°C</span>}</p>
+                                </div>
+                                <div className='item'>
+                                    <img src={humidity} className='hum-icon' alt="Humidity" />
+                                    <span><span className="label-text">Humidity</span> {isLoading ? "Loading..." : <span className="col">{climateData?.humidity}%</span>}</span>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
 
