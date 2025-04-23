@@ -18,6 +18,9 @@ function Home(){
                 <div className='item'>
                     <a href='/map'><button className='skip-button'>Skip To map</button></a>
                 </div>
+                <div className='item'>
+                    <a href='/what-is-hotd'><button className='what-button'>What is HotD?</button></a>
+                </div>
                 
             </div>
 

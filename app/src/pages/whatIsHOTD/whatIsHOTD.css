@@ -1,0 +1,8 @@
+.whatIsHOTD {
+    width: 100vw;
+    height: 100vh;
+    position: relative; /* Ensure positioning for the pseudo-element */
+    background: #799a84ff; /* Fallback background color */
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
