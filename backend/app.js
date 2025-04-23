@@ -34,7 +34,7 @@ app.use('/auth', authRoutes);
 app.get('/api/trails', (req, res) => {
   try {
     //if file moves change file path here pls
-    const filePath = path.join(__dirname, 'public/data/randomTrailsSelection/trail_lines.geojson');
+    const filePath = path.join(__dirname, 'public/data/randomTrailsSelection/trail_lines_full.geojson');
     
     //checks if the file exists or not
     if (!fs.existsSync(filePath)) {

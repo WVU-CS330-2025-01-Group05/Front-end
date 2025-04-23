@@ -85,7 +85,7 @@ function Map() {
 
     // Fetch trail data when component mounts
     useEffect(() => {
-        fetch('/data/randomTrailsSelection/trail_lines.geojson')
+        fetch('/data/randomTrailsSelection/trail_lines_full.geojson')
             .then((res) => res.json())
             .then((data) => setGeojsonData(data))
             .catch((err) => {
