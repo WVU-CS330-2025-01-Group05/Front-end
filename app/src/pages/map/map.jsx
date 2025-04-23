@@ -5,11 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents} from 'react-leafl
 import 'leaflet/dist/leaflet.css';
 import { default as rain } from './icons/rain.svg';
 import { default as thermometer } from './icons/thermometer.png';
-import { default as clouds } from './icons/clouds.svg';
-import { default as moon } from './icons/moon.svg';
 import { default as humidity } from './icons/humidity.svg';
-import { default as uv } from './icons/uv.svg';
-import { default as leaf } from './icons/leaf.svg';
 import L from 'leaflet';
 import { GeoJSON } from 'react-leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -191,11 +187,17 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
                                 {climateData?.status && <div className="status-message">{climateData.status}</div>}
                                 <div className='item'>
                                     <img src={rain} className='prcp-icon' alt="Rain" />
-                                    <span><span className="label-text">Precipitation</span> {isLoading ? "Loading..." : <span className="col">{climateData?.precipitation} ml/day</span>}</span>
+                                    <span className="label-text">| Precipitation |</span>
+                                </div>
+                                <div className='item'>
+                                    <span className="label-text"></span> {isLoading ? "Loading..." : <span className="col">{climateData?.precipitation} ml/day</span>}
+                                </div>
+                                <div className='item temperature-item'>
+                                    <p>---------------------------------</p>
                                 </div>
                                 <div className='item temperature-item'>
                                     <img src={thermometer} className='therm-icon' alt="Thermometer" />
-                                    <h4>Temperature</h4>
+                                    <span className="label-text">| Temperature |</span>
                                 </div>
                                 <div className='item temperature-item'>
                                     <p className="temperature-label">Average: {isLoading ? "Loading..." : <span className="col">{climateData?.temperature?.average}°C</span>}</p>
@@ -203,9 +205,15 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
                                 <div className='item temperature-item'>
                                     <p className="temperature-label" style={{ whiteSpace: 'nowrap' }}>Range: {isLoading ? "Loading..." : <span className="col">{climateData?.temperature?.min}°C - {climateData?.temperature?.max}°C</span>}</p>
                                 </div>
+                                <div className='item temperature-item'>
+                                    <p>---------------------------------</p>
+                                </div>
                                 <div className='item'>
                                     <img src={humidity} className='hum-icon' alt="Humidity" />
-                                    <span><span className="label-text">Humidity</span> {isLoading ? "Loading..." : <span className="col">{climateData?.humidity}%</span>}</span>
+                                    <span className="label-text">| Relative Humidity | </span> 
+                                </div>
+                                <div className='item'>
+                                    <span className="label-text"></span> {isLoading ? "Loading..." : <span className="col">{climateData?.humidity}%</span>}
                                 </div>
                             </>
                         )}
