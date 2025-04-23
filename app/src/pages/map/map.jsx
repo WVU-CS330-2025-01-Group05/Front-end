@@ -245,7 +245,7 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
                     </MapContainer>
                 </div>
             </div>
-        </div>
+        
     );
 }
 
