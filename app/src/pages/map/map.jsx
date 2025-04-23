@@ -122,11 +122,12 @@ function Map() {
                                     {geojsonData.features.map((feature, idx) => (
                                         <option key={idx} value={idx}>
                                             {feature.properties.trailName
-                                                ? `${feature.properties.trailName} (${feature.properties.trailLength?.toFixed(2) || "?"} km)`
-                                                : `Trail ${idx + 1} (${feature.properties.trailLength?.toFixed(2) || "?"} km)`}
+                                                ? `${feature.properties.trailName} (${feature.properties.miles?.toFixed(2) || "?"} mi)`
+                                                : `Trail ${idx + 1} (${feature.properties.miles?.toFixed(2) || "?"} mi)`}
                                         </option>
                                     ))}
                                 </select>
+
                             </div>
                         )}
                     </div>
