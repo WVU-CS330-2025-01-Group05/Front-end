@@ -148,7 +148,7 @@ function Map() {
                                 {climateData?.status && <div className="status-message">{climateData.status}</div>}
                                 <div className='item'>
                                     <img src={rain} className='prcp-icon' alt="Rain" />
-                                    <span><span className="label-text">Precipitation</span> {isLoading ? "Loading..." : <span className="col">{climateData?.precipitation} ml</span>}</span>
+                                    <span><span className="label-text">Precipitation</span> {isLoading ? "Loading..." : <span className="col">{climateData?.precipitation} ml/day</span>}</span>
                                 </div>
                                 <div className='item temperature-item'>
                                     <img src={thermometer} className='therm-icon' alt="Thermometer" />

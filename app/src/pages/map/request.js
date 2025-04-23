@@ -64,8 +64,8 @@ export async function getClimateData() {
         //const zip = await getZipCode();
         console.log("Using ZIP:", zip);
 
-        const startDate = 2020;
-        const endDate = 2024;
+        const startDate = 2022;
+        const endDate = 2025;
 
         let TempTOT = 0;
         let TempMIN = 100;
