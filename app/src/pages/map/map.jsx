@@ -174,9 +174,6 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
                         )}
                     </div>
 
-                    {/* Basic Weather Stats Section */}
-                    
-
                     {/* Climate Data Section */}
                     <div className='climate-data'>
                         {error ? (
@@ -218,7 +215,6 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
                             </>
                         )}
                     </div>
-                    </div>
                 </div>
 
                 <div className='right' style={{ height: "80vh", width: "70vw" }}>
@@ -253,7 +249,7 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
                     </MapContainer>
                 </div>
             </div>
-        
+        </div>
     );
 }
 
