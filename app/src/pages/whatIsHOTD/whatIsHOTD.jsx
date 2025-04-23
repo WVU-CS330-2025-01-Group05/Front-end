@@ -1,12 +1,10 @@
 import React from 'react';
 import './whatIsHOTD.css';
-import { useNavigate } from 'react-router-dom';
 
 function WhatIsHOTD() {
-    const navigate = useNavigate();
-
     return (
         <div className='whatIsHOTD'>
+            <a href='/home'><button id='back'>Back to Home</button></a>
             <div className='whatIsHOTD-container'>
                 <h2>What is HotD?</h2>
                 <p id='paragraph'>
@@ -20,18 +18,18 @@ function WhatIsHOTD() {
                     can see and rate all the hikes you've done!
                 </p>
                 <h2>Developers</h2>
-                <h3>Backend:</h3>
+                <h3>Back-end:</h3>
                 <p id='developers'>
-                    Lauren Taylor
+                    Lauren Taylor & 
                     Grace Hanson
                 </p>
-                <h3>Frontend:</h3>
+                <h3>Front-end:</h3>
                 <p id='developers'>
-                    Kiersten Doescher
-                    Alex Loving
-                    Julian Hays
-                    Carter Wright
-                    Blake Rogers
+                    Kiersten Doescher, 
+                    Alex Loving, 
+                    Julian Hays, 
+                    Carter Wright, 
+                    Blake Rogers, & 
                     Mark Khairullah
                 </p>
             </div>
