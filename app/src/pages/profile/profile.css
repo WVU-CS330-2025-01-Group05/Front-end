@@ -86,7 +86,7 @@
   left: 0;
 }
 
-.completedHike {
+#completedHike {
   color: black;
   border-style: 5px solid grey;
   border-radius: 5px;
@@ -109,7 +109,7 @@
   background: url('forestshadow.png') no-repeat center center;
   background-size: 100%;
   opacity: 0.2;
-  z-index: -1; /* ✅ ensures it's truly behind everything */
+  z-index: 0; /* z-index needs to be 0 otherwise it is too far back */
   background-position: cover;
   background-attachment: fixed;
 }
