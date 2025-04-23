@@ -66,8 +66,6 @@
         
     }
 
-
-
     .bottom {
         height: 80vh;
         display: flex;
@@ -75,20 +73,22 @@
         padding: 20px;
         max-height: 90vh;
 
-
         .left {
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-
-            flex-grow: 2;
-            gap: 5vh;
+            width: 250px; /* Set a fixed width for the left panel */
+            min-width: 250px; /* Ensure the panel doesn't shrink below this */
+            max-width: 250px; /* Ensure the panel doesn't grow beyond this */
+            flex-grow: 0; /* Don't allow it to grow */
+            gap: 2vh;
+            margin-right: 20px; /* Add some spacing between left panel and map */
 
             .filters {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 15px;
+                gap: 10px;
 
                 select {
                     border: none;
@@ -105,7 +105,7 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 15px;
+                gap: 10px;
             }
             
             .filter {
@@ -145,51 +145,138 @@
 
         }
 
-        .stats {
-            display: flex;
-
-            flex-direction: column;
-            justify-content: center;
-            gap: 10px;
-            align-items: center;
-
-            .item {
-                display: flex;
-                flex-direction: row;
-                max-width: 100px;
-                gap: 50px;
-                align-items: center;
-
-                .icon {
-                    height: 30px;
-                }
-            }
-        }
-
-
-
-
-
         .right {
-            flex-grow: 6;
+            flex-grow: 1;
             display: flex;
             flex-direction: row;
             justify-content: center;
-            max-width: 70vw;
-            padding: 20px;
             height: 80vh;
-            width: 70vw;
 
             .leaflet-container {
                 height: 100%;
                 width: 100%;
             }
         }
-
     }
 
     a {
         text-decoration: none;
     }
+}
 
+/* Updated stats section */
+.stats {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 15px;
+    width: 220px; /* Fix the width to match the left panel */
+    max-height: 350px; /* Set a maximum height */
+    overflow-y: auto; /* Enable vertical scrolling when content exceeds max-height */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+}
+
+.stats h3 {
+    text-align: center;
+    width: 100%;
+    margin: 0 0 8px 0;
+    font-family: "Pacifico", serif;
+    color: #494949;
+    font-size: 1.3rem;
+    position: sticky; /* Keep the title visible when scrolling */
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 5px 0;
+    z-index: 1;
+}
+
+.stats .item {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    padding: 2px 0;
+}
+
+.stats .item img {
+    width: 20px;
+    height: 20px;
+}
+
+.stats .item span {
+    font-size: 0.9rem;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+/* Style the scrollbar for better appearance */
+.stats::-webkit-scrollbar {
+    width: 6px;
+}
+
+.stats::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.stats::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.stats::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.trail-info {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+/* Style the popup content */
+.leaflet-popup-content {
+    font-family: Arial, sans-serif;
+}
+
+.leaflet-popup-content b {
+    color: #494949;
+    font-size: 16px;
+}
+
+/* Loading indicator */
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    width: 100%;
+}
+
+.loading:after {
+    content: " ";
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 5px solid #494949;
+    border-color: #494949 transparent #494949 transparent;
+    animation: loading 1.2s linear infinite;
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
