@@ -108,27 +108,27 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
 */
    
 
-     const runPythonScript = async () => {
-         const res = await fetch("http://localhost:5000/run-script", {
-        method: "POST",
-         });
-         const data = await res.json();
+    //  const runPythonScript = async () => {
+    //      const res = await fetch("http://localhost:5000/run-script", {
+    //     method: "POST",
+    //      });
+    //      const data = await res.json();
         
-        console.log("Script response:", data);
-        if (data.status === 'Script executed') {
+    //     console.log("Script response:", data);
+    //     if (data.status === 'Script executed') {
             
-            setTimeout(() => {
-                fetch("/data/randomTrailsSelection/trail_lines_full.geojson")
-                    .then((res) => res.json())
-                    .then((data) => {
-                        setGeojsonData(data);
-                    })
-                    .catch((err) => console.error('GeoJSON load error after script:', err));
-            }, 500); 
-        }
+    //         setTimeout(() => {
+    //             fetch("/data/randomTrailsSelection/trail_lines_full.geojson")
+    //                 .then((res) => res.json())
+    //                 .then((data) => {
+    //                     setGeojsonData(data);
+    //                 })
+    //                 .catch((err) => console.error('GeoJSON load error after script:', err));
+    //         }, 500); 
+    //     }
 
 
-     };
+    //  };
 
     return (
         <div className='map'>
@@ -136,7 +136,7 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
                 <Clock />
                 <span id="plan">Plan Your Hike</span>
                  {/* Button to run script to get random trails */}
-                 <button onClick={runPythonScript}>Get Trails</button> 
+               
                 <a href='/profile'><button id="account">Account</button></a>
             </div>
             <div className='bottom'>
