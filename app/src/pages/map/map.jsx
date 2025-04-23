@@ -118,7 +118,7 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
         if (data.status === 'Script executed') {
             
             setTimeout(() => {
-                fetch("/data/randomTrailsSelection/trail_lines.geojson")
+                fetch("/data/randomTrailsSelection/trail_lines_full.geojson")
                     .then((res) => res.json())
                     .then((data) => {
                         setGeojsonData(data);
