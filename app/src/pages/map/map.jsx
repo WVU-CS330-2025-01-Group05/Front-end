@@ -172,9 +172,6 @@ function Map() {
                                 <div className='item'>
                                     <span className="label-text"></span> {isLoading ? "Loading..." : <span className="col">{climateData?.humidity}%</span>}
                                 </div>
-                                <div className='item temperature-item'>
-                                    <p>---------------------------------</p>
-                                </div>
                             </>
                         )}
                     </div>
