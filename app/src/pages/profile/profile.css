@@ -86,7 +86,7 @@
   left: 0;
 }
 
-.completedHike {
+#completedHike {
   color: black;
   border-style: 5px solid grey;
   border-radius: 5px;
