@@ -16,6 +16,7 @@ const monthName = monthList[month];
 const currMonth = (month + 1).toString().padStart(2, '0');
 
 const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const zip = await getZipCode();
 
 //In case of leap year
 if ((d.getFullYear() % 4 === 0 && d.getFullYear() % 100 !== 0) || (d.getFullYear() % 400 === 0)) {
@@ -23,10 +24,11 @@ if ((d.getFullYear() % 4 === 0 && d.getFullYear() % 100 !== 0) || (d.getFullYear
 }
 
 const tokenFromNoaa = "zRJaCOXTyBqXhvrDQMFapLNnZiFBGoNe";
+const zipKey = "1deae9cf9cd74ef0b825b997814ef02d";
 
 async function getZipCode() {
     try {
-        const response = await fetch("https://ipgeolocation.abstractapi.com/v1/?api_key=1deae9cf9cd74ef0b825b997814ef02d");
+        const response = await fetch("https://ipgeolocation.abstractapi.com/v1/?api_key=" + zipKey);
         const data = await response.json();
         return data.postal_code;
     } catch (error) {
@@ -59,7 +61,7 @@ async function fetchNoaaData(url) {
 
 export async function getClimateData() {
     try {
-        const zip = await getZipCode();
+        //const zip = await getZipCode();
         console.log("Using ZIP:", zip);
 
         const startDate = 2020;
@@ -73,7 +75,7 @@ export async function getClimateData() {
         let dataCount = 0;
 
         for (let i = startDate; i < endDate; i++) {
-            const url = `https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOM&locationid=ZIP:26505&datatypeid=TAVG,TMIN,TMAX,PRCP,RHAV&startdate=${i}-${currMonth}-01&enddate=${i}-${currMonth}-01`;
+            const url = `https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOM&locationid=ZIP:${zip}&datatypeid=TAVG,TMIN,TMAX,PRCP,RHAV&startdate=${i}-${currMonth}-01&enddate=${i}-${currMonth}-01`;
 
             const results = await fetchNoaaData(url);
 
