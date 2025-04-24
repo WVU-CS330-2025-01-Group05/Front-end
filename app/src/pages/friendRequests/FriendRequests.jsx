@@ -56,9 +56,9 @@ function FriendRequests() {
           requests.map((req) => (
             <div key={req.id} className="request-item">
               <p>{req.sender_username} sent you a friend request.</p>
-              <div className="buttons">
-                <button onClick={() => handleRespond(req.id, 'accept')}>Accept</button>
-                <button onClick={() => handleRespond(req.id, 'deny')}>Deny</button>
+              <div className="reqButtons">
+                <button id='accept' onClick={() => handleRespond(req.id, 'accept')}>Accept</button>
+                <button id='deny' onClick={() => handleRespond(req.id, 'deny')}>Deny</button>
               </div>
             </div>
           ))

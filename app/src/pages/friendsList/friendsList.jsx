@@ -102,7 +102,7 @@ function FriendsList() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button className='search' onClick={handleSearch}>SEARCH</button>
+            <button className='search' onClick={handleSearch}>Search</button>
             <button
               className="close"
               onClick={() => {

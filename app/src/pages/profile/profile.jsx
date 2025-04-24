@@ -59,7 +59,7 @@ function Profile() {
 
       <div>
         <p id="name">{userData.nameVar}</p>
-        <p id="username">{userData.username}</p>
+        <p id="username">@{userData.username}</p>
         <p id="hikes">Hikes Completed: {userData.numOfHikes}</p>
         <label htmlFor="bio">Bio:</label>
         <p id="biography">{userData.bio}</p>
