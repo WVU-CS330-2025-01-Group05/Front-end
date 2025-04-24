@@ -24,6 +24,11 @@
   left: 0;
 }
 
+.friend-back:hover {
+  background-color: #151515;
+  color: white;
+}
+
   .container {
     height: 500px;
     width: 500px;
