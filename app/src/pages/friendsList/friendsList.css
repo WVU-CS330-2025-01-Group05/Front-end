@@ -6,7 +6,7 @@
   background-image: url('https://as1.ftcdn.net/jpg/05/24/39/98/1000_F_524399837_FIwRVE6kb6mU9UPzjFqumIm5OHNkPRZ0.jpg');
   background-size: 100%;
   
-  button {
+  .friend-back {
   border: none;
   font-family: Arial, sans-serif;
   padding: 16px 32px;
