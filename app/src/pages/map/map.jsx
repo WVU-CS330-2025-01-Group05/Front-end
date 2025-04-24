@@ -619,7 +619,7 @@ function Map() {
 
                                     const popup = `
                                     <div>
-                                      <button>Save to Profile</button>
+                                      <button>Add to Profile</button>
                                     </div>
                                   `;
                             
