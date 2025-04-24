@@ -44,11 +44,33 @@ function Edit() {
   const handleEdit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('nameVar', nameVar);
-    formData.append('bio', bio);
+    
+    //checks if user wants to change their information or not
+    if (nameVar.length === 0) {
+      formData.append('nameVar', userData.nameVar);
+    }
+    else {
+      formData.append('nameVar', nameVar);
+    }
+    if (bio.length === 0) {
+      formData.append('bio', userData.bio);
+    }
+    else {
+      formData.append('bio', bio);
+    }
+    
+    //uploads image to database if uploaded
     if (imageFile) {
       formData.append('profileImage', imageFile);
     }
+
+    /*
+    if (nameVar.length <= 0 || bio.length <= 0) {
+      alert("Name or bio input is empty. Try again.");
+      return;
+    }
+    */
+    
 
     try {
       await axios.post(`${API_URL}/auth/edit-profile`, formData, {
