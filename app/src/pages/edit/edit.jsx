@@ -64,14 +64,6 @@ function Edit() {
       formData.append('profileImage', imageFile);
     }
 
-    /*
-    if (nameVar.length <= 0 || bio.length <= 0) {
-      alert("Name or bio input is empty. Try again.");
-      return;
-    }
-    */
-    
-
     try {
       await axios.post(`${API_URL}/auth/edit-profile`, formData, {
         withCredentials: true,
