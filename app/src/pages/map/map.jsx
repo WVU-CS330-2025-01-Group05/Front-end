@@ -11,7 +11,7 @@ import { GeoJSON } from 'react-leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-import { getClimateData } from './request.js';
+import { getClimateData, getTrailClimateData } from './request.js';
 
 const userIcon = L.icon({
     iconUrl: markerIcon,
@@ -60,12 +60,26 @@ function Map() {
     const [geojsonData, setGeojsonData] = useState(null);
     const [selectedTrail, setSelectedTrail] = useState(null);
     const [climateData, setClimateData] = useState(null);
+    const [trailClimateData, setTrailClimateData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showStartTrailModal, setShowStartTrailModal] = useState(false);
 
     /* Trail click function */
     const handleTrailClick = (feature, idx) => {
         setSelectedTrail(idx);
+    };
+
+    // Handle starting a trail
+    const handleStartTrail = () => {
+        if (selectedTrail !== null) {
+            setShowStartTrailModal(true);
+            
+            // Auto-close the modal after 3 seconds
+            setTimeout(() => {
+                setShowStartTrailModal(false);
+            }, 3000);
+        }
     };
 
     // Fetch climate data when component mounts
@@ -99,44 +113,61 @@ function Map() {
             });
     }, []);
 
-
-
-/* Function runs python script that generates random trails and updates the map with the newly generated data. 
-const res- sends post request to run python script
-const data- parses data recieved as json
-Then script is checked for execution, and if it excecuted, then a timeout occurs to allow the new file data to load and then fetches and sets the new data
-*/
-   
-
-    //  const runPythonScript = async () => {
-    //      const res = await fetch("http://localhost:5000/run-script", {
-    //     method: "POST",
-    //      });
-    //      const data = await res.json();
+    // Fetch trail-specific climate data when a trail is selected
+    useEffect(() => {
+        async function fetchTrailClimateData() {
+            if (selectedTrail !== null && geojsonData && geojsonData.features) {
+                try {
+                    setIsLoading(true);
+                    const selectedFeature = geojsonData.features[selectedTrail];
+                    if (selectedFeature) {
+                        const data = await getTrailClimateData(selectedFeature);
+                        setTrailClimateData(data);
+                        console.log("Trail climate data fetched:", data);
+                    }
+                } catch (error) {
+                    console.error("Error fetching trail climate data:", error);
+                    setTrailClimateData(null);
+                } finally {
+                    setIsLoading(false);
+                }
+            } else {
+                setTrailClimateData(null);
+            }
+        }
         
-    //     console.log("Script response:", data);
-    //     if (data.status === 'Script executed') {
-            
-    //         setTimeout(() => {
-    //             fetch("/data/randomTrailsSelection/trail_lines_full.geojson")
-    //                 .then((res) => res.json())
-    //                 .then((data) => {
-    //                     setGeojsonData(data);
-    //                 })
-    //                 .catch((err) => console.error('GeoJSON load error after script:', err));
-    //         }, 500); 
-    //     }
+        fetchTrailClimateData();
+    }, [selectedTrail, geojsonData]);
 
+    // Get trail name from selected trail
+    const getSelectedTrailName = () => {
+        if (selectedTrail !== null && geojsonData && geojsonData.features) {
+            const feature = geojsonData.features[selectedTrail];
+            if (feature) {
+                return feature.properties.Name || 
+                       feature.properties.trailName || 
+                       `Trail ${selectedTrail + 1}`;
+            }
+        }
+        return "Select a trail";
+    };
 
-    //  };
+    // Get trail length from selected trail
+    const getSelectedTrailLength = () => {
+        if (selectedTrail !== null && geojsonData && geojsonData.features) {
+            const feature = geojsonData.features[selectedTrail];
+            if (feature && feature.properties.miles) {
+                return `${feature.properties.miles.toFixed(2)} miles`;
+            }
+        }
+        return "Unknown length";
+    };
 
     return (
         <div className='map'>
             <div className='header'>
                 <Clock />
                 <span id="plan">Plan Your Hike</span>
-                 {/* Button to run script to get random trails */}
-               
                 <a href='/profile'><button id="account">Account</button></a>
             </div>
             <div className='bottom'>
@@ -169,52 +200,83 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
                                         </option>
                                     ))}
                                 </select>
-
                             </div>
                         )}
                     </div>
 
-                    {/* Climate Data Section */}
-                    <div className='climate-data'>
-                        {error ? (
-                            <div className="error-message">{error}</div>
-                        ) : (
+                    {/* Updated Trail Weather Info Box */}
+                    <div className='trail-weather-box'>
+                        {selectedTrail !== null ? (
                             <>
-                                <h3>{isLoading ? "Loading climate data..." : `Climate Averages for ${climateData?.month}`}</h3>
-                                {climateData?.status && <div className="status-message">{climateData.status}</div>}
-                                <div className='item'>
-                                    <img src={rain} className='prcp-icon' alt="Rain" />
-                                    <span className="label-text">| Precipitation |</span>
-                                </div>
-                                <div className='item'>
-                                    <span className="label-text"></span> {isLoading ? "Loading..." : <span className="col">{climateData?.precipitation} ml/day</span>}
-                                </div>
-                                <div className='item temperature-item'>
-                                    <p>---------------------------------</p>
-                                </div>
-                                <div className='item temperature-item'>
-                                    <img src={thermometer} className='therm-icon' alt="Thermometer" />
-                                    <span className="label-text">| Temperature |</span>
-                                </div>
-                                <div className='item temperature-item'>
-                                    <p className="temperature-label">Average: {isLoading ? "Loading..." : <span className="col">{climateData?.temperature?.average}°C</span>}</p>
-                                </div>
-                                <div className='item temperature-item'>
-                                    <p className="temperature-label" style={{ whiteSpace: 'nowrap' }}>Range: {isLoading ? "Loading..." : <span className="col">{climateData?.temperature?.min}°C - {climateData?.temperature?.max}°C</span>}</p>
-                                </div>
-                                <div className='item temperature-item'>
-                                    <p>---------------------------------</p>
-                                </div>
-                                <div className='item'>
-                                    <img src={humidity} className='hum-icon' alt="Humidity" />
-                                    <span className="label-text">| Relative Humidity | </span> 
-                                </div>
-                                <div className='item'>
-                                    <span className="label-text"></span> {isLoading ? "Loading..." : <span className="col">{climateData?.humidity}%</span>}
+                                <h3 className='trail-name-header'>{getSelectedTrailName()}</h3>
+                                <div className='weather-data-content'>
+                                    <p className='trail-length'>{getSelectedTrailLength()}</p>
+                                    
+                                    {isLoading ? (
+                                        <div className="loading"></div>
+                                    ) : trailClimateData ? (
+                                        <div className='trail-weather-data'>
+                                            <div className='weather-section'>
+                                                <h4>Weather ({trailClimateData.month} Monthly Average)</h4>
+                                                
+                                                <div className='weather-item'>
+                                                    <img src={rain} className='weather-icon' alt="Rain" />
+                                                    <span className='weather-label'>Precipitation:</span>
+                                                    <span className='weather-value'>{trailClimateData.precipitation} ml/day</span>
+                                                </div>
+                                                
+                                                <div className='weather-item'>
+                                                    <img src={thermometer} className='weather-icon' alt="Temperature" />
+                                                    <span className='weather-label'>Temperature:</span>
+                                                    <span className='weather-value'>{trailClimateData.temperature.average}°C</span>
+                                                </div>
+                                                
+                                                <div className='weather-item'>
+                                                    <span className='weather-label'>Range:</span>
+                                                    <span className='weather-value'>{trailClimateData.temperature.min}°C - {trailClimateData.temperature.max}°C</span>
+                                                </div>
+                                                
+                                                <div className='weather-item'>
+                                                    <img src={humidity} className='weather-icon' alt="Humidity" />
+                                                    <span className='weather-label'>Humidity:</span>
+                                                    <span className='weather-value'>{trailClimateData.humidity}%</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className='trail-recommendation'>
+                                                <h4>Hiking Recommendation</h4>
+                                                <p>{getHikingRecommendation(trailClimateData)}</p>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div>No weather data available for this trail</div>
+                                    )}
+                                    
+                                    <button className='start-trail-button' onClick={() => handleStartTrail()}>
+                                        Start Trail
+                                    </button>
                                 </div>
                             </>
+                        ) : (
+                            <div className='select-trail-prompt'>
+                                <h3 className='trail-name-header'>Trail Information</h3>
+                                <div className="please-select-message">
+                                    <p>Please select a trail to view weather information</p>
+                                </div>
+                            </div>
                         )}
                     </div>
+
+                    {/* Start Trail Modal */}
+                    {showStartTrailModal && (
+                        <div className='start-trail-modal'>
+                            <div className='modal-content'>
+                                <span className='close-button' onClick={() => setShowStartTrailModal(false)}>×</span>
+                                <h3>Trail started! Good luck!</h3>
+                                <p>{getSelectedTrailLength()}</p>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 <div className='right' style={{ height: "80vh", width: "70vw" }}>
@@ -251,6 +313,30 @@ Then script is checked for execution, and if it excecuted, then a timeout occurs
             </div>
         </div>
     );
+}
+
+//helper function
+//generates a hiking recommendation besed on what the weather is looking like
+function getHikingRecommendation(weatherData) {
+    if (!weatherData) return "";
+    
+    const temp = parseFloat(weatherData.temperature.average);
+    const humidity = parseFloat(weatherData.humidity);
+    const precip = parseFloat(weatherData.precipitation);
+    
+    if (precip > 10) {
+        return "High precipitation expected. Consider waterproof gear or choosing another day.";
+    } else if (temp > 30) {
+        return "Very hot conditions. Bring plenty of water and sun protection.";
+    } else if (temp < 5) {
+        return "Cold conditions. Dress in layers and bring extra warm clothing.";
+    } else if (humidity > 80) {
+        return "High humidity. Stay hydrated and take breaks as needed.";
+    } else if (temp >= 15 && temp <= 25 && humidity < 70 && precip < 5) {
+        return "Excellent hiking conditions! Enjoy your trek.";
+    } else {
+        return "Moderate conditions. Prepare appropriately for your hike.";
+    }
 }
 
 export default Map;
