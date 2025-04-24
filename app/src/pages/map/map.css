@@ -72,10 +72,9 @@
         max-width: 100px;
         gap: 20px;
         align-items: center;
-        margin-bottom: 5px; /* Add this to reduce vertical spacing */
+        margin-bottom: 5px; /*to reduce vertical spacing */
     }
     
-    /* Add a new class for temperature details */
     .temperature-item {
         margin-bottom: 0 !important; /* Override the regular item spacing */
         margin-top: 0 !important;
@@ -191,10 +190,6 @@
             }
         }
 
-
-
-
-
         .right {
             flex-grow: 1;
             display: flex;
@@ -245,7 +240,163 @@
 
 }
 
-/* Updated stats section */
+/* Updated Trail Weather Box */
+.trail-weather-box {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 15px;
+    width: 100%;
+    max-height: 320px; /* Shortened from 350px */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+}
+
+.weather-data-content {
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.please-select-message {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+/* Style for the Start Trail Button */
+.start-trail-button {
+    margin-top: 10px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 15px;
+    background-color: #8ab896; /* Light green color */
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    align-self: center;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.start-trail-button:hover {
+    background-color: #6a9976; /* Darker green on hover.. may change? - grace*/
+}
+
+/* Modal styles */
+.start-trail-modal {
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+    width: 300px;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #555;
+}
+
+.close-button:hover {
+    color: #000;
+}
+
+/* fix trail name header for consistency */
+.trail-name-header {
+    font-family: "Pacifico", serif;
+    color: #494949;
+    font-size: 1.3rem;
+    text-align: center;
+    margin: 0;
+    padding: 10px 5px;
+    border-bottom: 1px solid #e0e0e0;
+    position: sticky;
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    z-index: 1;
+}
+
+/* fixes the trail length display */
+.trail-length {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+    margin: 5px 0 10px 0;
+}
+
+/* Clean up weather items for better spacing */
+.weather-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.weather-label {
+    font-weight: bold;
+    margin-right: 5px;
+    min-width: 100px;
+}
+
+.weather-value {
+    color: #0f5100;
+    font-weight: bold;
+}
+
+/* NEW STYLES FOR WEATHER ICONS - making them smaller */
+.weather-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+.trail-weather-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.trail-weather-box::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.trail-weather-box::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.trail-weather-box::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Stats section (keeping for compatibility) */
 .stats {
     display: flex;
     flex-direction: column;
@@ -258,8 +409,8 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-top: 15px;
     width: 220px; /* Fix the width to match the left panel */
-    max-height: 350px; /* Set a maximum height */
-    overflow-y: auto; /* Enable vertical scrolling when content exceeds max-height */
+    max-height: 350px; /* will set a maximum height */
+    overflow-y: auto; /* enable vertical scrolling when content exceeds max height */
     overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
@@ -297,23 +448,11 @@
     font-family: Arial, sans-serif;
 }
 
-/* Style the scrollbar for better appearance */
-.stats::-webkit-scrollbar {
-    width: 6px;
-}
-
-.stats::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-}
-
-.stats::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-}
-
-.stats::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.3);
+/* weather section (keeping for compatibility) */
+.weather-section h4 {
+    margin-top: 5px;
+    margin-bottom: 8px;
+    font-size: 1rem;
 }
 
 .trail-info {
@@ -323,7 +462,7 @@
     margin-top: 10px;
 }
 
-/* Style the popup content */
+/*stylization*/
 .leaflet-popup-content {
     font-family: Arial, sans-serif;
 }
@@ -334,6 +473,7 @@
 }
 
 /* Loading indicator */
+
 .loading {
     display: flex;
     justify-content: center;
@@ -360,4 +500,27 @@
     100% {
         transform: rotate(360deg);
     }
+}
+
+/* add "select trail" for select trail prompt */
+.select-trail-prompt {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* add space for recommendation section */
+.trail-recommendation {
+    margin-top: 8px;
+}
+
+.trail-recommendation h4 {
+    margin-top: 5px;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.trail-recommendation p {
+    font-size: 0.9rem;
+    line-height: 1.3;
 }
