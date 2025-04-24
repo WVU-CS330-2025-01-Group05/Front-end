@@ -614,8 +614,18 @@ function Map() {
                                     const featureIndex = geojsonData.features.findIndex(f => f === feature);
                                     layer.on({
                                         click: () => setSelectedTrail(featureIndex),
+                                        
                                     });
+
+                                    const popup = `
+                                    <div>
+                                      <button>Save to Profile</button>
+                                    </div>
+                                  `;
+                            
+                                  layer.bindPopup(popup);
                                 }}
+                                
                             />
                         )}
                     </MapContainer>
