@@ -65,7 +65,7 @@ function FriendsList() {
 
   return (
     <div className="friends-page">
-              <a href='/profile'><button className='friend-back'>Account</button></a>
+      <a href='/profile'><button className='friend-back'>Account</button></a>
 
       <div className="container">
         <button
@@ -102,9 +102,9 @@ function FriendsList() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button onClick={handleSearch}>SEARCH</button>
+            <button className='search' onClick={handleSearch}>SEARCH</button>
             <button
-              className="close-popup-button"
+              className="close"
               onClick={() => {
                 setShowSearchPopup(false);
                 setSearchResults([]);
