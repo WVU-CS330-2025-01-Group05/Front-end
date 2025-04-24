@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Clock from './clock';
 import './map.css';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { default as rain } from './icons/rain.svg';
 import { default as thermometer } from './icons/thermometer.png';
@@ -21,41 +21,158 @@ const userIcon = L.icon({
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowSize: [41, 41],
-  });
+});
 
 const defaultCenter = [39.6295, -79.9559];
 
-/*@param setPosition is the position that we are setting from user location
-
-const map- sets up event listeners for the map, zooming in on the correct location
-@param e is the location that is returned by leaflet
-locationfound is triggered when leaflet finds the user location
-locationerror happens if leaflet returns an error
-useEffect sets the map view to center on the user location
-
- */
 function LocationHandler({ setPosition }) {
-    
-const map = useMapEvents({
-    locationfound(e) {
-    setPosition(e.latlng);
-    map.flyTo(e.latlng, map.getZoom());
-      },
+    const map = useMapEvents({
+        locationfound(e) {
+            setPosition(e.latlng);
+            map.flyTo(e.latlng, map.getZoom());
+        },
         locationerror(e) {
             alert(`Unable to determine location: ${e.message}`);
         },
     });
+    
     useEffect(() => {
-      map.locate({ setView: true, timeout: 20000});
+        map.locate({ setView: true, timeout: 20000});
     }, [map]);
   
     return null;
 }
 
+//center map based on selected trail
+//this is a custom hook that will center the map on the selected trail
+//it will also zoom in on the trail
+function TrailCenterHandler({ selectedTrail, geojsonData }) {
+    const map = useMap();
+    
+    useEffect(() => {
+        if (selectedTrail !== null && geojsonData && geojsonData.features) {
+            const selectedFeature = geojsonData.features[selectedTrail];
+            
+            if (selectedFeature && selectedFeature.geometry) {
+                //gets coordinates based on geometry type
+                let coordinates;
+                
+                if (selectedFeature.geometry.type === "MultiLineString") {
+                    // For MultiLineString, get center point of first line segment
+                    if (selectedFeature.geometry.coordinates[0].length > 0) {
+                        const line = selectedFeature.geometry.coordinates[0];
+                        const midIndex = Math.floor(line.length / 2);
+                        coordinates = [line[midIndex][1], line[midIndex][0]]; //flips long lat to lat long
+                    }
+                } else if (selectedFeature.geometry.type === "LineString") {
+                    const line = selectedFeature.geometry.coordinates;
+                    const midIndex = Math.floor(line.length / 2);
+                    coordinates = [line[midIndex][1], line[midIndex][0]]; 
+                }
+                
+                // if coordinates are found the map will ""fly"" to them
+                //this is a smooth transition to the new coordinates
+                if (coordinates) {
+                    map.flyTo(coordinates, 14); //zoom level 14, can be changed!
+                }
+            }
+        }
+    }, [selectedTrail, geojsonData, map]);
+    
+    return null;
+}
+
+// New component for searchable dropdown
+function SearchableTrailDropdown({ trails, selectedTrail, onTrailSelect }) {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    //filters based on what was searched in the input box
+    const filteredTrails = trails?.filter(trail => {
+        const trailName = trail.properties.Name 
+            ? trail.properties.Name 
+            : `Trail ${trails.indexOf(trail) + 1}`;
+        return trailName.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+
+    //close dropdown when clicking outside
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsDropdownOpen(false);
+            }
+        }
+        
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dropdownRef]);
+
+
+    //gets name of the selected trail based on the index
+    const getSelectedTrailName = () => {
+        if (selectedTrail !== null && trails) {
+            const feature = trails[selectedTrail];
+            if (feature) {
+                return feature.properties.Name || `Trail ${selectedTrail + 1}`;
+            }
+        }
+        return "Select a trail";
+    };
+
+    return (
+        <div className='filter trail-search-dropdown' ref={dropdownRef}>
+            <label htmlFor='trailSearch'>Select Trail:</label>
+            <div className="search-dropdown-container">
+                <div 
+                    className="selected-trail-display" 
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                >
+                    {getSelectedTrailName()}
+                </div>
+                
+                {isDropdownOpen && (
+                    <div className="dropdown-content">
+                        <input
+                            type="text"
+                            placeholder="Search trails..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                        />
+                        <div className="trail-options">
+                            {filteredTrails && filteredTrails.length > 0 ? (
+                                filteredTrails.map((trail, idx) => {
+                                    const trailIndex = trails.indexOf(trail);
+                                    return (
+                                        <div 
+                                            key={idx} 
+                                            className={`trail-option ${trailIndex === selectedTrail ? 'selected' : ''}`}
+                                            onClick={() => {
+                                                onTrailSelect(trailIndex);
+                                                setIsDropdownOpen(false);
+                                            }}
+                                        >
+                                            {trail.properties.Name
+                                                ? `${trail.properties.Name} (${trail.properties.miles?.toFixed(2) || "?"} mi)`
+                                                : `Trail ${trailIndex + 1} (${trail.properties.miles?.toFixed(2) || "?"} mi)`}
+                                        </div>
+                                    );
+                                })
+                            ) : (
+                                <div className="no-trails-found">No trails found</div>
+                            )}
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
 function Map() {
-    /* 
-    Set up states for position, trails, and climate data
-    */
     const [position, setPosition] = useState(null);
     const [geojsonData, setGeojsonData] = useState(null);
     const [selectedTrail, setSelectedTrail] = useState(null);
@@ -64,25 +181,22 @@ function Map() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showStartTrailModal, setShowStartTrailModal] = useState(false);
+    const [trailClimateDataMap, setTrailClimateDataMap] = useState({});
+    const [activeFilter, setActiveFilter] = useState(""); 
 
-    /* Trail click function */
     const handleTrailClick = (feature, idx) => {
         setSelectedTrail(idx);
     };
 
-    // Handle starting a trail
     const handleStartTrail = () => {
         if (selectedTrail !== null) {
             setShowStartTrailModal(true);
-            
-            // Auto-close the modal after 3 seconds
             setTimeout(() => {
                 setShowStartTrailModal(false);
             }, 3000);
         }
     };
 
-    // Fetch climate data when component mounts
     useEffect(() => {
         async function fetchClimateData() {
             try {
@@ -90,7 +204,6 @@ function Map() {
                 setError(null);
                 const data = await getClimateData();
                 setClimateData(data);
-                console.log("Climate data fetched:", data);
             } catch (error) {
                 console.error("Error fetching climate data:", error);
                 setError("Failed to load climate data");
@@ -102,18 +215,16 @@ function Map() {
         fetchClimateData();
     }, []);
 
-    // Fetch trail data when component mounts
     useEffect(() => {
         fetch('/data/randomTrailsSelection/trail_lines_full.geojson')
             .then((res) => res.json())
             .then((data) => setGeojsonData(data))
             .catch((err) => {
                 console.error('GeoJSON load error:', err);
-                // Handle GeoJSON error if needed
             });
     }, []);
 
-    // Fetch trail-specific climate data when a trail is selected
+    //fetch climate data for the selected trail
     useEffect(() => {
         async function fetchTrailClimateData() {
             if (selectedTrail !== null && geojsonData && geojsonData.features) {
@@ -121,9 +232,17 @@ function Map() {
                     setIsLoading(true);
                     const selectedFeature = geojsonData.features[selectedTrail];
                     if (selectedFeature) {
-                        const data = await getTrailClimateData(selectedFeature);
-                        setTrailClimateData(data);
-                        console.log("Trail climate data fetched:", data);
+                        //checks if we already have the data in our map
+                        if (trailClimateDataMap[selectedTrail]) {
+                            setTrailClimateData(trailClimateDataMap[selectedTrail]);
+                        } else {
+                            const data = await getTrailClimateData(selectedFeature);
+                            setTrailClimateData(data);
+                            setTrailClimateDataMap(prevMap => ({
+                                ...prevMap,
+                                [selectedTrail]: data
+                            }));
+                        }
                     }
                 } catch (error) {
                     console.error("Error fetching trail climate data:", error);
@@ -139,7 +258,199 @@ function Map() {
         fetchTrailClimateData();
     }, [selectedTrail, geojsonData]);
 
-    // Get trail name from selected trail
+    //load data for all traisl to filter
+    useEffect(() => {
+        async function loadAllTrailsClimateData() {
+            if (geojsonData && geojsonData.features && position) {
+                const dataMap = {};
+                
+                for (let i = 0; i < geojsonData.features.length; i++) {
+                    try {
+                        const feature = geojsonData.features[i];
+                        const data = await getTrailClimateData(feature);
+                        dataMap[i] = data;
+                    } catch (error) {
+                        console.error(`Error loading climate data for trail ${i}:`, error);
+                    }
+                }
+                
+                setTrailClimateDataMap(dataMap);
+            }
+        }
+        
+        if (geojsonData && position && Object.keys(trailClimateDataMap).length === 0) {
+            loadAllTrailsClimateData();
+        }
+    }, [geojsonData, position, trailClimateDataMap]);
+
+    const handleFilterChange = (e) => {
+        const filterValue = e.target.value;
+        setActiveFilter(filterValue);
+        
+        if (!geojsonData || !geojsonData.features || !position) {
+            return;
+        }
+        
+        let selectedIdx = null;
+        
+        switch (filterValue) {
+            case "closest":
+                selectedIdx = findClosestTrail();
+                break;
+            case "farthest":
+                selectedIdx = findFarthestTrail();
+                break;
+            case "lowest-temp":
+                selectedIdx = findTrailByTemperature("lowest");
+                break;
+            case "highest-temp":
+                selectedIdx = findTrailByTemperature("highest");
+                break;
+            case "lowest-humidity":
+                selectedIdx = findTrailByHumidity("lowest");
+                break;
+            case "highest-humidity":
+                selectedIdx = findTrailByHumidity("highest");
+                break;
+            default:
+                return;
+        }
+        
+        if (selectedIdx !== null) {
+            setSelectedTrail(selectedIdx);
+        }
+    };
+    
+    const findClosestTrail = () => {
+        if (!position || !geojsonData || !geojsonData.features) return null;
+        
+        let closestIdx = null;
+        let minDistance = Infinity;
+        
+        geojsonData.features.forEach((feature, idx) => {
+            const coords = getTrailCenterCoordinates(feature);
+            if (coords) {
+
+                //uses haversine formula to calculate distance between two points on the earth
+                //according to stack overflow and wikipedia this is a good idea? - grace
+                const distance = calculateDistance(
+                    position.lat, position.lng,
+                    coords[0], coords[1]
+                );
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestIdx = idx;
+                }
+            }
+        });
+        
+        return closestIdx;
+    };
+    
+    const findFarthestTrail = () => {
+        if (!position || !geojsonData || !geojsonData.features) return null;
+        
+        let farthestIdx = null;
+        let maxDistance = -1;
+        
+        geojsonData.features.forEach((feature, idx) => {
+            const coords = getTrailCenterCoordinates(feature);
+            if (coords) {
+                const distance = calculateDistance(
+                    position.lat, position.lng,
+                    coords[0], coords[1]
+                );
+                
+                if (distance > maxDistance) {
+                    maxDistance = distance;
+                    farthestIdx = idx;
+                }
+            }
+        });
+        
+        return farthestIdx;
+    };
+    
+    const findTrailByTemperature = (type) => {
+        if (!trailClimateDataMap || Object.keys(trailClimateDataMap).length === 0) return null;
+        
+        let selectedIdx = null;
+        let compareTemp = type === "lowest" ? Infinity : -Infinity;
+        
+        Object.entries(trailClimateDataMap).forEach(([idx, data]) => {
+            if (data && data.temperature && data.temperature.average) {
+                const temp = parseFloat(data.temperature.average);
+                
+                if ((type === "lowest" && temp < compareTemp) || 
+                    (type === "highest" && temp > compareTemp)) {
+                    compareTemp = temp;
+                    selectedIdx = parseInt(idx);
+                }
+            }
+        });
+        
+        return selectedIdx;
+    };
+    
+    const findTrailByHumidity = (type) => {
+        if (!trailClimateDataMap || Object.keys(trailClimateDataMap).length === 0) return null;
+        
+        let selectedIdx = null;
+        let compareHumidity = type === "lowest" ? Infinity : -Infinity;
+        
+        Object.entries(trailClimateDataMap).forEach(([idx, data]) => {
+            if (data && data.humidity) {
+                const humidity = parseFloat(data.humidity);
+                
+                if ((type === "lowest" && humidity < compareHumidity) || 
+                    (type === "highest" && humidity > compareHumidity)) {
+                    compareHumidity = humidity;
+                    selectedIdx = parseInt(idx);
+                }
+            }
+        });
+        
+        return selectedIdx;
+    };
+    
+    //helper func to get trail center coordinates
+    const getTrailCenterCoordinates = (feature) => {
+        if (!feature || !feature.geometry) return null;
+        
+        if (feature.geometry.type === "MultiLineString") {
+            if (feature.geometry.coordinates[0].length > 0) {
+                const line = feature.geometry.coordinates[0];
+                const midIndex = Math.floor(line.length / 2);
+                return [line[midIndex][1], line[midIndex][0]]; //flip again
+            }
+        } else if (feature.geometry.type === "LineString") {
+            const line = feature.geometry.coordinates;
+            const midIndex = Math.floor(line.length / 2);
+            return [line[midIndex][1], line[midIndex][0]]; 
+        }
+        
+        return null;
+    };
+    
+    const calculateDistance = (lat1, lon1, lat2, lon2) => {
+        const R = 6371; //earths radius in km
+        const dLat = deg2rad(lat2 - lat1);
+        const dLon = deg2rad(lon2 - lon1); 
+        const a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2); 
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        const distance = R * c; // Distance in km
+        return distance;
+    };
+    
+    const deg2rad = (deg) => {
+        return deg * (Math.PI/180);
+    };
+
+    //Get trail name from selected trail
     const getSelectedTrailName = () => {
         if (selectedTrail !== null && geojsonData && geojsonData.features) {
             const feature = geojsonData.features[selectedTrail];
@@ -152,7 +463,7 @@ function Map() {
         return "Select a trail";
     };
 
-    // Get trail length from selected trail
+    //Get trail length from selected trail
     const getSelectedTrailLength = () => {
         if (selectedTrail !== null && geojsonData && geojsonData.features) {
             const feature = geojsonData.features[selectedTrail];
@@ -175,36 +486,32 @@ function Map() {
                     <div className='filters'>
                         <div className='filter'>
                             <label htmlFor='filter1'>Filter:</label>
-                            <select id='filter1'>
-                                <option>Lowest UV</option>
-                                <option>Lowest Pollen</option>
-                                <option>Closest</option>
-                                <option>Longest</option>
+                            <select 
+                                id='filter1'
+                                value={activeFilter}
+                                onChange={handleFilterChange}
+                            >
+                                <option value="">Select a filter</option>
+                                <option value="closest">Closest to me</option>
+                                <option value="farthest">Farthest from me</option>
+                                <option value="lowest-temp">Lowest temperature</option>
+                                <option value="highest-temp">Highest temperature</option>
+                                <option value="lowest-humidity">Lowest humidity</option>
+                                <option value="highest-humidity">Highest humidity</option>
                             </select>
                         </div>
 
+                        {/* Replace the regular dropdown w/ searchable dropdown */}
                         {geojsonData && (
-                            <div className='filter'>
-                                <label htmlFor='trailSelect'>Select Trail:</label>
-                                <select
-                                    id='trailSelect'
-                                    onChange={(e) => setSelectedTrail(parseInt(e.target.value))}
-                                    value={selectedTrail ?? ''}
-                                >
-                                    <option value="" disabled>Select a trail</option>
-                                    {geojsonData.features.map((feature, idx) => (
-                                        <option key={idx} value={idx}>
-                                            {feature.properties.Name
-                                                ? `${feature.properties.Name} (${feature.properties.miles?.toFixed(2) || "?"} mi)`
-                                                : `Trail ${idx + 1} (${feature.properties.miles?.toFixed(2) || "?"} mi)`}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+                            <SearchableTrailDropdown 
+                                trails={geojsonData.features}
+                                selectedTrail={selectedTrail}
+                                onTrailSelect={setSelectedTrail}
+                            />
                         )}
                     </div>
 
-                    {/* Updated Trail Weather Info Box */}
+                    {/* Trail weather infobox */}
                     <div className='trail-weather-box'>
                         {selectedTrail !== null ? (
                             <>
@@ -283,6 +590,9 @@ function Map() {
                     <MapContainer center={defaultCenter} zoom={13} style={{ height: "100%", width: "100%" }}>
                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                         <LocationHandler setPosition={setPosition} />
+                        
+                        {/* Center map on selected trail */}
+                        {geojsonData && <TrailCenterHandler selectedTrail={selectedTrail} geojsonData={geojsonData} />}
 
                         {position && (
                             <Marker position={position} icon={userIcon}>
@@ -316,7 +626,7 @@ function Map() {
 }
 
 //helper function
-//generates a hiking recommendation besed on what the weather is looking like
+//generates a hiking recommendation based on what the weather is looking like
 function getHikingRecommendation(weatherData) {
     if (!weatherData) return "";
     
