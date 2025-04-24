@@ -27,7 +27,7 @@
         flex-direction: column;
         align-items: center;
         max-width: 40vw;
-        gap: 30vh;
+        gap: 25vh;
 
         .home-top {
             margin-top: 100px;
