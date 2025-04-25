@@ -220,5 +220,43 @@ router.get('/friends', authMiddleware, async (req, res) => {
   }
 });
 
+//Post the trail the user is doing
+router.post('/upload-trail', authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+  const trailId = req.trails.id;
+  const { status, rating } = req.body; 
+
+  try {
+    await pool.promise().execute(
+      'INSERT INTO user_trails (user_id, trail_id, status, rating, completed_at) VALUES (?, ?, ?, ?, current_date())',
+      [userId, trailId, status, rating]
+    );
+  }
+  catch (error) {
+    console.error("Error uploading trail: ", error);
+    res.status(500).json({error: 'Failed to upload trail'});
+  }
+});
+
+//Get trails user completed
+router.get('/trails', authMiddleware, async (req, res) => {
+  try {
+    const [rows] = await pool.promise().execute(
+      'SELECT trail_id, status, rating, completed_at FROM user_trails WHERE user_id = ?',
+      [req.user.id]
+    );
+
+    const user = rows[0];
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    res.status(500).json({ error: 'Failed to fetch user profile' });
+  }
+});
+
 module.exports = router;
 

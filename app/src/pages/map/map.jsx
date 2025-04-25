@@ -12,6 +12,9 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { getClimateData, getTrailClimateData } from './request.js';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 
 const userIcon = L.icon({
     iconUrl: markerIcon,
@@ -183,17 +186,27 @@ function Map() {
     const [showStartTrailModal, setShowStartTrailModal] = useState(false);
     const [trailClimateDataMap, setTrailClimateDataMap] = useState({});
     const [activeFilter, setActiveFilter] = useState(""); 
+    const [status, setStatus] = useState(1);
+    const [rating, setRating] = useState(0);
+    
 
-    const handleTrailClick = (feature, idx) => {
-        setSelectedTrail(idx);
-    };
-
-    const handleStartTrail = () => {
+    const handleStartTrail = async () => {
         if (selectedTrail !== null) {
             setShowStartTrailModal(true);
             setTimeout(() => {
                 setShowStartTrailModal(false);
             }, 3000);
+
+            try {
+                await axios.post(API_URL + '/auth/upload-trail', 
+                    { status, rating }, 
+                    {withCredentials: true});
+                alert("Trail added to profile.");
+            }
+            catch (error) {
+                alert("Error adding trail to profile.");
+                console.error("Error adding trail to profile: ", error);
+            }
         }
     };
 
