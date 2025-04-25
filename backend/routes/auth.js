@@ -258,5 +258,26 @@ router.get('/trails', authMiddleware, async (req, res) => {
   }
 });
 
+//Fetch trail data 
+router.get('/fetch-trails', authMiddleware, async (req, res) => {
+  const {trailId} = req.body;
+  try {
+    const [rows] = await pool.promise().execute(
+      'SELECT name FROM trails WHERE id = ?',
+      [trailId]
+    );
+
+    const trail = rows[0];
+    if (trail) {
+      res.json(trail);
+    } else {
+      res.status(404).json({ error: 'Trail not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching trail name:', error);
+    res.status(500).json({ error: 'Failed to fetch trail name' });
+  }
+});
+
 module.exports = router;
 
