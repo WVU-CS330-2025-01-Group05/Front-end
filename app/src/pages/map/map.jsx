@@ -629,14 +629,47 @@ function Map() {
                                         click: () => setSelectedTrail(featureIndex),
                                         
                                     });
-
+                                // Displays unicode stars for ratings
+                                // Gives each star its own value so that it can be accessed and changed individually
                                     const popup = `
-                                    <div>
-                                      <button>Add to Profile</button>
-                                    </div>
+                                <div>
+                              
+                                <div class="starRating" style="font-size: 24px; color: gold; cursor: pointer;">
+                                    <span data-value="1">☆</span>
+                                    <span data-value="2">☆</span>
+                                    <span data-value="3">☆</span>
+                                    <span data-value="4">☆</span>
+                                    <span data-value="5">☆</span>
+                                </div>
+
+                                    <button>Add to Profile</button>
+                                        
+                                 </div>
                                   `;
                             
                                   layer.bindPopup(popup);
+                                // listens for popup of the selectedtrail to open
+                                // const starsContainer holds the css unicode stars in the class .starRating
+                                // The loop makes sure starsContainer exists, and then listens for a click
+                                // When a click happens, it checks if it clicks on a star with a value
+                                // const rating- grabs the dataset value of the star (or rating)
+                                //const stars- grabs all of the stars in the span
+                                // The forEach loop checks to see if the current star is less than the clicked rating (then its filled in), and if its not it is blank
+                                
+
+                                    layer.on('popupopen', () => {
+                                    const starsContainer = document.querySelector('.starRating');
+                                    if (starsContainer) {
+                                      starsContainer.addEventListener('click', (event) => {
+                                        if (!event.target.dataset.value) return;
+                                        const rating = parseInt(event.target.dataset.value);
+                                        const stars = starsContainer.querySelectorAll('span');
+                                        stars.forEach((star, index) => {
+                                          star.textContent = index < rating ? '★' : '☆';
+                                        });
+                                      });
+                                    }
+                                  });
                                 }}
                                 
                             />
