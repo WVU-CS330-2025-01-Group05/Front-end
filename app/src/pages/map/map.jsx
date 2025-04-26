@@ -235,28 +235,29 @@ function Map() {
       };
       
       const fetchTrailRating = async (trailId) => {
-        if (!trailId) {
-          console.warn('Trail ID is undefined, not fetching rating.');
-          return;
-        }
-      
-        try {
-          const response = await axios.post(`${API_URL}/auth/fetch-trails`, { trailId }, { withCredentials: true });
-      
-          const trail = response.data;
-          if (trail.rating_count > 0) {
-            const avg = Math.round(trail.total_rating / trail.rating_count);
-            setSelectedTrailRating(avg);
-            setSelectedTrailRatingCount(trail.rating_count);
-          } else {
-            setSelectedTrailRating(0);
-            setSelectedTrailRatingCount(0);
-          }
-        } catch (error) {
-          console.error('Error fetching trail rating:', error);
-        }
-      };
-      
+  if (!trailId) {
+    console.warn('Trail ID is undefined, not fetching rating.');
+    return;
+  }
+
+  try {
+    const response = await axios.post(`${API_URL}/auth/fetch-trails`, { trailId }, { withCredentials: true });
+    const trail = response.data;
+
+    if (trail.rating_count > 0) {
+      const avg = trail.total_rating / trail.rating_count;
+      const cleanAvg = Math.round(avg); // <<< round to nearest whole number
+      setSelectedTrailRating(cleanAvg);
+      setSelectedTrailRatingCount(trail.rating_count);
+    } else {
+      setSelectedTrailRating(0);
+      setSelectedTrailRatingCount(0);
+    }
+  } catch (error) {
+    console.error('Error fetching trail rating:', error);
+  }
+};
+
       
       
     
@@ -274,7 +275,7 @@ function Map() {
             status: 'in-progress',
           }, { withCredentials: true });
       
-          // ⬇️ NEW CODE: Save trail_id to memory (if your backend returns trailId)
+          //save trailid to memory if backend returns trailid
           if (response.data.trailId) {
             geojsonData.features[selectedTrail].properties.trail_id = response.data.trailId;
           }
@@ -668,11 +669,31 @@ function Map() {
                     {selectedTrailName && (
   <div className="trail-info">
     <p><strong>Selected Trail:</strong> {selectedTrailName}</p>
-    {selectedTrailRatingCount > 0 ? (
-      <p>⭐ {selectedTrailRating} ({selectedTrailRatingCount} ratings)</p>
-    ) : (
-      <p>No ratings yet</p>
-    )}
+ {selectedTrailRatingCount > 0 ? (
+  <div className="star-rating-display">
+    {Array.from({ length: 5 }, (_, index) => (
+      <span key={index} style={{ fontSize: '24px', color: index < selectedTrailRating ? 'gold' : 'lightgray' }}>
+        ★
+      </span>
+    ))}
+    <span style={{ marginLeft: '8px', fontSize: '16px', color: 'gray' }}>
+      ({selectedTrailRatingCount})
+    </span>
+  </div>
+) : (
+  <div className="star-rating-display">
+    {Array.from({ length: 5 }, (_, index) => (
+      <span key={index} style={{ fontSize: '24px', color: 'lightgray' }}>
+        ★
+      </span>
+    ))}
+    <span style={{ marginLeft: '8px', fontSize: '16px', color: 'gray' }}>
+      (0)
+    </span>
+  </div>
+)}
+
+
   </div>
 )}
 

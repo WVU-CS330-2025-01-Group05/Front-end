@@ -640,3 +640,23 @@
     margin-top: 5px;
   }
   
+  .star-rating-display {
+    display: flex;
+    align-items: center;
+    animation: popIn 0.4s ease;
+  }
+  
+  @keyframes popIn {
+    0% {
+      transform: scale(0.5);
+      opacity: 0;
+    }
+    80% {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
