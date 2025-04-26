@@ -22,15 +22,7 @@ function Profile() {
     completed_at: ''
   });
 
-  /*
-  const [trailInfo, setTrailInfo] = useState({
-    name: '',
-    miles: 0.0,
-    total_rating: 0,
-    rating_count: 0
-  });
-  */
-  const trailId = trailData.trail_id;
+  //const trailId = trailData.trail_id;
   const [trailName, setTrailName] = useState('');
 
   useEffect(() => {
@@ -64,6 +56,7 @@ function Profile() {
   }, [API_URL]);
 
   useEffect(() => {
+    const trailId = trailData.trail_id;
     const fetchTrailName = async () => {
       try {
         const response = await axios.get(API_URL + '/auth/fetch-trails', {trailId}, {withCredentials: true});
@@ -75,7 +68,7 @@ function Profile() {
     };
 
     fetchTrailName();
-  }, [API_URL]);
+  }, [API_URL, trailData.trail_id]);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -112,7 +105,7 @@ function Profile() {
       </div>
 
       <div className="hikes">
-        <p id="completedHike">{trailData.trail_id}, {trailData.status}, {trailData.rating}, {trailData.completed_at}</p>
+        <p id="completedHike">{trailName}, {trailData.trail_id}, {trailData.status}, {trailData.rating}, {trailData.completed_at}</p>
       </div>
     </div>
   );

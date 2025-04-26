@@ -131,6 +131,7 @@ router.get('/search-users', async (req, res) => {
 router.post('/send-request', authMiddleware, async (req, res) => {
   const { receiverId } = req.body;
   const senderId = req.user.id;
+  
   try {
     await pool.promise().execute(
       'INSERT INTO friend_requests (sender_id, receiver_id) VALUES (?, ?)',
@@ -245,13 +246,8 @@ router.get('/trails', authMiddleware, async (req, res) => {
       'SELECT trail_id, status, rating, completed_at FROM user_trails WHERE user_id = ?',
       [req.user.id]
     );
-
-    const user = rows[0];
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).json({ error: 'User not found' });
-    }
+    const trail = rows[0];
+    res.json(trail);
   } catch (error) {
     console.error('Error fetching user profile:', error);
     res.status(500).json({ error: 'Failed to fetch user profile' });

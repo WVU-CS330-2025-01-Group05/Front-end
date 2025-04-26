@@ -10,6 +10,7 @@ function FriendsList() {
   const [noResults, setNoResults] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
   const [friends, setFriends] = useState([]);
+  const [alreadyFriends, setAlreadyFriends] = useState(false);
   const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 
   const fetchFriends = async () => {
@@ -51,10 +52,19 @@ function FriendsList() {
     }
   };
 
+  const check = () => {
+    friends.map((friend) => {
+      if (friend.username === selectedUser.username) {
+        setAlreadyFriends(true);
+      }
+    });
+    return alreadyFriends;
+  }
+
   const handleSendFriendRequest = async () => {
     try {
       await axios.post(`${API_URL}/auth/send-request`, {
-        receiverId: selectedUser.id,
+        receiverId: selectedUser.id
       }, { withCredentials: true });
       setRequestSent(true);
     } catch (err) {
@@ -138,12 +148,12 @@ function FriendsList() {
         </div>
       )}
 
-      {selectedUser && (
+      {selectedUser && !alreadyFriends && (
         <div className="search-popup">
           <div className="search-popup-content">
             <h2>{selectedUser.username}</h2>
             <p>Would you like to add this user as a friend?</p>
-            <button onClick={handleSendFriendRequest}>Add Friend</button>
+            <button onClick={check ? alert("Already friends.") : handleSendFriendRequest}>Add Friend</button>
             <button onClick={() => setSelectedUser(null)}>Back to Search</button>
 
             {requestSent && (
