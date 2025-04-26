@@ -200,41 +200,6 @@
             .leaflet-container {
                 height: 100%;
                 width: 100%;
-                button {
-                    border: none;
-                    color: #494949;
-                    font-family: Arial, sans-serif;
-                    padding: 16px 32px;
-                    text-align: center;
-                    text-decoration: none;
-                    display: inline-block;
-                    font-size: 20px;
-                    margin: 4px 2px;
-                    transition-duration: 0.4s;
-                    cursor: pointer;
-                    background-color: #494949;
-                    color: white;
-                    border: 2px solid #151515;
-                    border: none;
-                    color: #494949;
-                    font-family: Arial, sans-serif;
-                    height:60px;
-                    width:120px;
-                    font-size: 15px;
-                    transition-duration: 0.4s;
-                    background-color: #494949;
-                    color: white;
-                    border-radius: 20px;
-                    position: relative;
-                    border:solid black 2px ;
-                    z-index: 2; 
-                    
-                } 
-        
-                button:hover {
-                    background-color: #151515;
-                    color: white;
-                }
             }
         }
     }
@@ -560,13 +525,11 @@
     line-height: 1.3;
 }
 
-/* Search dropdown container */
 .search-dropdown-container {
     position: relative;
     width: 100%;
 }
 
-/* Selected trail display */
 .selected-trail-display {
     background: #f8f8f8;
     border: 2px solid #ccc;
@@ -586,7 +549,6 @@
     background: #e0e0e0;
 }
 
-/* Dropdown content */
 .dropdown-content {
     position: absolute;
     top: 100%;
@@ -599,7 +561,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Search input */
+/* search stuff */
 .dropdown-content input {
     width: calc(100% - 20px);
     padding: 8px 10px;
@@ -609,13 +571,11 @@
     font-size: 0.9rem;
 }
 
-/* Trail options container */
 .trail-options {
     max-height: 200px;
     overflow-y: auto;
 }
 
-/* Individual trail option */
 .trail-option {
     padding: 8px 10px;
     cursor: pointer;
@@ -632,7 +592,6 @@
     font-weight: bold;
 }
 
-/* No trails found message */
 .no-trails-found {
     padding: 10px;
     text-align: center;
@@ -640,8 +599,44 @@
     font-style: italic;
 }
 
-/* Trail search dropdown */
+/* search dropdown */
 .trail-search-dropdown {
     margin-top: 10px;
     width: 100%;
 }
+.custom-alert {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 18px;
+    z-index: 9999;
+    opacity: 0.9;
+    animation: fadeInOut 2.5s forwards;
+  }
+  
+  @keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  }
+  
+  .trail-info p {
+    color: white;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 18px;
+  }
+  
+  .trail-rating {
+    font-size: 16px;
+    color: #ccc;
+    text-align: center;
+    margin-top: 5px;
+  }
+  

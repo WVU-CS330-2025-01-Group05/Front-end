@@ -221,53 +221,222 @@ router.get('/friends', authMiddleware, async (req, res) => {
   }
 });
 
-//Post the trail the user is doing
+//checks if the trail name exists in the database. If it doesnt it will be added to the database
 router.post('/upload-trail', authMiddleware, async (req, res) => {
+  //check if the user is authenticated
   const userId = req.user.id;
-  const trailId = req.trails.id;
-  const { status, rating } = req.body; 
+  const { trailName, status, rating } = req.body;
+
+//if the trail name is not provided return an error
+  if (!trailName) {
+    return res.status(400).json({ error: 'Trail name is required' });
+  }
+
+  try {
+    // Check if user already has an in-progress trail
+    const [existingInProgress] = await pool.promise().execute(
+      'SELECT id FROM user_trails WHERE user_id = ? AND status = ?',
+      [userId, 'in-progress']
+    );
+
+    if (existingInProgress.length > 0) {
+      return res.status(400).json({ error: 'You already have an active trail in progress. Complete or void it first.' });
+    }
+
+    //proceed as normal if no active trail exists
+    const [existingTrail] = await pool.promise().execute(
+      'SELECT id FROM trails WHERE name = ?',
+      [trailName]
+    );
+// Check if the trail name already exists in the database
+    let trailId;
+    if (existingTrail.length > 0) {
+      trailId = existingTrail[0].id;
+    } else {
+      const [result] = await pool.promise().execute(
+        'INSERT INTO trails (name) VALUES (?)',
+        [trailName]
+      );
+      trailId = result.insertId;
+    }
+//insert the trail into user_trails with status 'in-progress'
+    await pool.promise().execute(
+      'INSERT INTO user_trails (user_id, trail_id, status, rating, completed_at) VALUES (?, ?, ?, ?, NULL)',
+      [userId, trailId, status ?? 'in-progress', rating ?? null]
+    );
+    res.status(201).json({ message: 'Trail uploaded successfully' });
+
+  } catch (error) {
+    console.error("Error uploading trail: ", error);
+    res.status(500).json({ error: 'Failed to upload trail' });
+  }
+});
+
+
+//post to get the users last completed trail
+router.post('/trails', authMiddleware, async (req, res) => {
+  try {
+    const [rows] = await pool.promise().execute(
+      `SELECT trail_id, status, rating, completed_at 
+       FROM user_trails 
+       WHERE user_id = ? 
+       ORDER BY 
+         CASE status 
+           WHEN 'in-progress' THEN 1
+           WHEN 'completed' THEN 2
+           ELSE 3 END, 
+         completed_at DESC 
+       LIMIT 1`,
+      [req.user.id]
+    );
+
+    const trail = rows[0];
+    if (trail) {
+      res.json(trail);
+    } else {
+      res.json({});
+    }
+  } catch (error) {
+    console.error('Error fetching trail data:', error);
+    res.status(500).json({ error: 'Failed to fetch trail data' });
+  }
+});
+
+
+
+// Post to get the trail name from trail id
+router.post('/fetch-trails', authMiddleware, async (req, res) => {
+  const { trailId } = req.body;
+
+  if (!trailId) {
+    return res.status(400).json({ error: "Trail ID is required" });
+  }
+
+  try {
+    const [rows] = await pool.promise().execute(
+      'SELECT id, name, total_rating, rating_count FROM trails WHERE id = ?',
+      [trailId]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Trail not found" });
+    }
+
+    res.json(rows[0]);
+  } catch (error) {
+    console.error('Error fetching trail:', error);
+    res.status(500).json({ error: 'Failed to fetch trail' });
+  }
+});
+
+
+
+//post to get the users last completed trail
+//this will be used to get the last completed trail and show it in the profile page
+router.post('/complete-trail', authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    // Check if the user has an in-progress trail
+    const [current] = await pool.promise().execute(
+      'SELECT id FROM user_trails WHERE user_id = ? AND status = ? ORDER BY completed_at DESC LIMIT 1',
+      [userId, 'in-progress']
+    );
+
+    // If no in-progress trail is found return an error
+
+    if (current.length === 0) {
+      return res.status(400).json({ error: 'No active trail to complete' });
+    }
+
+    const trailEntryId = current[0].id;
+//update the trail entry to mark it as completed
+    await pool.promise().execute(
+      'UPDATE user_trails SET status = ?, completed_at = current_date() WHERE id = ?',
+      ['completed', trailEntryId]
+    );
+
+    await pool.promise().execute(
+      'UPDATE users SET numOfHikes = numOfHikes + 1 WHERE id = ?',
+      [userId]
+    );
+
+    res.status(200).json({ message: 'Trail marked as completed' });
+  } catch (error) {
+    console.error('Error completing trail:', error);
+    res.status(500).json({ error: 'Failed to complete trail' });
+  }
+});
+//post to void current trail if they want
+router.post('/void-trail', authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    //check if the user has an in-progress trail
+    const [current] = await pool.promise().execute(
+      'SELECT id FROM user_trails WHERE user_id = ? AND status = ? ORDER BY completed_at DESC LIMIT 1',
+      [userId, 'in-progress']
+    );
+
+    // If no in-progress trail is found return an error
+    if (current.length === 0) {
+      return res.status(400).json({ error: 'No active trail to void' });
+    }
+
+    const trailEntryId = current[0].id;
+//update the trail entry to mark it as voided
+    await pool.promise().execute(
+      'DELETE FROM user_trails WHERE id = ?',
+      [trailEntryId]
+    );
+
+    res.status(200).json({ message: 'Trail voided successfully' });
+  } catch (error) {
+    console.error('Error voiding trail:', error);
+    res.status(500).json({ error: 'Failed to void trail' });
+  }
+});
+
+router.get('/completed-hikes', authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const [completed] = await pool.promise().execute(
+      `SELECT trails.name, user_trails.completed_at
+       FROM user_trails
+       JOIN trails ON user_trails.trail_id = trails.id
+       WHERE user_trails.user_id = ? AND user_trails.status = ?
+       ORDER BY user_trails.completed_at DESC`,
+      [userId, 'completed']
+    );
+
+    res.json(completed);
+  } catch (error) {
+    console.error('Error fetching completed hikes:', error);
+    res.status(500).json({ error: 'Failed to fetch completed hikes' });
+  }
+});
+//rate trail work in progress cause it doesnt work yet
+router.post('/rate-trail', authMiddleware, async (req, res) => {
+  const { trailId, rating } = req.body;
+
+  if (!trailId || rating < 0 || rating > 5) {
+    return res.status(400).json({ error: "Invalid trail or rating" });
+  }
 
   try {
     await pool.promise().execute(
-      'INSERT INTO user_trails (user_id, trail_id, status, rating, completed_at) VALUES (?, ?, ?, ?, current_date())',
-      [userId, trailId, status, rating]
+      'UPDATE trails SET total_rating = total_rating + ?, rating_count = rating_count + 1 WHERE id = ?',
+      [rating, trailId]
     );
-  }
-  catch (error) {
-    console.error("Error uploading trail: ", error);
-    res.status(500).json({error: 'Failed to upload trail'});
+
+    res.json({ message: 'Rating saved successfully' });
+  } catch (error) {
+    console.error('Error saving rating:', error);
+    res.status(500).json({ error: 'Failed to save rating' });
   }
 });
 
-//Get trails user completed
-router.get('/trails', authMiddleware, async (req, res) => {
-  try {
-    const [rows] = await pool.promise().execute(
-      'SELECT trail_id, status, rating, completed_at FROM user_trails WHERE user_id = ?',
-      [req.user.id]
-    );
-    const trail = rows[0];
-    res.json(trail);
-  } catch (error) {
-    console.error('Error fetching user profile:', error);
-    res.status(500).json({ error: 'Failed to fetch user profile' });
-  }
-});
-
-//Fetch trail data 
-router.get('/fetch-trails', authMiddleware, async (req, res) => {
-  const {trailId} = req.body;
-  try {
-    const [trail] = await pool.promise().execute(
-      'SELECT name FROM trails WHERE trail_id = ?',
-      [trailId]
-    );
-    res.json(trail);
-  } catch (error) {
-    console.error('Error fetching trail name:', error);
-    res.status(500).json({ error: 'Failed to fetch trail name' });
-  }
-});
 
 module.exports = router;
 

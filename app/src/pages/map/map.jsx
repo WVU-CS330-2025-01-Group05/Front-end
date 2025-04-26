@@ -13,6 +13,8 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { getClimateData, getTrailClimateData } from './request.js';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 
@@ -176,6 +178,12 @@ function SearchableTrailDropdown({ trails, selectedTrail, onTrailSelect }) {
 }
 
 function Map() {
+    const [alertMessage, setAlertMessage] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
+    const [selectedTrailRating, setSelectedTrailRating] = useState(null);
+    const [selectedTrailRatingCount, setSelectedTrailRatingCount] = useState(null);
+
+
     const [position, setPosition] = useState(null);
     const [geojsonData, setGeojsonData] = useState(null);
     const [selectedTrail, setSelectedTrail] = useState(null);
@@ -188,27 +196,99 @@ function Map() {
     const [activeFilter, setActiveFilter] = useState(""); 
     const [status, setStatus] = useState(1);
     const [rating, setRating] = useState(0);
-    
+    const [trailData, setTrailData] = useState(null);
+    const [userData, setUserData] = useState({});
+    const [selectedTrailName, setSelectedTrailName] = useState('');
 
-    const handleStartTrail = async () => {
-        if (selectedTrail !== null) {
-            setShowStartTrailModal(true);
-            setTimeout(() => {
-                setShowStartTrailModal(false);
-            }, 3000);
 
-            try {
-                await axios.post(API_URL + '/auth/upload-trail', 
-                    { status, rating }, 
-                    {withCredentials: true});
-                alert("Trail added to profile.");
-            }
-            catch (error) {
-                alert("Error adding trail to profile.");
-                console.error("Error adding trail to profile: ", error);
-            }
+    //custom trigger alert because the toast thing was not working for some reason
+    //this is a custom alert that will show up for 2.5 seconds when a trail is started
+    const triggerAlert = (message) => {
+        setAlertMessage(message);
+        setShowAlert(true);
+      
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 2500); // disappears after 2.5 seconds
+      };
+      
+      //handles trail click for data pulling
+    const handleTrailClick = (trail) => {
+        console.log('Trail clicked:', trail);
+      
+        if (trail && trail.properties && trail.properties.Name) {
+          setSelectedTrailName(trail.properties.Name);
+          console.log('Selected trail:', trail.properties.Name);
+        } else {
+          console.log('No valid trail name found.');
+          setSelectedTrailName(''); //clear if no name found
         }
-    };
+      };
+
+      const handleTrailSelect = (trailIdx) => {
+        setSelectedTrail(trailIdx);
+      
+        if (geojsonData?.features?.[trailIdx]) {
+          const trailId = geojsonData.features[trailIdx].properties.trail_id;
+          fetchTrailRating(trailId);
+        }
+      };
+      
+      const fetchTrailRating = async (trailId) => {
+        if (!trailId) {
+          console.warn('Trail ID is undefined, not fetching rating.');
+          return;
+        }
+      
+        try {
+          const response = await axios.post(`${API_URL}/auth/fetch-trails`, { trailId }, { withCredentials: true });
+      
+          const trail = response.data;
+          if (trail.rating_count > 0) {
+            const avg = Math.round(trail.total_rating / trail.rating_count);
+            setSelectedTrailRating(avg);
+            setSelectedTrailRatingCount(trail.rating_count);
+          } else {
+            setSelectedTrailRating(0);
+            setSelectedTrailRatingCount(0);
+          }
+        } catch (error) {
+          console.error('Error fetching trail rating:', error);
+        }
+      };
+      
+      
+      
+    
+      const handleStartTrail = async () => {
+        if (selectedTrail === null || !geojsonData?.features?.[selectedTrail]) {
+          triggerAlert('Please select a trail first!');
+          return;
+        }
+      
+        const currentSelectedTrailName = geojsonData.features[selectedTrail].properties.Name || `Trail ${selectedTrail + 1}`;
+      
+        try {
+          await axios.post(`${API_URL}/auth/upload-trail`, {
+            trailName: currentSelectedTrailName,
+            status: 'in-progress',
+          }, { withCredentials: true });
+      
+          triggerAlert(`🏞️ Trail "${currentSelectedTrailName}" started!`);
+          await refreshProfileData();
+        } catch (error) {
+          console.error('Error starting new trail:', error);
+          if (error.response && error.response.data.error) {
+            triggerAlert(error.response.data.error);
+          } else {
+            triggerAlert('Failed to start trail.');
+          }
+        }
+      };
+      
+      
+      
+    
 
     useEffect(() => {
         async function fetchClimateData() {
@@ -486,9 +566,36 @@ function Map() {
         }
         return "Unknown length";
     };
+    useEffect(() => {
+        refreshProfileData();
+      }, []);
+      
+      const refreshProfileData = async () => {
+        try {
+          const trailResponse = await axios.post(`${API_URL}/auth/trails`, {}, { withCredentials: true });
+          setTrailData(trailResponse.data || {});
+      
+          const userResponse = await axios.get(`${API_URL}/auth/profile`, { withCredentials: true });
+          setUserData(userResponse.data);
+      
+        } catch (error) {
+          console.error('Failed to refresh profile data:', error);
+        }
+      };
+      
 
     return (
+        //sorry its spaced so bad - grade :)
         <div className='map'>
+         {showAlert && (
+  <div className="custom-alert">
+    {alertMessage}
+  </div>
+)}
+
+
+
+
             <div className='header'>
                 <Clock />
                 <span id="plan">Plan Your Hike</span>
@@ -517,20 +624,38 @@ function Map() {
                         {/* Replace the regular dropdown w/ searchable dropdown */}
                         {geojsonData && (
                             <SearchableTrailDropdown 
-                                trails={geojsonData.features}
-                                selectedTrail={selectedTrail}
-                                onTrailSelect={setSelectedTrail}
-                            />
+                            trails={geojsonData.features}
+                            selectedTrail={selectedTrail}
+                            onTrailSelect={handleTrailSelect}
+                          />
+                          
                         )}
                     </div>
+                    {selectedTrailName && (
+  <div className="trail-info">
+    <p><strong>Selected Trail:</strong> {selectedTrailName}</p>
+    {selectedTrailRatingCount > 0 ? (
+      <p>⭐ {selectedTrailRating} ({selectedTrailRatingCount} ratings)</p>
+    ) : (
+      <p>No ratings yet</p>
+    )}
+  </div>
+)}
 
-                    {/* Trail weather infobox */}
+
+                    {/* Trail weather infobox (im sorry its indented so poorly forgive me - grace)*/}
                     <div className='trail-weather-box'>
                         {selectedTrail !== null ? (
                             <>
                                 <h3 className='trail-name-header'>{getSelectedTrailName()}</h3>
                                 <div className='weather-data-content'>
                                     <p className='trail-length'>{getSelectedTrailLength()}</p>
+                                    {selectedTrailRatingCount > 0 ? (
+                                  <p className='trail-rating'>⭐ {selectedTrailRating} ({selectedTrailRatingCount} ratings)</p>
+                                                    ) : (
+                                        <p className='trail-rating'>No ratings yet</p>
+                                    )}
+
                                     
                                     {isLoading ? (
                                         <div className="loading"></div>
@@ -572,9 +697,10 @@ function Map() {
                                         <div>No weather data available for this trail</div>
                                     )}
                                     
-                                    <button className='start-trail-button' onClick={() => handleStartTrail()}>
-                                        Start Trail
-                                    </button>
+                                    <button className='start-trail-button' onClick={handleStartTrail}>
+  Start Trail
+</button>
+
                                 </div>
                             </>
                         ) : (
@@ -625,52 +751,43 @@ function Map() {
                                 }}
                                 onEachFeature={(feature, layer) => {
                                     const featureIndex = geojsonData.features.findIndex(f => f === feature);
+                                  
                                     layer.on({
-                                        click: () => setSelectedTrail(featureIndex),
-                                        
+                                      click: () => {
+                                        setSelectedTrail(featureIndex);
+                                        handleTrailClick(feature); // <-- ADD THIS
+                                      },
                                     });
-                                // Displays unicode stars for ratings
-                                // Gives each star its own value so that it can be accessed and changed individually
+                                  
                                     const popup = `
-                                <div>
-                              
-                                <div class="starRating" style="font-size: 24px; color: gold; cursor: pointer;">
-                                    <span data-value="1">☆</span>
-                                    <span data-value="2">☆</span>
-                                    <span data-value="3">☆</span>
-                                    <span data-value="4">☆</span>
-                                    <span data-value="5">☆</span>
-                                </div>
-
-                                    <button>Add to Profile</button>
-                                        
-                                 </div>
-                                  `;
-                            
-                                  layer.bindPopup(popup);
-                                // listens for popup of the selectedtrail to open
-                                // const starsContainer holds the css unicode stars in the class .starRating
-                                // The loop makes sure starsContainer exists, and then listens for a click
-                                // When a click happens, it checks if it clicks on a star with a value
-                                // const rating- grabs the dataset value of the star (or rating)
-                                //const stars- grabs all of the stars in the span
-                                // The forEach loop checks to see if the current star is less than the clicked rating (then its filled in), and if its not it is blank
-                                
-
+                                      <div>
+                                        <div class="starRating" style="font-size: 24px; color: gold; cursor: pointer;">
+                                            <span data-value="1">☆</span>
+                                            <span data-value="2">☆</span>
+                                            <span data-value="3">☆</span>
+                                            <span data-value="4">☆</span>
+                                            <span data-value="5">☆</span>
+                                        </div>
+                                        <button>Add to Profile</button>
+                                      </div>
+                                    `;
+                                    layer.bindPopup(popup);
+                                  
                                     layer.on('popupopen', () => {
-                                    const starsContainer = document.querySelector('.starRating');
-                                    if (starsContainer) {
-                                      starsContainer.addEventListener('click', (event) => {
-                                        if (!event.target.dataset.value) return;
-                                        const rating = parseInt(event.target.dataset.value);
-                                        const stars = starsContainer.querySelectorAll('span');
-                                        stars.forEach((star, index) => {
-                                          star.textContent = index < rating ? '★' : '☆';
+                                      const starsContainer = document.querySelector('.starRating');
+                                      if (starsContainer) {
+                                        starsContainer.addEventListener('click', (event) => {
+                                          if (!event.target.dataset.value) return;
+                                          const rating = parseInt(event.target.dataset.value);
+                                          const stars = starsContainer.querySelectorAll('span');
+                                          stars.forEach((star, index) => {
+                                            star.textContent = index < rating ? '★' : '☆';
+                                          });
                                         });
-                                      });
-                                    }
-                                  });
-                                }}
+                                      }
+                                    });
+                                  }}
+                                  
                                 
                             />
                         )}
