@@ -13,6 +13,8 @@ function Profile() {
   const [selectedTrailId, setSelectedTrailId] = useState(null);
   const [hoverRating, setHoverRating] = useState(0);
   const [selectedRating, setSelectedRating] = useState(0);
+  const [hasFriendRequests, setHasFriendRequests] = useState(false);
+
 
 
 
@@ -63,6 +65,24 @@ function Profile() {
     fetchUserData();
   }, [API_URL, navigate]);
 
+
+  useEffect(() => {
+    const fetchFriendRequests = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/auth/friend-requests`, {
+          withCredentials: true,
+        });
+        setHasFriendRequests(response.data.length > 0);
+      } catch (err) {
+        console.error('Error fetching friend requests:', err);
+        setHasFriendRequests(false);
+      }
+    };
+  
+    fetchFriendRequests();
+  }, [API_URL]);
+
+  
   useEffect(() => {
     const fetchTrailData = async () => {
       try {
@@ -270,7 +290,13 @@ const handleStarClick = (stars) => {
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
       <a href='/edit'><button id='editProfile'>Edit Profile</button></a>
       <a href='/home'><button id='logOut' onClick={handleLogout}>Log Out</button></a>
-      <a href='/friend-requests'><button id='friendRequests'>Friend Requests</button></a>
+      <a href='/friend-requests' style={{ position: 'relative' }}>
+      <button id='friendRequests'>Friend Requests</button>
+         {hasFriendRequests && (
+              <div className="notification-badge">!</div>
+                 )}        
+      </a>
+
 
       <div>
         <p id="name">{userData.nameVar}</p>

@@ -235,7 +235,7 @@
   top: 30%;
   left: 50%;
   transform: translateX(-50%);
-  background: white; /* maybe change to black? idk both are ugly imo */
+  background: white; /* maybe change to black? idk both are ugly - grace */
   padding: 25px;
   border-radius: 15px;
   text-align: center;
@@ -290,4 +290,21 @@
   font-size: 16px;
   color: #666;
   margin-bottom: 0px;
+}
+
+.notification-badge {
+  position: fixed;
+  top: 10px; /* Adjust based on where you want it */
+  right: 180px; /* Match friendRequests button */
+  background: red;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  z-index: 10000; /* High so it stays on top */
 }
