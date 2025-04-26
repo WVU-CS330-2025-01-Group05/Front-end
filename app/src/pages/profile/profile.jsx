@@ -16,9 +16,6 @@ function Profile() {
   const [hasFriendRequests, setHasFriendRequests] = useState(false);
 
 
-
-
-
   const triggerAlert = (message) => {
     setAlertMessage(message);
     setShowAlert(true);
@@ -59,6 +56,7 @@ function Profile() {
       } catch (error) {
         console.error('Error fetching user data:', error);
         alert('Failed to fetch user data. Please log in again.');
+        navigate("/");
       }
     };
 
@@ -86,8 +84,6 @@ function Profile() {
   useEffect(() => {
     const fetchTrailData = async () => {
       try {
-        
-
         const response = await axios.post(`${API_URL}/auth/trails`, {}, { withCredentials: true });
         const data = response.data;
         setTrailData(data);

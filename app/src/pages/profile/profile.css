@@ -9,17 +9,21 @@
   padding-bottom: 100px;
 }
 
-.profile body {
+.profile html, body {
   font-family: Arial, sans-serif;
-  color: #fff;
+  overflow-x: hidden;
+  position: relative;
 }
 
 .profile img {
   border-radius: 50%;
   margin-left: 300px;
   margin-top: 50px;
-  height: 250px;
-  width: 250px;
+  height: 240px;
+  width: 240px;
+  object-fit: cover;
+  margin-bottom: 20px;
+  border: 3px solid white;
 }
 
 .profile p,
@@ -35,7 +39,10 @@
 }
 
 #username {
-  margin-top: -20px;
+  margin-top: -23px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #e0e0e0;
 }
 
 .profile button {
