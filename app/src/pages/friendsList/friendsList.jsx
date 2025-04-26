@@ -68,11 +68,23 @@ function FriendsList() {
       triggerAlert("Already friends with this user.");
       return;
     }
-
+  
     try {
+      //check safe to see if the user has already sent a request to the selected user
+      const sentResponse = await axios.get(`${API_URL}/auth/sent-requests`, { withCredentials: true });
+      const sentRequests = sentResponse.data;
+      const hasAlreadySentRequest = sentRequests.some(req => req.receiver_username === selectedUser.username);
+  
+      if (hasAlreadySentRequest) {
+        triggerAlert("Friend request already sent!");
+        return;
+      }
+  
+      //sends a post request to the backend to send a friend request to the selected user
       await axios.post(`${API_URL}/auth/send-request`, {
         receiverId: selectedUser.id
       }, { withCredentials: true });
+  
       setRequestSent(true);
       triggerAlert("Friend request sent!");
     } catch (err) {
@@ -80,6 +92,8 @@ function FriendsList() {
       triggerAlert("Failed to send friend request.");
     }
   };
+  
+  
 
   return (
     <div className="friends-page">
@@ -168,26 +182,51 @@ function FriendsList() {
         </div>
       )}
 
-      {selectedUser && (
-        <div className="search-popup">
-          <div className="search-popup-content">
-            <h2>{selectedUser.username}</h2>
-            <p>Would you like to add this user as a friend?</p>
-            {!requestSent ? (
-              <>
-                <button onClick={handleSendFriendRequest}>Send Request</button>
-                <button
-                  onClick={() => {
-                    setSelectedUser(null);
-                  }}
-                >Cancel</button>
-              </>
-            ) : (
-              <p style={{ color: 'green' }}>Request sent!</p>
-            )}
-          </div>
-        </div>
+{selectedUser && (
+  <div className="search-popup">
+    <div className="search-popup-content" style={{ position: "relative" }}>
+      {/* Small X button in the corner */}
+      <button
+        onClick={() => {
+          setSelectedUser(null);
+          setRequestSent(false);
+          setShowSearchPopup(false);
+        }}
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          background: "none",
+          border: "none",
+          fontSize: "20px",
+          cursor: "pointer",
+          color: "#888",
+        }}
+      >
+        ×
+      </button>
+
+      {/* Popup content */}
+      <h2>{selectedUser.username}</h2>
+      <p>Would you like to add this user as a friend?</p>
+      {!requestSent ? (
+        <>
+          <button onClick={handleSendFriendRequest}>Send Request</button>
+          <button
+            onClick={() => {
+              setSelectedUser(null);
+            }}
+          >
+            Cancel
+          </button>
+        </>
+      ) : (
+        <p style={{ color: "green" }}>Request sent!</p>
       )}
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

@@ -460,6 +460,24 @@ router.get('/profile/:id', authMiddleware, async (req, res) => {
   }
 });
 
+// Get Sent Friend Requests
+router.get('/sent-requests', authMiddleware, async (req, res) => {
+  const senderId = req.user.id;
+  try {
+    const [rows] = await pool.promise().execute(
+      `SELECT friend_requests.id, users.username AS receiver_username
+       FROM friend_requests
+       JOIN users ON friend_requests.receiver_id = users.id
+       WHERE friend_requests.sender_id = ?`,
+      [senderId]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching sent requests:', err);
+    res.status(500).json({ error: 'Failed to fetch sent requests' });
+  }
+});
+
 
 
 
