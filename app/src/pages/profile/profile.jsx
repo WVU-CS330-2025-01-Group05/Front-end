@@ -16,12 +16,21 @@ function Profile() {
   });
 
   const [trailData, setTrailData] = useState({
-    trail_id: '',
+    trail_id: 0,
     status: '',
     rating: 0,
     completed_at: ''
   });
 
+  /*
+  const [trailInfo, setTrailInfo] = useState({
+    name: '',
+    miles: 0.0,
+    total_rating: 0,
+    rating_count: 0
+  });
+  */
+  const trailId = trailData.trail_id;
   const [trailName, setTrailName] = useState('');
 
   useEffect(() => {
@@ -52,21 +61,21 @@ function Profile() {
     };
 
     fetchTrailData();
-  }, [API_URL, navigate]);
+  }, [API_URL]);
 
   useEffect(() => {
     const fetchTrailName = async () => {
       try {
-        const response = await axios.get(API_URL + '/auth/fetch-trails', {withCredentials: true});
+        const response = await axios.get(API_URL + '/auth/fetch-trails', {trailId}, {withCredentials: true});
         setTrailName(response.data);
       } catch (error) {
-        alert("Failed to fetch trail data.");
-        console.error("Failed to fetch trail data: ", error);
+        alert("Failed to fetch trail name.");
+        console.error("Failed to fetch trail name: ", error);
       }
     };
 
     fetchTrailName();
-  }, [API_URL, navigate]);
+  }, [API_URL]);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -103,7 +112,7 @@ function Profile() {
       </div>
 
       <div className="hikes">
-        <p id="completedHike">{trailName}, {trailData.status}, {trailData.rating}, {trailData.completed_at}</p>
+        <p id="completedHike">{trailData.trail_id}, {trailData.status}, {trailData.rating}, {trailData.completed_at}</p>
       </div>
     </div>
   );

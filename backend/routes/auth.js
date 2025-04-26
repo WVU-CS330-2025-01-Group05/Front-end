@@ -262,17 +262,11 @@ router.get('/trails', authMiddleware, async (req, res) => {
 router.get('/fetch-trails', authMiddleware, async (req, res) => {
   const {trailId} = req.body;
   try {
-    const [rows] = await pool.promise().execute(
-      'SELECT name FROM trails WHERE id = ?',
+    const [trail] = await pool.promise().execute(
+      'SELECT name FROM trails WHERE trail_id = ?',
       [trailId]
     );
-
-    const trail = rows[0];
-    if (trail) {
-      res.json(trail);
-    } else {
-      res.status(404).json({ error: 'Trail not found' });
-    }
+    res.json(trail);
   } catch (error) {
     console.error('Error fetching trail name:', error);
     res.status(500).json({ error: 'Failed to fetch trail name' });
