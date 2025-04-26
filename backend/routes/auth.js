@@ -437,6 +437,31 @@ router.post('/rate-trail', authMiddleware, async (req, res) => {
   }
 });
 
+router.get('/profile/:id', authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [rows] = await pool.promise().execute(
+      'SELECT username, numOfHikes, bio, nameVar, img FROM users WHERE id = ?',
+      [id]
+    );
+
+    const user = rows[0];
+    if (user) {
+      if (user.img) {
+        user.img = `data:image/jpeg;base64,${Buffer.from(user.img).toString('base64')}`;
+      }
+      res.json(user);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching friend profile:', error);
+    res.status(500).json({ error: 'Failed to fetch friend profile' });
+  }
+});
+
+
+
 
 module.exports = router;
 

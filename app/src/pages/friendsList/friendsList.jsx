@@ -109,7 +109,13 @@ function FriendsList() {
             friends.map((friend) => (
               <div key={friend.id} className="friend">
                 <div>{friend.username}</div>
-                <button className="view-profile-button">View Profile</button>
+                <button
+                  className="view-profile-button"
+                    onClick={() => window.location.href = `/friend-profile/${friend.id}`}
+                      >     
+                        View Profile
+                                </button>
+
               </div>
             ))
           )}

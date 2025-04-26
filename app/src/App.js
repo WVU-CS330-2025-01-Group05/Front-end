@@ -18,6 +18,7 @@ import LoginToView from './pages/loginToView/loginToView';
 import FriendRequests from './pages/friendRequests/FriendRequests';
 import NotFound from './pages/notFound/notFound'
 import WhatIsHOTD from './pages/whatIsHOTD/whatIsHOTD'
+import FriendProfile  from './pages/friendProfile/FriendProfile';
 
 /**
  * Main application component that manages routes and authentication state.
@@ -52,6 +53,8 @@ function App() {
         <Route path="/loginToView" element={<LoginToView />} />
         <Route path='*' element={<NotFound/>}/>
         <Route path='/what-is-hotd' element={<WhatIsHOTD />}/>
+        <Route path="/friend-profile/:id" element={<FriendProfile />} />
+
       </Routes>
     </Router>
   );
