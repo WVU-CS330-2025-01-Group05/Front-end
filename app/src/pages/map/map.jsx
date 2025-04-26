@@ -269,10 +269,15 @@ function Map() {
         const currentSelectedTrailName = geojsonData.features[selectedTrail].properties.Name || `Trail ${selectedTrail + 1}`;
       
         try {
-          await axios.post(`${API_URL}/auth/upload-trail`, {
+          const response = await axios.post(`${API_URL}/auth/upload-trail`, {
             trailName: currentSelectedTrailName,
             status: 'in-progress',
           }, { withCredentials: true });
+      
+          // ⬇️ NEW CODE: Save trail_id to memory (if your backend returns trailId)
+          if (response.data.trailId) {
+            geojsonData.features[selectedTrail].properties.trail_id = response.data.trailId;
+          }
       
           triggerAlert(`🏞️ Trail "${currentSelectedTrailName}" started!`);
           await refreshProfileData();
@@ -315,7 +320,36 @@ function Map() {
             .catch((err) => {
                 console.error('GeoJSON load error:', err);
             });
+
     }, []);
+
+    useEffect(() => {
+        const fetchTrailIds = async () => {
+          if (!geojsonData) return;
+      
+          try {
+            const response = await axios.get(`${API_URL}/auth/all-trails`, { withCredentials: true });
+            const trailsFromDb = response.data; // [{ id, name }, { id, name }, ...]
+      
+            const updatedGeojson = { ...geojsonData };
+            updatedGeojson.features.forEach(feature => {
+              const trailName = feature.properties.Name;
+              const matchedTrail = trailsFromDb.find(dbTrail => dbTrail.name === trailName);
+      
+              if (matchedTrail) {
+                feature.properties.trail_id = matchedTrail.id;
+              }
+            });
+      
+            setGeojsonData(updatedGeojson);
+          } catch (error) {
+            console.error('Failed to fetch trails from database:', error);
+          }
+        };
+      
+        fetchTrailIds();
+      }, [geojsonData]);
+      
 
     //fetch climate data for the selected trail
     useEffect(() => {
@@ -585,7 +619,7 @@ function Map() {
       
 
     return (
-        //sorry its spaced so bad - grade :)
+        //sorry its spaced so bad - grace :)
         <div className='map'>
          {showAlert && (
   <div className="custom-alert">

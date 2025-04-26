@@ -171,40 +171,38 @@ function Profile() {
   };
   
   const handleCompleteHike = async () => {
-  try {
-    await axios.post(`${API_URL}/auth/complete-trail`, {}, { withCredentials: true });
-
-    //show the star rating popup after they complete the hike
-    setShowRatingPopup(true);
-
-    //success alert funct
-    triggerAlert('🎉 Hike marked as completed!');
-  } catch (error) {
-    console.error('Failed to complete hike:', error);
-    triggerAlert('Error completing hike.');
-  }
-};
-
-const submitRating = async (stars) => {
-  try {
-    //ONLY submit if rating is 0-5 and id is valid (actual trail)
-    if (stars >= 0 && selectedTrailId) {
-      //send rating to backend (doesnt work lol)
-      await axios.post(`${API_URL}/auth/rate-trail`, {
-        trailId: selectedTrailId,
-        rating: stars
-      }, { withCredentials: true });
+    try {
+      await axios.post(`${API_URL}/auth/complete-trail`, {}, { withCredentials: true });
+  
+      setSelectedTrailId(trailData.trail_id); // Set the selected trail ID for rating
+      setShowRatingPopup(true);
+      triggerAlert('🎉 Hike marked as completed!');
+    } catch (error) {
+      console.error('Failed to complete hike:', error);
+      triggerAlert('Error completing hike.');
     }
+  };
+  
 
-    //after submission hide popup and refresh data
-    setShowRatingPopup(false);
-    await refreshProfileData();
-    triggerAlert('Thanks for your feedback!');
-  } catch (error) {
-    console.error('Failed to submit rating:', error);
-    triggerAlert('Failed to submit rating.');
-  }
-};
+  const submitRating = async (stars) => {
+    try {
+      if (stars >= 0 && selectedTrailId) {
+        await axios.post(`${API_URL}/auth/rate-trail`, {
+          trailId: selectedTrailId,
+          rating: stars
+        }, { withCredentials: true });
+      }
+  
+      setShowRatingPopup(false);
+      await refreshProfileData();
+      triggerAlert('Thanks for your feedback!');
+    } catch (error) {
+      console.error('Failed to submit rating:', error);
+      triggerAlert('Failed to submit rating.');
+    }
+  };
+  
+
 
 const handleStarClick = (stars) => {
   setSelectedRating(stars);

@@ -1,4 +1,6 @@
 .profile {
+  position: relative;
+  z-index: 0;
   background: #799a84;
   width: 100vw;
   min-height: 100vh;
@@ -49,6 +51,8 @@
   color: white;
   border: 2px solid #151515;
   border-radius: 25px;
+  opacity: 1;
+  z-index:2;
 }
 
 .profile button:hover {
@@ -86,7 +90,6 @@
   left: 0;
 }
 
-/* REMOVE #completedHike — no longer needed! */
 
 .hikes {
   margin-top: 50px;
@@ -155,6 +158,33 @@
   font-size: 20px;
   margin-bottom: 10px;
 }
+/* Completed Hikes Section */
+.completed-hikes {
+  margin-top: 40px;
+  padding: 20px;
+  background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)); /* softer background */
+  border-radius: 10px;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  color: white;
+}
+
+
+.completed-hikes h2 {
+  text-align: center;
+  color: white;
+  font-size: 32px; 
+  
+}
+
+.completed-hikes p {
+  color: white;
+  margin: 8px 0;
+  text-align: center;
+}
+
 
 
 /* Buttons under Hike */
@@ -192,28 +222,6 @@
   background-color: #e53935;
 }
 
-/* Completed Hikes Section */
-.completed-hikes {
-  margin-top: 40px;
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  width: 70%;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
-
-.completed-hikes h2 {
-  text-align: center;
-  color: white;
-}
-
-.completed-hikes p {
-  color: white;
-  margin: 8px 0;
-  text-align: center;
-}
 
 /* Background Image Styling */
 .profile::before {
@@ -226,9 +234,10 @@
   background: url('forestshadow.png') no-repeat center center;
   background-size: cover;
   opacity: 0.2;
-  z-index: -1;
-  background-attachment: fixed;
+  z-index: 1; 
+  pointer-events: none; /* so you can still click buttons */
 }
+
 
 .rating-popup {
   position: fixed;

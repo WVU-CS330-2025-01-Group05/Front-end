@@ -74,4 +74,20 @@
             }
         }
     }
+
+    .skip-button {
+        color: black; /* Text visible even when not hovered */
+        background: white;
+        border: 2px solid lightslategray;
+        width: 150px;
+        height: 40px;
+        border-radius: 25px;
+        transition-duration: 0.4s;
+      }
+      
+      .skip-button:hover {
+        background-color: lightslategray;
+        color: white;
+      }
+      
 }

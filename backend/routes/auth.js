@@ -260,11 +260,15 @@ router.post('/upload-trail', authMiddleware, async (req, res) => {
       trailId = result.insertId;
     }
 //insert the trail into user_trails with status 'in-progress'
-    await pool.promise().execute(
-      'INSERT INTO user_trails (user_id, trail_id, status, rating, completed_at) VALUES (?, ?, ?, ?, NULL)',
-      [userId, trailId, status ?? 'in-progress', rating ?? null]
-    );
-    res.status(201).json({ message: 'Trail uploaded successfully' });
+await pool.promise().execute(
+  'INSERT INTO user_trails (user_id, trail_id, status, rating, completed_at) VALUES (?, ?, ?, ?, NULL)',
+  [userId, trailId, status ?? 'in-progress', rating ?? null]
+);
+
+res.status(201).json({ 
+  message: 'Trail uploaded successfully', 
+  trailId: trailId
+});
 
   } catch (error) {
     console.error("Error uploading trail: ", error);
@@ -477,6 +481,20 @@ router.get('/sent-requests', authMiddleware, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch sent requests' });
   }
 });
+
+//get all trails (id and name) - for syncing the GeoJSON file with the database
+router.get('/all-trails', authMiddleware, async (req, res) => {
+  try {
+    const [rows] = await pool.promise().execute(
+      'SELECT id, name FROM trails'
+    );
+    res.json(rows);
+  } catch (error) {
+    console.error('Error fetching all trails:', error);
+    res.status(500).json({ error: 'Failed to fetch all trails' });
+  }
+});
+
 
 
 
