@@ -6,7 +6,7 @@
   justify-content: center;
   align-items: center;
 
-  button {
+  .friendReq-back {
     border: none;
     font-family: Arial, sans-serif;
     padding: 16px 32px;
