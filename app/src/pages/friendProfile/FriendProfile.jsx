@@ -45,7 +45,7 @@ function FriendProfile() {
 
   return (
     <div className="friend-profile-page">
-      <a href='/friends_list'><button className="friend-back-button">Back to Friends</button></a>
+      <a href='/friends_list'><button className="friend-back-button">Friends List</button></a>
 
         <img className="friend-profile-img" src={friendData.img ? friendData.img : require('./default pfp.jpg')} alt="profile" />
         <h1 className="friend-profile-name">{friendData.nameVar}</h1>

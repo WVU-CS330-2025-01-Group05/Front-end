@@ -83,7 +83,7 @@ function Edit() {
         src={userData.img ? userData.img : require("./default pfp.jpg")}
         alt="profile"
       />
-      <a href="/profile"><button id="back">Back to Account</button></a>
+      <a href="/profile"><button id="back">Account</button></a>
 
       <div className="edit-container">
         <form onSubmit={handleEdit}>
