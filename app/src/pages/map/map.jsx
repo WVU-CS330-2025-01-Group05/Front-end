@@ -213,17 +213,22 @@ function Map() {
       };
       
       //handles trail click for data pulling
-    const handleTrailClick = (trail) => {
-        console.log('Trail clicked:', trail);
-      
-        if (trail && trail.properties && trail.properties.Name) {
-          setSelectedTrailName(trail.properties.Name);
-          console.log('Selected trail:', trail.properties.Name);
-        } else {
-          console.log('No valid trail name found.');
-          setSelectedTrailName(''); //clear if no name found
+      const handleTrailClick = (feature) => {
+        const featureIndex = geojsonData.features.findIndex(f => f === feature);
+        if (featureIndex !== -1) {
+          setSelectedTrail(featureIndex);
+          const trailId = geojsonData.features[featureIndex]?.properties?.trail_id;
+          if (trailId) {
+            fetchTrailRating(trailId);
+          }
+          if (feature.properties?.Name) {
+            setSelectedTrailName(feature.properties.Name);
+          } else {
+            setSelectedTrailName('');
+          }
         }
       };
+      
 
       const handleTrailSelect = (trailIdx) => {
         setSelectedTrail(trailIdx);
@@ -666,38 +671,6 @@ function Map() {
                           
                         )}
                     </div>
-                    {selectedTrailName && (
-  <div className="trail-info">
-    <p><strong>Selected Trail:</strong> {selectedTrailName}</p>
- {selectedTrailRatingCount > 0 ? (
-  <div className="star-rating-display">
-    {Array.from({ length: 5 }, (_, index) => (
-      <span key={index} style={{ fontSize: '24px', color: index < selectedTrailRating ? 'gold' : 'lightgray' }}>
-        ★
-      </span>
-    ))}
-    <span style={{ marginLeft: '8px', fontSize: '16px', color: 'gray' }}>
-      ({selectedTrailRatingCount})
-    </span>
-  </div>
-) : (
-  <div className="star-rating-display">
-    {Array.from({ length: 5 }, (_, index) => (
-      <span key={index} style={{ fontSize: '24px', color: 'lightgray' }}>
-        ★
-      </span>
-    ))}
-    <span style={{ marginLeft: '8px', fontSize: '16px', color: 'gray' }}>
-      (0)
-    </span>
-  </div>
-)}
-
-
-  </div>
-)}
-
-
                     {/* Trail weather infobox (im sorry its indented so poorly forgive me - grace)*/}
                     <div className='trail-weather-box'>
                         {selectedTrail !== null ? (
@@ -706,10 +679,29 @@ function Map() {
                                 <div className='weather-data-content'>
                                     <p className='trail-length'>{getSelectedTrailLength()}</p>
                                     {selectedTrailRatingCount > 0 ? (
-                                  <p className='trail-rating'>⭐ {selectedTrailRating} ({selectedTrailRatingCount} ratings)</p>
+                                    <div className="star-rating-display" style={{ textAlign: 'center', marginTop: '5px' }}>
+                                         {Array.from({ length: 5 }, (_, index) => (
+                                              <span key={index} style={{ fontSize: '24px', color: index < selectedTrailRating ? 'gold' : 'lightgray' }}>
+                                                     ★
+                                                              </span>
+                                                                    ))}           
+                                      <span style={{ marginLeft: '8px', fontSize: '16px', color: 'gray' }}>
+                                      ({selectedTrailRatingCount})
+                                         </span>
+                                                </div>
                                                     ) : (
-                                        <p className='trail-rating'>No ratings yet</p>
-                                    )}
+                             <div className="star-rating-display" style={{ textAlign: 'center', marginTop: '5px' }}>
+                                      {Array.from({ length: 5 }, (_, index) => (
+                                      <span key={index} style={{ fontSize: '24px', color: 'lightgray' }}>
+                                               ★
+                                                         </span>
+                                                     ))}
+                             <span style={{ marginLeft: '8px', fontSize: '16px', color: 'gray' }}>
+                                                      (0)
+                                                         </span>
+                                                                        </div>
+                                                    )}          
+
 
                                     
                                     {isLoading ? (
@@ -805,28 +797,13 @@ function Map() {
                                     };
                                 }}
                                 onEachFeature={(feature, layer) => {
-                                    const featureIndex = geojsonData.features.findIndex(f => f === feature);
-                                  
                                     layer.on({
                                       click: () => {
-                                        setSelectedTrail(featureIndex);
-                                        handleTrailClick(feature); // <-- ADD THIS
+                                        handleTrailClick(feature);
                                       },
                                     });
                                   
-                                    const popup = `
-                                      <div>
-                                        <div class="starRating" style="font-size: 24px; color: gold; cursor: pointer;">
-                                            <span data-value="1">☆</span>
-                                            <span data-value="2">☆</span>
-                                            <span data-value="3">☆</span>
-                                            <span data-value="4">☆</span>
-                                            <span data-value="5">☆</span>
-                                        </div>
-                                        <button>Add to Profile</button>
-                                      </div>
-                                    `;
-                                    layer.bindPopup(popup);
+                                  
                                   
                                     layer.on('popupopen', () => {
                                       const starsContainer = document.querySelector('.starRating');
