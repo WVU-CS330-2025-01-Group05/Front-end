@@ -20,6 +20,19 @@ const Login = ({ setAuthenticated }) => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_BACKEND_API_URL || ''; // Fallback for local development
+
+  const [alertMessage, setAlertMessage] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+    
+  const triggerAlert = (message) => {
+    setAlertMessage(message);
+    setShowAlert(true);
+    
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 2500);
+  };
+
   /**
    * handleSubmit
    * 
@@ -44,16 +57,21 @@ const Login = ({ setAuthenticated }) => {
         setAuthenticated(true);
         navigate('/'); // Redirect to main page
       } else {
-        alert('Login failed. Please check your credentials.');
+        triggerAlert('✖️ Login failed. Please check your credentials.');
       }
     } catch (error) {
       console.error('Login failed:', error);
-      alert('Invalid credentials');
+      triggerAlert('✖️ Invalid credentials');
     }
   };
 
   return (
     <div className="login">
+      {showAlert && (
+        <div className="custom-alert">
+          {alertMessage}
+        </div>
+      )}
       <div className="login-container">
         <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '300px' }}>
           <h2>Login</h2>

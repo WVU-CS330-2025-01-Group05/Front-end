@@ -21,6 +21,19 @@ const Register = () => {
   const [img, setImg] = useState('/default pfp.jpg');
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_BACKEND_API_URL; // Fallback for local development
+  
+  const [alertMessage, setAlertMessage] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
+  
+    const triggerAlert = (message) => {
+      setAlertMessage(message);
+      setShowAlert(true);
+  
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 2500);
+    };
+  
   /**
    * Handles form submission by sending registration details to the backend.
    * @param {Object} e - Event object from the form submission.
@@ -36,17 +49,25 @@ const Register = () => {
       );
 
       if (response.data.message === 'User registered successfully') {
-        alert('Registration successful');
+        triggerAlert('🎉 Registration successful');
         navigate('/login'); // Navigate to map page after registration
+      }
+      else {
+        triggerAlert("✖️ Registration failed. Try different username.");
       }
     } catch (error) {
       console.error('Registration failed:', error);
-      alert('Error registering user');
+      triggerAlert('✖️ Error registering user.');
     }
   };
 
   return (
     <div className="register">
+      {showAlert && (
+        <div className="custom-alert">
+          {alertMessage}
+        </div>
+      )}
       <div className="register-container">
         <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', maxWidth: '300px' }}>
           <h2>Register</h2>
