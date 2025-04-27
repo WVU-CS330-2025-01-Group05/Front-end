@@ -11,6 +11,18 @@ function Edit() {
   const [imageFile, setImageFile] = useState(null);
   const [userData, setUserData] = useState({ img: null });
 
+  const [alertMessage, setAlertMessage] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  
+  const triggerAlert = (message) => {
+    setAlertMessage(message);
+    setShowAlert(true);
+  
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 2500);
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -34,7 +46,7 @@ function Edit() {
     img.src = URL.createObjectURL(file);
     img.onload = () => {
       if (img.width !== img.height) {
-        alert("Image must be square.");
+        triggerAlert("🖼️ Image must be square.");
       } else {
         setImageFile(file);
       }
@@ -69,21 +81,31 @@ function Edit() {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-      alert("Profile updated successfully!");
+      triggerAlert("✔️ Profile updated successfully!");
       navigate('/profile');
     } catch (error) {
       console.error("Error updating profile ", error);
-      alert("Failed to update user profile.");
+      if (bio.length > 255) {
+        triggerAlert("✖️ Bio is too long.")
+      }
+      else if (nameVar.length > 55) {
+        triggerAlert("✖️ Name is too long.")
+      }
     }
   };
 
   return (
     <div className="edit">
+      {showAlert && (
+        <div className="custom-alert">
+          {alertMessage}
+        </div>
+      )}
       <img
         src={userData.img ? userData.img : require("./default pfp.jpg")}
         alt="profile"
       />
-      <a href="/profile"><button id="back">Back to Account</button></a>
+      <a href="/profile"><button id="back">Account</button></a>
 
       <div className="edit-container">
         <form onSubmit={handleEdit}>
@@ -98,8 +120,9 @@ function Edit() {
             value={nameVar}
             onChange={(e) => setNameVar(e.target.value)}
           />
-          <input
-            type="text"
+          <textarea
+            rows="4"
+            cols="50"
             placeholder="Bio"
             value={bio}
             onChange={(e) => setBio(e.target.value)}

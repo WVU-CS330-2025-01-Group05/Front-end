@@ -16,9 +16,6 @@ function Profile() {
   const [hasFriendRequests, setHasFriendRequests] = useState(false);
 
 
-
-
-
   const triggerAlert = (message) => {
     setAlertMessage(message);
     setShowAlert(true);
@@ -58,12 +55,12 @@ function Profile() {
         setUserData(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);
-        alert('Failed to fetch user data. Please log in again.');
+        triggerAlert('✖️ Failed to fetch user data. Please log in again.');
       }
     };
 
     fetchUserData();
-  }, [API_URL, navigate]);
+  }, [API_URL]);
 
 
   useEffect(() => {
@@ -86,8 +83,6 @@ function Profile() {
   useEffect(() => {
     const fetchTrailData = async () => {
       try {
-        
-
         const response = await axios.post(`${API_URL}/auth/trails`, {}, { withCredentials: true });
         const data = response.data;
         setTrailData(data);
@@ -121,7 +116,7 @@ function Profile() {
           setTrailName(response.data.name);
         }
       } catch (error) {
-        alert("Failed to fetch trail name.");
+        triggerAlert("✖️ Failed to fetch trail name.");
         console.error("Failed to fetch trail name: ", error);
       }
     };
@@ -179,7 +174,7 @@ function Profile() {
       triggerAlert('🎉 Hike marked as completed!');
     } catch (error) {
       console.error('Failed to complete hike:', error);
-      triggerAlert('Error completing hike.');
+      triggerAlert('✖️ Error completing hike.');
     }
   };
   
@@ -198,7 +193,7 @@ function Profile() {
       triggerAlert('Thanks for your feedback!');
     } catch (error) {
       console.error('Failed to submit rating:', error);
-      triggerAlert('Failed to submit rating.');
+      triggerAlert('✖️ Failed to submit rating.');
     }
   };
   
@@ -218,7 +213,7 @@ const handleStarClick = (stars) => {
       await refreshProfileData();
     } catch (error) {
       console.error('Failed to void hike:', error);
-      triggerAlert('Failed to void hike.');
+      triggerAlert('✖️ Failed to void hike.');
     }
   };
   
@@ -284,7 +279,7 @@ const handleStarClick = (stars) => {
         
       />
 
-      <a href='/map'><button id='back'>Back to Map</button></a>
+      <a href='/map'><button id='back'>Map</button></a>
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
       <a href='/edit'><button id='editProfile'>Edit Profile</button></a>
       <a href='/home'><button id='logOut' onClick={handleLogout}>Log Out</button></a>
@@ -300,8 +295,8 @@ const handleStarClick = (stars) => {
         <p id="name">{userData.nameVar}</p>
         <p id="username">@{userData.username}</p>
         <p id="hikes">Hikes Completed: {userData.numOfHikes}</p>
-        <label htmlFor="bio">Bio:</label>
-        <p id="biography">{userData.bio}</p>
+        <label htmlFor="biography">Bio:</label>
+        <p id="biography" style={{width: "40%"}}>{userData.bio}</p>
 
       </div>
 

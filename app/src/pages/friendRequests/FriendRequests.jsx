@@ -15,7 +15,6 @@ function FriendRequests() {
         setRequests(response.data);
       } catch (err) {
         console.error('Error fetching requests:', err);
-        alert('Failed to fetch friend requests');
       }
     };
 
@@ -39,7 +38,6 @@ function FriendRequests() {
       }
     } catch (err) {
       console.error(`Error trying to ${action} request:`, err);
-      alert(`Failed to ${action} request`);
     }
   };
 

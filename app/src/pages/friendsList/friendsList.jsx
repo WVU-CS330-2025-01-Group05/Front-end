@@ -10,6 +10,13 @@ function FriendsList() {
   const [noResults, setNoResults] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
   const [friends, setFriends] = useState([]);
+  const [userData, setUserData] = useState({
+    username: '',
+    numOfHikes: 0,
+    bio: 'No Bio Available',
+    nameVar: '',
+    img: null
+  })
   const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 
   const [alertMessage, setAlertMessage] = useState('');
@@ -42,9 +49,28 @@ function FriendsList() {
     return () => window.removeEventListener("friendsUpdated", fetchFriends);
   }, [API_URL]);
 
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const response = await axios.get(API_URL + '/auth/profile', {withCredentials: true});
+        setUserData(response.data);
+      }
+      catch(error) {
+        console.error("Error fetching user data: ", error);
+      }
+    }
+
+    fetchUsername();
+  }, [API_URL])
+
   const handleSearch = async () => {
     if (searchQuery.trim() === "") {
-      triggerAlert("Please enter a username to search.");
+      triggerAlert("🔍 Please enter a username to search.");
+      return;
+    }
+
+    if (searchQuery.trim() === userData.username) {
+      triggerAlert("✖️ Cannot search your username.");
       return;
     }
 
@@ -65,7 +91,7 @@ function FriendsList() {
   const handleSendFriendRequest = async () => {
     const isAlreadyFriend = friends.some(friend => friend.username === selectedUser.username);
     if (isAlreadyFriend) {
-      triggerAlert("Already friends with this user.");
+      triggerAlert("😊 Already friends with this user.");
       return;
     }
   
@@ -76,7 +102,7 @@ function FriendsList() {
       const hasAlreadySentRequest = sentRequests.some(req => req.receiver_username === selectedUser.username);
   
       if (hasAlreadySentRequest) {
-        triggerAlert("Friend request already sent!");
+        triggerAlert("✔️ Friend request already sent!");
         return;
       }
   
@@ -86,7 +112,7 @@ function FriendsList() {
       }, { withCredentials: true });
   
       setRequestSent(true);
-      triggerAlert("Friend request sent!");
+      triggerAlert("✔️ Friend request sent!");
     } catch (err) {
       console.error("Error sending request:", err);
       triggerAlert("Failed to send friend request.");

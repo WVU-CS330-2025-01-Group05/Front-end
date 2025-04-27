@@ -401,6 +401,7 @@ router.post('/void-trail', authMiddleware, async (req, res) => {
   }
 });
 
+//Gets users completed hikes for profile
 router.get('/completed-hikes', authMiddleware, async (req, res) => {
   const userId = req.user.id;
 
@@ -441,6 +442,7 @@ router.post('/rate-trail', authMiddleware, async (req, res) => {
   }
 });
 
+//Gets the profile of the requested id
 router.get('/profile/:id', authMiddleware, async (req, res) => {
   const { id } = req.params;
   try {
@@ -461,6 +463,26 @@ router.get('/profile/:id', authMiddleware, async (req, res) => {
   } catch (error) {
     console.error('Error fetching friend profile:', error);
     res.status(500).json({ error: 'Failed to fetch friend profile' });
+  }
+});
+
+//Gets friend's completed hikes
+router.get('/completed-hikes/:id', authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [completed] = await pool.promise().execute(
+      `SELECT trails.name, user_trails.completed_at
+       FROM user_trails
+       JOIN trails ON user_trails.trail_id = trails.id
+       WHERE user_trails.user_id = ? AND user_trails.status = ?
+       ORDER BY user_trails.completed_at DESC`,
+      [id, 'completed']
+    );
+    res.json(completed);
+  }
+  catch {
+    console.error('Error fetching friends completed hikes:', error);
+    res.status(500).json({ error: 'Failed to fetch friends completed hikes' });
   }
 });
 

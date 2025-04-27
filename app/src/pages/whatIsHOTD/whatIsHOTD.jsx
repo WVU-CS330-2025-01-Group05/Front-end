@@ -4,7 +4,7 @@ import './whatIsHOTD.css';
 function WhatIsHOTD() {
     return (
         <div className='whatIsHOTD'>
-            <a href='/home'><button id='back'>Back to Home</button></a>
+            <a href='/home'><button id='back'>Home</button></a>
             <div className='whatIsHOTD-container'>
                 <h2>What is HotD?</h2>
                 <p id='paragraph'>
