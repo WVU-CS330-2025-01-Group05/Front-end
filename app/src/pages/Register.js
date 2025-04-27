@@ -49,7 +49,6 @@ const Register = () => {
       );
 
       if (response.data.message === 'User registered successfully') {
-        triggerAlert('🎉 Registration successful');
         navigate('/login'); // Navigate to map page after registration
       }
       else {

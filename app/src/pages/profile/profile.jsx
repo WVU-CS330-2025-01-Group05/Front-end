@@ -226,11 +226,10 @@ const handleStarClick = (stars) => {
     try {
       await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
       localStorage.removeItem('authenticated');
-      alert('Logout successful');
       navigate('/home');
     } catch (error) {
       console.error('Logout failed:', error);
-      alert('Error logging out');
+      triggerAlert('✖️ Error logging out');
     }
   };
 
