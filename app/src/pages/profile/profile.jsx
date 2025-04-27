@@ -280,7 +280,7 @@ const handleStarClick = (stars) => {
         
       />
 
-      <a href='/map'><button id='back'>Back to Map</button></a>
+      <a href='/map'><button id='back'>Map</button></a>
       <a href='/friends_list'><button id='friendsList'>Friends List</button></a>
       <a href='/edit'><button id='editProfile'>Edit Profile</button></a>
       <a href='/home'><button id='logOut' onClick={handleLogout}>Log Out</button></a>
@@ -296,8 +296,8 @@ const handleStarClick = (stars) => {
         <p id="name">{userData.nameVar}</p>
         <p id="username">@{userData.username}</p>
         <p id="hikes">Hikes Completed: {userData.numOfHikes}</p>
-        <label htmlFor="bio">Bio:</label>
-        <p id="biography">{userData.bio}</p>
+        <label htmlFor="biography">Bio:</label>
+        <p id="biography" style={{width: "40%"}}>{userData.bio}</p>
 
       </div>
 

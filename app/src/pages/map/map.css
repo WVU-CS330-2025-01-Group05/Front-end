@@ -35,27 +35,14 @@
             text-decoration: none;
             display: inline-block;
             font-size: 20px;
-            margin: 4px 2px;
+            margin: 5px;
             transition-duration: 0.4s;
             cursor: pointer;
             background-color: #494949;
             color: white;
             border: 2px solid #151515;
             border-radius: 25px;
-            border: none;
-            color: #494949;
-            font-family: Arial, sans-serif;
-            height:75px;
-            width:150px;
-            font-size: 20px;
-            transition-duration: 0.4s;
-            background-color: #494949;
-            color: white;
-            border-radius: 20px;
-            position: relative;
-            border:solid black 2px ;
-            z-index: 2; 
-            
+            z-index: 2;  
         } 
 
         /* DO NOT CHANGE THIS OR MOVE IT!!! IT WILL NOT WORK */
@@ -64,6 +51,17 @@
             color: white;
         }
         
+        #home {
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        #account {
+            position: fixed;
+            top: 0;
+            right: 0;
+        }
     }
 
     .stats .item {

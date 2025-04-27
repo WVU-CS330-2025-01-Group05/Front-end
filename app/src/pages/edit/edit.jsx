@@ -98,8 +98,9 @@ function Edit() {
             value={nameVar}
             onChange={(e) => setNameVar(e.target.value)}
           />
-          <input
-            type="text"
+          <textarea
+            rows="4"
+            cols="50"
             placeholder="Bio"
             value={bio}
             onChange={(e) => setBio(e.target.value)}

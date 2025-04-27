@@ -632,7 +632,7 @@ function Map() {
 
 
             <div className='header'>
-                <Clock />
+                <a href='/home'><button id='home'>Home</button></a>
                 <span id="plan">Plan Your Hike</span>
                 <a href='/profile'><button id="account">Account</button></a>
             </div>
