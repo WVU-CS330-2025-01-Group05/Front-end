@@ -55,7 +55,7 @@ function Profile() {
         setUserData(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);
-        alert('Failed to fetch user data. Please log in again.');
+        triggerAlert('✖️ Failed to fetch user data. Please log in again.');
       }
     };
 
@@ -116,7 +116,7 @@ function Profile() {
           setTrailName(response.data.name);
         }
       } catch (error) {
-        alert("Failed to fetch trail name.");
+        triggerAlert("✖️ Failed to fetch trail name.");
         console.error("Failed to fetch trail name: ", error);
       }
     };
@@ -174,7 +174,7 @@ function Profile() {
       triggerAlert('🎉 Hike marked as completed!');
     } catch (error) {
       console.error('Failed to complete hike:', error);
-      triggerAlert('Error completing hike.');
+      triggerAlert('✖️ Error completing hike.');
     }
   };
   
@@ -193,7 +193,7 @@ function Profile() {
       triggerAlert('Thanks for your feedback!');
     } catch (error) {
       console.error('Failed to submit rating:', error);
-      triggerAlert('Failed to submit rating.');
+      triggerAlert('✖️ Failed to submit rating.');
     }
   };
   
@@ -213,7 +213,7 @@ const handleStarClick = (stars) => {
       await refreshProfileData();
     } catch (error) {
       console.error('Failed to void hike:', error);
-      triggerAlert('Failed to void hike.');
+      triggerAlert('✖️ Failed to void hike.');
     }
   };
   

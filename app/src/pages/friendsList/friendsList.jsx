@@ -65,12 +65,12 @@ function FriendsList() {
 
   const handleSearch = async () => {
     if (searchQuery.trim() === "") {
-      triggerAlert("Please enter a username to search.");
+      triggerAlert("🔍 Please enter a username to search.");
       return;
     }
 
     if (searchQuery.trim() === userData.username) {
-      triggerAlert("Cannot search your username.");
+      triggerAlert("✖️ Cannot search your username.");
       return;
     }
 
@@ -91,7 +91,7 @@ function FriendsList() {
   const handleSendFriendRequest = async () => {
     const isAlreadyFriend = friends.some(friend => friend.username === selectedUser.username);
     if (isAlreadyFriend) {
-      triggerAlert("Already friends with this user.");
+      triggerAlert("😊 Already friends with this user.");
       return;
     }
   
@@ -102,7 +102,7 @@ function FriendsList() {
       const hasAlreadySentRequest = sentRequests.some(req => req.receiver_username === selectedUser.username);
   
       if (hasAlreadySentRequest) {
-        triggerAlert("Friend request already sent!");
+        triggerAlert("✔️ Friend request already sent!");
         return;
       }
   
@@ -112,7 +112,7 @@ function FriendsList() {
       }, { withCredentials: true });
   
       setRequestSent(true);
-      triggerAlert("Friend request sent!");
+      triggerAlert("✔️ Friend request sent!");
     } catch (err) {
       console.error("Error sending request:", err);
       triggerAlert("Failed to send friend request.");
