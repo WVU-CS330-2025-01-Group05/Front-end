@@ -330,31 +330,41 @@ function Map() {
     }, []);
 
     useEffect(() => {
-        const fetchTrailIds = async () => {
+        async function assignTrailIds() {
           if (!geojsonData) return;
       
           try {
             const response = await axios.get(`${API_URL}/auth/all-trails`, { withCredentials: true });
-            const trailsFromDb = response.data; // [{ id, name }, { id, name }, ...]
+            const trailsFromDb = response.data;
       
-            const updatedGeojson = { ...geojsonData };
-            updatedGeojson.features.forEach(feature => {
+            const updatedFeatures = geojsonData.features.map((feature) => {
               const trailName = feature.properties.Name;
               const matchedTrail = trailsFromDb.find(dbTrail => dbTrail.name === trailName);
       
               if (matchedTrail) {
-                feature.properties.trail_id = matchedTrail.id;
+                return {
+                  ...feature,
+                  properties: {
+                    ...feature.properties,
+                    trail_id: matchedTrail.id
+                  }
+                };
               }
+              return feature;
             });
       
-            setGeojsonData(updatedGeojson);
+            setGeojsonData({ ...geojsonData, features: updatedFeatures });
+      
           } catch (error) {
             console.error('Failed to fetch trails from database:', error);
           }
-        };
+        }
       
-        fetchTrailIds();
+        if (geojsonData) {
+          assignTrailIds();
+        }
       }, [geojsonData]);
+      
       
 
     //fetch climate data for the selected trail
