@@ -20,6 +20,10 @@
     overflow-y: hidden;
     overflow-x: hidden;
 
+    .disabled{
+        display:none;
+    }
+
 
     .home-container {
 
@@ -64,6 +68,9 @@
                     background:white;
                     border: 2px solid lightslategray;
                     transition-duration: 0.4s;
+                    &&.disabled{
+                        background-color:black;
+                    }
 
                 }
 
@@ -71,6 +78,8 @@
                     background-color: lightslategray;
                     color: black;
                 }
+
+                
             }
         }
     }
