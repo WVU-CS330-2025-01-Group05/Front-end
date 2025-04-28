@@ -657,4 +657,10 @@
       transform: scale(1);
     }
   }
+
+  .difficulty-text {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
   

@@ -199,6 +199,8 @@ function Map() {
     const [trailData, setTrailData] = useState(null);
     const [userData, setUserData] = useState({});
     const [selectedTrailName, setSelectedTrailName] = useState('');
+    const [filteredTrailIndexes, setFilteredTrailIndexes] = useState([]);
+
 
 
     //custom trigger alert because the toast thing was not working for some reason
@@ -211,6 +213,65 @@ function Map() {
           setShowAlert(false);
         }, 2500); // disappears after 2.5 seconds
       };
+
+      const handleFilterChange = (e) => {
+        const filterValue = e.target.value;
+        setActiveFilter(filterValue);
+      
+        if (!geojsonData || !geojsonData.features || !position) {
+          return;
+        }
+      
+        if (filterValue === "easy" || filterValue === "medium" || filterValue === "hard" || filterValue === "very-hard") {
+          const indexes = geojsonData.features
+            .map((feature, idx) => {
+              if (feature.properties.miles !== undefined) {
+                const { label } = getTrailDifficulty(feature.properties.miles);
+                if (
+                  (filterValue === "easy" && label === "Easy") ||
+                  (filterValue === "medium" && label === "Medium") ||
+                  (filterValue === "hard" && label === "Hard") ||
+                  (filterValue === "very-hard" && label === "Very Hard")
+                ) {
+                  return idx; // save the index
+                }
+              }
+              return null;
+            })
+            .filter((idx) => idx !== null); // remove non-matches
+      
+          setFilteredTrailIndexes(indexes);
+          setSelectedTrail(null);
+        } else {
+          setFilteredTrailIndexes([]);
+          let selectedIdx = null;
+      
+          switch (filterValue) {
+            case "closest":
+              selectedIdx = findClosestTrail();
+              break;
+            case "farthest":
+              selectedIdx = findFarthestTrail();
+              break;
+            case "lowest-temp":
+              selectedIdx = findTrailByTemperature("lowest");
+              break;
+            case "highest-temp":
+              selectedIdx = findTrailByHumidity("lowest");
+              break;
+            case "highest-humidity":
+              selectedIdx = findTrailByHumidity("highest");
+              break;
+            default:
+              return;
+          }
+      
+          if (selectedIdx !== null) {
+            setSelectedTrail(selectedIdx);
+          }
+        }
+      };
+      
       
       //handles trail click for data pulling
       const handleTrailClick = (feature) => {
@@ -228,6 +289,7 @@ function Map() {
           }
         }
       };
+      
       
 
       const handleTrailSelect = (trailIdx) => {
@@ -426,43 +488,6 @@ function Map() {
         }
     }, [geojsonData, position, trailClimateDataMap]);
 
-    const handleFilterChange = (e) => {
-        const filterValue = e.target.value;
-        setActiveFilter(filterValue);
-        
-        if (!geojsonData || !geojsonData.features || !position) {
-            return;
-        }
-        
-        let selectedIdx = null;
-        
-        switch (filterValue) {
-            case "closest":
-                selectedIdx = findClosestTrail();
-                break;
-            case "farthest":
-                selectedIdx = findFarthestTrail();
-                break;
-            case "lowest-temp":
-                selectedIdx = findTrailByTemperature("lowest");
-                break;
-            case "highest-temp":
-                selectedIdx = findTrailByTemperature("highest");
-                break;
-            case "lowest-humidity":
-                selectedIdx = findTrailByHumidity("lowest");
-                break;
-            case "highest-humidity":
-                selectedIdx = findTrailByHumidity("highest");
-                break;
-            default:
-                return;
-        }
-        
-        if (selectedIdx !== null) {
-            setSelectedTrail(selectedIdx);
-        }
-    };
     
     const findClosestTrail = () => {
         if (!position || !geojsonData || !geojsonData.features) return null;
@@ -487,9 +512,34 @@ function Map() {
                 }
             }
         });
+
+      
         
         return closestIdx;
     };
+
+      const findTrailByDifficulty = (difficulty) => {
+            if (!geojsonData || !geojsonData.features) return null;
+          
+            // Find the first trail that matches the selected difficulty
+            for (let i = 0; i < geojsonData.features.length; i++) {
+              const feature = geojsonData.features[i];
+              if (feature.properties.miles !== undefined) {
+                const { label } = getTrailDifficulty(feature.properties.miles);
+                if (
+                  (difficulty === "easy" && label === "Easy") ||
+                  (difficulty === "medium" && label === "Medium") ||
+                  (difficulty === "hard" && label === "Hard") ||
+                  (difficulty === "very-hard" && label === "Very Hard")
+                ) {
+                  return i;
+                }
+              }
+            }
+          
+            return null; // No matching trail
+          };
+          
     
     const findFarthestTrail = () => {
         if (!position || !geojsonData || !geojsonData.features) return null;
@@ -593,6 +643,14 @@ function Map() {
         return deg * (Math.PI/180);
     };
 
+    const getTrailDifficulty = (miles) => {
+        if (miles <= 1.5) return { label: "Easy", color: "green" };
+        if (miles <= 5) return { label: "Medium", color: "goldenrod" };
+        if (miles <= 10) return { label: "Hard", color: "orange" };
+        return { label: "Very Hard", color: "red" };
+      };
+      
+
     //Get trail name from selected trail
     const getSelectedTrailName = () => {
         if (selectedTrail !== null && geojsonData && geojsonData.features) {
@@ -668,16 +726,31 @@ function Map() {
                                 <option value="highest-temp">Highest temperature</option>
                                 <option value="lowest-humidity">Lowest humidity</option>
                                 <option value="highest-humidity">Highest humidity</option>
+                                <option value="easy">Easy Difficulty</option>
+                                <option value="medium">Medium Difficulty</option>
+                                <option value="hard">Hard Difficulty</option>
+                                <option value="very-hard">Very Hard Difficulty</option>
                             </select>
                         </div>
 
                         {/* Replace the regular dropdown w/ searchable dropdown */}
                         {geojsonData && (
-                            <SearchableTrailDropdown 
-                            trails={geojsonData.features}
-                            selectedTrail={selectedTrail}
-                            onTrailSelect={handleTrailSelect}
-                          />
+                           <SearchableTrailDropdown
+                           trails={
+                             filteredTrailIndexes.length > 0
+                               ? filteredTrailIndexes.map(idx => geojsonData.features[idx])
+                               : geojsonData.features
+                           }
+                           selectedTrail={selectedTrail}
+                           onTrailSelect={(idx) => {
+                             if (filteredTrailIndexes.length > 0) {
+                               setSelectedTrail(filteredTrailIndexes[idx]);
+                             } else {
+                               setSelectedTrail(idx);
+                             }
+                           }}
+                       />
+                       
                           
                         )}
                     </div>
@@ -687,7 +760,23 @@ function Map() {
                             <>
                                 <h3 className='trail-name-header'>{getSelectedTrailName()}</h3>
                                 <div className='weather-data-content'>
-                                    <p className='trail-length'>{getSelectedTrailLength()}</p>
+                                <p className='trail-length'>
+  {selectedTrail !== null && geojsonData && geojsonData.features ? (
+    <>
+      {geojsonData.features[selectedTrail].properties.miles
+        ? `${geojsonData.features[selectedTrail].properties.miles.toFixed(2)} miles `
+        : "Unknown length "}
+      {geojsonData.features[selectedTrail].properties.miles && (
+        <span style={{ color: getTrailDifficulty(geojsonData.features[selectedTrail].properties.miles).color, fontWeight: 'bold' }}>
+          ({getTrailDifficulty(geojsonData.features[selectedTrail].properties.miles).label})
+        </span>
+      )}
+    </>
+  ) : (
+    "Unknown length"
+  )}
+</p>
+
                                     {selectedTrailRatingCount > 0 ? (
                                     <div className="star-rating-display" style={{ textAlign: 'center', marginTop: '5px' }}>
                                          {Array.from({ length: 5 }, (_, index) => (
