@@ -183,7 +183,7 @@ function Map() {
     const [selectedTrailRating, setSelectedTrailRating] = useState(null);
     const [selectedTrailRatingCount, setSelectedTrailRatingCount] = useState(null);
 
-
+    const [searchRadiusMiles, setSearchRadiusMiles] = useState(10);
     const [position, setPosition] = useState(null);
     const [geojsonData, setGeojsonData] = useState(null);
     const [selectedTrail, setSelectedTrail] = useState(null);
@@ -463,7 +463,7 @@ function Map() {
         fetchTrailClimateData();
     }, [selectedTrail, geojsonData]);
 
-    //load data for all traisl to filter
+    //load data for all trails to filter
     useEffect(() => {
         async function loadAllTrailsClimateData() {
             if (geojsonData && geojsonData.features && position) {
@@ -506,7 +506,7 @@ function Map() {
                     coords[0], coords[1]
                 );
                 
-                if (distance < minDistance) {
+                if (distance <= searchRadiusMiles && distance < minDistance) { // logic to check searchRadiusMiles {
                     minDistance = distance;
                     closestIdx = idx;
                 }
@@ -555,7 +555,7 @@ function Map() {
                     coords[0], coords[1]
                 );
                 
-                if (distance > maxDistance) {
+                if (distance <= searchRadiusMiles && distance > maxDistance) { // logic to check searchRadiusMiles 
                     maxDistance = distance;
                     farthestIdx = idx;
                 }
@@ -574,6 +574,16 @@ function Map() {
         Object.entries(trailClimateDataMap).forEach(([idx, data]) => {
             if (data && data.temperature && data.temperature.average) {
                 const temp = parseFloat(data.temperature.average);
+
+                // Update to check within radius
+                const feature = geojsonData.features[idx];
+                const coords = getTrailCenterCoordinates(feature);
+                if (!coords) return;
+                const distance = calculateDistance(
+                    position.lat, position.lng,
+                    coords[0], coords[1]
+                );
+                if (distance > searchRadiusMiles) return;
                 
                 if ((type === "lowest" && temp < compareTemp) || 
                     (type === "highest" && temp > compareTemp)) {
@@ -595,6 +605,16 @@ function Map() {
         Object.entries(trailClimateDataMap).forEach(([idx, data]) => {
             if (data && data.humidity) {
                 const humidity = parseFloat(data.humidity);
+
+                // Update to check if within radius
+                const feature = geojsonData.features[idx];
+                const coords = getTrailCenterCoordinates(feature);
+                if (!coords) return;
+                const distance = calculateDistance(
+                    position.lat, position.lng,
+                    coords[0], coords[1]
+                );
+                if (distance > searchRadiusMiles) return;
                 
                 if ((type === "lowest" && humidity < compareHumidity) || 
                     (type === "highest" && humidity > compareHumidity)) {
@@ -713,6 +733,23 @@ function Map() {
                 <div className='left'>
                     <div className='filters'>
                         <div className='filter'>
+                            {/* Code block for trail slider */}
+                            <div style={{ marginBottom: "0px" }}> 
+                            <label htmlFor="search-radius-slider" style={{ display: "block", marginBottom: "8px" }}>
+                                Search Radius: {searchRadiusMiles} miles
+                            </label>
+                            <input
+                                id="search-radius-slider"
+                                type="range"
+                                min="5"
+                                max="100"
+                                step="5"
+                                value={searchRadiusMiles}
+                                onChange={(e) => setSearchRadiusMiles(Number(e.target.value))}
+                                style={{ width: "100%" }}
+                            />
+                            </div>
+                            {/* End of slider block, feel free to ctrl + x and move */}
                             <label htmlFor='filter1'>Filter:</label>
                             <select 
                                 id='filter1'
