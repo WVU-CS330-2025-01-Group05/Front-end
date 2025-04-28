@@ -22,6 +22,16 @@ if ((d.getFullYear() % 4 === 0 && d.getFullYear() % 100 !== 0) || (d.getFullYear
     monthDays[1] = 29;
 }
 
+function formatDate(date) {
+    const year = date.getFullYear();
+    // getMonth() is zero-indexed, so add 1
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+}
+
+
 const tokenFromNoaa = "zRJaCOXTyBqXhvrDQMFapLNnZiFBGoNe";
 const zipKey = "2db231e368124778ae3517c281ea41aa";
 
@@ -301,6 +311,156 @@ async function getClimateDataByZip(zip) {
         };
     }
 }
+
+
+
+async function getCountyFIPScode(lat, lng) {
+    try {
+        const url = `https://geo.fcc.gov/api/census/block/find?format=json&latitude=${lat}&longitude=${lng}`;
+        const response = await fetch(url);
+        console.log(url);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data || !data.County || !data.County.FIPS) {
+            throw new Error("Missing county FIPS data in response");
+        }
+
+        return data.County.FIPS;
+    } catch (error) {
+        console.error("Error fetching FIPs code:", error);
+        return "54061"; // fallback: Morgantown WV county FIPS
+    }
+}
+
+
+//gets by zip code for NOAA 
+async function getClimateDataByCounty(FIPS) {
+    console.log("Using FIPS code: " + FIPS);
+    const today = new Date();
+
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 2);
+
+    const tenDaysBefore = new Date(today);
+    tenDaysBefore.setDate(today.getDate() - 8);
+
+    const formattedYesterday = formatDate(yesterday);
+    const formattedTenDaysBefore = formatDate(tenDaysBefore);
+
+    console.log("Yesterday:", formattedYesterday);
+    console.log("Ten days before yesterday:", formattedTenDaysBefore);
+
+    try {
+        let TempMIN = 100;
+        let TempMAX = 0;
+
+        let TempTOT = 0;
+        let TempCount = 0;
+
+        let prcpTOT = 0;
+        let prcpCount = 0;
+
+        let awndTOT = 0;
+        let awndCount = 0;
+
+        let dataCount = 0;
+
+
+        const url = `https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GHCND&locationid=FIPS:${FIPS}&datatypeid=TMAX,TMIN,PRCP,AWND&units=standard&startdate=${formattedTenDaysBefore}&enddate=${formattedYesterday}&limit=100`;
+        console.log(url);
+        const results = await fetchNoaaData(url);
+            if (results && Array.isArray(results) && results.length >= 1) {
+                for (const entry of results) {
+                    switch (entry.datatype) {
+                        case "PRCP":
+                            prcpTOT += entry.value;
+                            prcpCount++;
+                            break;
+                        case "TMAX":
+                            TempTOT += entry.value;
+                            TempCount++;
+                            if (entry.value > TempMAX) TempMAX = entry.value;
+                            break;
+                        case "TMIN":
+                            TempTOT += entry.value;
+                            TempCount++;
+                            if (entry.value < TempMIN) TempMIN = entry.value;
+                            break;
+                        case "AWND":
+                            awndTOT += entry.value;
+                            awndCount++;
+                        }
+                        dataCount++;
+                }
+            }
+
+
+        //ensure theres some sort of data if u cant fetch so app doesnt crash again!
+        if (dataCount === 0) {
+            console.warn("No climate data found, returning default values");
+            return {
+                precipitation: "0.00",
+                temperature: {
+                    average: "70.00",
+                    max: 85,
+                    min: 55
+                },
+                windSpeed: "5.00",
+                month: monthName,
+                status: "No data available - using defaults"
+            };
+        }
+
+        
+        //datacount instead of weird hardcoded stuff
+        const avgPrcp = (25.4 * (prcpTOT / prcpCount)).toFixed(4);
+        const avgWind = (awndTOT / awndCount).toFixed(2);
+        const avgTemp = (TempTOT / TempCount).toFixed(2);
+
+        console.log("p "+prcpCount);
+        console.log("a "+awndCount);
+
+        console.log("Avg PRCP:", avgPrcp);
+        console.log("Avg TEMP:", avgTemp);
+        console.log("MAX TEMP:", TempMAX);
+        console.log("MIN TEMP:", TempMIN);
+        console.log("Avg Wind Speed:", avgWind);
+
+        //return as a data object
+        return {
+            precipitation: avgPrcp,
+            temperature: {
+                avg: avgTemp,
+                max: TempMAX,
+                min: TempMIN
+            },
+            windSpeed: avgWind,
+            month: monthName,
+            status: ""
+        };
+
+    } catch (error) {
+        console.error("Error in getClimateData:", error);
+        // fallback incase an issue occurs so app wont crash lol
+        return {
+            precipitation: "0.00",
+            temperature: {
+                average: "70.00",
+                max: 85,
+                min: 55
+            },
+            month: monthName,
+            status: "Error loading data - using defaults"
+        };
+    }
+}
+
+
 
 async function fetchNoaaData(url) {
     try {
