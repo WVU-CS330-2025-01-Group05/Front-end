@@ -1,5 +1,4 @@
 .profile {
-  position: relative;
   z-index: 0;
   background: #799a84;
   width: 100vw;
@@ -52,7 +51,6 @@
 }
 
 .profile button {
-  border: none;
   font-family: Arial, sans-serif;
   padding: 16px 32px;
   text-align: center;

@@ -53,5 +53,4 @@
     background-size: cover;
     opacity: 0.2; /* 50% transparency */
     z-index: 0; /* Ensure it stays behind other elements */
-    background-size: cover;
   }

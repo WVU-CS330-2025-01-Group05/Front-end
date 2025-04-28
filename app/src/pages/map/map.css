@@ -18,17 +18,14 @@
         padding: 20px;
 
         span {
-            font-size: 2rem;
+            font-size: 4rem;
             color: white;
             font-family: "Pacifico", serif;
-            font-size: 4rem;
             text-shadow: 5px 5px #525252;
 
         }
 
         button {
-            border: none;
-            color: #494949;
             font-family: Arial, sans-serif;
             padding: 16px 32px;
             text-align: center;
@@ -136,7 +133,6 @@
             }
             
             .filter select {
-                border: none;
                 height: 2rem;
                 font-size: 1rem;
                 padding: 0 10px;
