@@ -182,6 +182,7 @@ function Map() {
     const [showAlert, setShowAlert] = useState(false);
     const [selectedTrailRating, setSelectedTrailRating] = useState(null);
     const [selectedTrailRatingCount, setSelectedTrailRatingCount] = useState(null);
+    const [debounceTimer, setDebounceTimer] = useState(null);
 
     const [searchRadiusMiles, setSearchRadiusMiles] = useState(10);
     const [position, setPosition] = useState(null);
@@ -227,6 +228,14 @@ function Map() {
             .map((feature, idx) => {
               if (feature.properties.miles !== undefined) {
                 const { label } = getTrailDifficulty(feature.properties.miles);
+
+                // Radius checking
+                const coords = getTrailCenterCoordinates(feature); 
+                if (!coords) return null; 
+                const distance = calculateDistance(position.lat, position.lng, coords[0], coords[1]);
+                if (distance > searchRadiusMiles) return null; 
+
+                
                 if (
                   (filterValue === "easy" && label === "Easy") ||
                   (filterValue === "medium" && label === "Medium") ||
@@ -729,6 +738,7 @@ function Map() {
                 <span id="plan">Plan Your Hike</span>
                 <a href='/profile'><button id="account">Account</button></a>
             </div>
+
             <div className='bottom'>
                 <div className='left'>
                     <div className='filters'>
@@ -742,10 +752,26 @@ function Map() {
                                 id="search-radius-slider"
                                 type="range"
                                 min="5"
-                                max="100"
+                                max="400"
                                 step="5"
                                 value={searchRadiusMiles}
-                                onChange={(e) => setSearchRadiusMiles(Number(e.target.value))}
+                                onChange={(e) => {
+                                  const miles = Number(e.target.value);
+                                  setSearchRadiusMiles(miles);
+                              
+                                  // Debounce the re-filter
+                                  if (debounceTimer) {
+                                    clearTimeout(debounceTimer);
+                                  }
+                              
+                                  const timer = setTimeout(() => {
+                                    if (activeFilter) {
+                                      handleFilterChange({ target: { value: activeFilter } });
+                                    }
+                                  }, 300); // wait 300ms after user stops moving
+                              
+                                  setDebounceTimer(timer);
+                                }}
                                 style={{ width: "100%" }}
                             />
                             </div>

@@ -63,9 +63,9 @@
 
                     width:150px;
                     height:40px;
+                    border: 2px solid lightslategray;                 
                     border-radius: 25px;
                     background:white;
-                    border: 2px solid lightslategray;
                     transition-duration: 0.4s;
                     &&.disabled{
                         background-color:black;
