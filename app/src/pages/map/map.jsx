@@ -742,7 +742,7 @@ function Map() {
                                 id="search-radius-slider"
                                 type="range"
                                 min="5"
-                                max="100"
+                                max="400"
                                 step="5"
                                 value={searchRadiusMiles}
                                 onChange={(e) => setSearchRadiusMiles(Number(e.target.value))}
