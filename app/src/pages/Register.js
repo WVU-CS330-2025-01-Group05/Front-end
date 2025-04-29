@@ -17,8 +17,8 @@ const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [nameVar, setNameVar] = useState('');
-  const [bio, setBio] = useState('No Bio');
-  const [img, setImg] = useState('/default pfp.jpg');
+  const [bio] = useState('No Bio');
+  const [img] = useState('/default pfp.jpg');
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_BACKEND_API_URL; // Fallback for local development
   

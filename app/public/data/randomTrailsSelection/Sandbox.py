@@ -4,7 +4,7 @@ import json
 
 
 # when randTrail is run, three random trails will be selected from input file
-def randTrail(filename):
+def rand_trail(filename):
     with open(filename, newline='', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
         trails = [row for row in reader if row]  # Skip empty rows
@@ -22,8 +22,6 @@ def randTrail(filename):
                 testy = float(trail[1])
                 print(f"x: {testx}, y: {testy}")
 
-                x = trail[0]
-                y = trail[1]
                 # Copy the first 3 features
                 new_data = {
                     "type": "FeatureCollection",
@@ -52,6 +50,6 @@ def randTrail(filename):
             #     print(f"{x}, {y}")
 
 
-randTrail(
+rand_trail(
     'WV_all_trails.csv',
 )

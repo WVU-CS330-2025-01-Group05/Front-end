@@ -56,8 +56,8 @@ function FriendProfile() {
       <div className='friends-completed-hikes'>
         <h2>Completed Hikes</h2>
           {completedHikes.length > 0 ? (
-            completedHikes.map((hike, idx) => (
-              <p key={idx}>Completed {hike.name} on {new Date(hike.completed_at).toLocaleDateString()}</p>
+            completedHikes.map((hike) => (
+              <p key={hike.id}>Completed {hike.name} on {new Date(hike.completed_at).toLocaleDateString()}</p>
             ))
           ) : (
             <p>No completed hikes yet.</p>
