@@ -11,7 +11,7 @@ import { GeoJSON } from 'react-leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-import { getTrailClimateData } from './request.js';
+import { getClimateData, getTrailClimateData } from './request.js';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -391,7 +391,6 @@ function Map() {
     }, []);
 
     useEffect(() => {
->>>>>>> parent of 97024bd (Merge pull request #17 from WVU-CS330-2025-01-Group05/noaabugs)
         async function assignTrailIds() {
           if (!geojsonData) return;
       
