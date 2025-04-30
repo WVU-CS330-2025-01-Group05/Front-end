@@ -51,69 +51,56 @@ async function getZipCode() {
 export async function getTrailClimateData(trailFeature) {
     try {
         if (!trailFeature || !trailFeature.geometry || !trailFeature.geometry.coordinates) {
-            console.log("No valid trail feature provided");
-            return getClimateData(); //fall back to user location
+            console.warn("No valid trail geometry:", trailFeature);
+            return null; // Or optionally fallback to getClimateDataByZip
         }
-        
-        //extracts coordinates using geomtry (thank you stack overflow)
+
         const coordinates = trailFeature.geometry.coordinates;
-        
         let lat, lng;
-        
+
         if (trailFeature.geometry.type === "MultiLineString") {
-            if (coordinates.length > 0 && coordinates[0].length > 0) {
+            if (coordinates[0] && coordinates[0][0]) {
                 [lng, lat] = coordinates[0][0];
             } else {
-                console.log("Invalid MultiLineString coordinates");
-                return getClimateData();
+                console.warn("Invalid MultiLineString format:", coordinates);
+                return null;
             }
         } else if (trailFeature.geometry.type === "LineString") {
-            if (coordinates.length > 0) {
+            if (coordinates[0]) {
                 [lng, lat] = coordinates[0];
             } else {
-                console.log("Invalid LineString coordinates");
-                return getClimateData();
+                console.warn("Invalid LineString format:", coordinates);
+                return null;
             }
         } else {
-            console.log("Unsupported geometry type:", trailFeature.geometry.type);
-            return getClimateData();
+            console.warn("Unsupported geometry type:", trailFeature.geometry.type);
+            return null;
         }
-        
-        console.log("Trail coordinates:", lat, lng);
-        
+
         const data = await getMonthlyAverageWeather(lat, lng);
-        
-        // Add trail name to the data
-        const trailName = trailFeature.properties?.trailName || 
-                          trailFeature.properties?.Name || 
-                          "Selected Trail";
-        
+
+        const trailName = trailFeature.properties?.trailName ||
+                          trailFeature.properties?.Name || "Selected Trail";
+                          console.log(`fetched climate data for trail "${trailName}" at [${lat}, ${lng}]:`, data);
+
+
         return {
             ...data,
-            trailName: trailName
+            trailName
         };
     } catch (error) {
         console.error("Error in getTrailClimateData:", error);
-        return {
-            precipitation: "0.00",
-            humidity: "50.00",
-            temperature: {
-                average: "70.00",
-                max: 85,
-                min: 55
-            },
-            month: monthName,
-            status: "Error loading trail data",
-            trailName: "Selected Trail"
-        };
+        return null;
     }
 }
 
+/*
 // Get climate data based on user location (no coordinates provided)
 export async function getClimateData() {
     const zip = await getZipCode();
+    console.log("did fallback for users location zip");
     return getClimateDataByZip(zip);
-}
+}*/
 
 // Use approximate weather data based on latitude/longitude
 async function getMonthlyAverageWeather(lat, lng) {
