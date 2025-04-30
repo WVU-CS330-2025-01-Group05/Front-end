@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from 'react';
-import Clock from './clock';
 import './map.css';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -7,13 +6,12 @@ import { default as rain } from './icons/rain.svg';
 import { default as thermometer } from './icons/thermometer.png';
 import { default as humidity } from './icons/humidity.svg';
 import L from 'leaflet';
-import { GeoJSON } from 'react-leaflet';
+import {GeoJSON} from 'react-leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { getClimateData, getTrailClimateData } from './request.js';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const API_URL = process.env.REACT_APP_BACKEND_API_URL;
