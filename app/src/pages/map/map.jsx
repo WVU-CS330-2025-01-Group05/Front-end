@@ -11,7 +11,7 @@ import { GeoJSON } from 'react-leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-import { getClimateData, getTrailClimateData } from './request.js';
+import { getTrailClimateData } from './request.js';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -359,23 +359,10 @@ function Map() {
         }
       };
       
-      
-      
     
 
     useEffect(() => {
-<<<<<<< HEAD
-        fetch('/data/randomTrailsSelection/trail_lines_full.geojson')
-            .then((res) => res.json())
-            .then((data) => setGeojsonData(data))
-            .catch((err) => {
-                console.error('GeoJSON load error:', err);
-            });
 
-    }, []);
-
-    useEffect(() => {
-=======
         async function fetchClimateData() {
             try {
                 setIsLoading(true);
