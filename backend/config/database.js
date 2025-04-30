@@ -1,7 +1,7 @@
 // backend/config/database.js
 require('dotenv').config();
 
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2');
 console.log('DB_USER:', process.env.DB_USER); // This should output "root"
 
 
@@ -19,13 +19,5 @@ const pool = mysql.createPool({
    ssl: {ca: fs.readFileSync(__dirname + '\\AzureMySQLRootCert.pem')}
 });
 
-pool.getConnection()
-  .then(conn => {
-    console.log('Successfully connected to MySQL');
-    conn.release();
-  })
-  .catch(err => {
-    console.error('MySQL connection failed on startup:', err);
-  });
 
 module.exports = pool;

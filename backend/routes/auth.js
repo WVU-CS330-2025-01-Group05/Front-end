@@ -23,7 +23,7 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Insert the new user into the database
-    const [result] = await pool.execute(
+    const [result] = await pool.promise().execute(
       'INSERT INTO users (username, password, bio, nameVar) VALUES (?, ?, ?, ?)',
       [username, hashedPassword, bio, nameVar]
     );
@@ -38,7 +38,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
-    const [rows] = await pool.execute(
+    const [rows] = await pool.promise().execute(
       'SELECT * FROM users WHERE username = ?',
       [username]
     );
@@ -115,7 +115,7 @@ router.get('/search-users', async (req, res) => {
 
   try {
     // Query the database for users matching the search query
-    const [rows] = await pool.execute(
+    const [rows] = await pool.promise().execute(
       'SELECT id, username FROM users WHERE username LIKE ? LIMIT 10',
       [`%${query}%`]
     );
@@ -133,7 +133,7 @@ router.post('/send-request', authMiddleware, async (req, res) => {
   const senderId = req.user.id;
   
   try {
-    await pool.execute(
+    await pool.promise().execute(
       'INSERT INTO friend_requests (sender_id, receiver_id) VALUES (?, ?)',
       [senderId, receiverId]
     );
