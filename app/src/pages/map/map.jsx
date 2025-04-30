@@ -11,7 +11,7 @@ import { GeoJSON } from 'react-leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-import { getClimateData, getTrailClimateData } from './request.js';
+import { getTrailClimateData } from './request.js';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -368,7 +368,7 @@ function Map() {
             try {
                 setIsLoading(true);
                 setError(null);
-                const data = await getClimateData();
+                const data = await getTrailClimateData(trailData);
                 setClimateData(data);
             } catch (error) {
                 console.error("Error fetching climate data:", error);

@@ -52,7 +52,8 @@ export async function getTrailClimateData(trailFeature) {
     try {
         if (!trailFeature || !trailFeature.geometry || !trailFeature.geometry.coordinates) {
             console.log("No valid trail feature provided");
-            return getClimateData(); //fall back to user location
+            return;
+            //return getClimateData(); //fall back to user location
         }
         
         //extracts coordinates using geomtry (thank you stack overflow)
@@ -65,18 +66,18 @@ export async function getTrailClimateData(trailFeature) {
                 [lng, lat] = coordinates[0][0];
             } else {
                 console.log("Invalid MultiLineString coordinates");
-                return getClimateData();
+                //return getClimateData();
             }
         } else if (trailFeature.geometry.type === "LineString") {
             if (coordinates.length > 0) {
                 [lng, lat] = coordinates[0];
             } else {
                 console.log("Invalid LineString coordinates");
-                return getClimateData();
+                //return getClimateData();
             }
         } else {
             console.log("Unsupported geometry type:", trailFeature.geometry.type);
-            return getClimateData();
+            //return getClimateData();
         }
         
         console.log("Trail coordinates:", lat, lng);
@@ -109,11 +110,13 @@ export async function getTrailClimateData(trailFeature) {
     }
 }
 
+/*
 // Get climate data based on user location (no coordinates provided)
 export async function getClimateData() {
     const zip = await getZipCode();
+    console.log("did fallback for users location zip");
     return getClimateDataByZip(zip);
-}
+}*/
 
 // Use approximate weather data based on latitude/longitude
 async function getMonthlyAverageWeather(lat, lng) {
