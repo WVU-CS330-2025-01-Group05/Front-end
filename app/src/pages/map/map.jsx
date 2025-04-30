@@ -178,6 +178,7 @@ function SearchableTrailDropdown({ trails, selectedTrail, onTrailSelect }) {
 }
 
 function Map() {
+  const lastFetchedMapRef = useRef({});
     const [alertMessage, setAlertMessage] = useState('');
     const [showAlert, setShowAlert] = useState(false);
     const [selectedTrailRating, setSelectedTrailRating] = useState(null);
@@ -359,27 +360,7 @@ function Map() {
         }
       };
       
-      
-      
     
-
-    useEffect(() => {
-        async function fetchClimateData() {
-            try {
-                setIsLoading(true);
-                setError(null);
-                const data = await getTrailClimateData(trailData);
-                setClimateData(data);
-            } catch (error) {
-                console.error("Error fetching climate data:", error);
-                setError("Failed to load climate data");
-            } finally {
-                setIsLoading(false);
-            }
-        }
-        
-        fetchClimateData();
-    }, []);
 
     useEffect(() => {
         fetch('/data/randomTrailsSelection/trail_lines_full.geojson')
@@ -436,17 +417,45 @@ function Map() {
                 try {
                     setIsLoading(true);
                     const selectedFeature = geojsonData.features[selectedTrail];
+
+                    console.log(`requesting climate data for trail index ${selectedTrail}`);
+                    console.log("feature ", selectedFeature);
+
+
                     if (selectedFeature) {
                         //checks if we already have the data in our map
-                        if (trailClimateDataMap[selectedTrail]) {
-                            setTrailClimateData(trailClimateDataMap[selectedTrail]);
+                        const cached = lastFetchedMapRef.current[selectedTrail];
+
+                    if (cached) {
+                        const now = new Date();
+                        const fetchedTime = new Date(cached.fetchedAt);
+                        const ageInMs = now - fetchedTime;
+                        const oneHourMs = 60 * 60 * 1000;
+
+                    if (ageInMs < oneHourMs) {
+                         console.log("Using cached trail climate data (fresh, <1hr)");
+                         setTrailClimateData(cached.data);
+                             return;
                         } else {
+                          console.log(" Cached data is older than 1 hour. Re-fetching...");
+                             }
+                          }
+
+                         else {
                             const data = await getTrailClimateData(selectedFeature);
+                            console.log(" Received new trail climate data:", data);
+
                             setTrailClimateData(data);
+                            const now = new Date().toISOString();
+
                             setTrailClimateDataMap(prevMap => ({
-                                ...prevMap,
-                                [selectedTrail]: data
+                              ...prevMap,
+                               [selectedTrail]: { data, fetchedAt: now }
                             }));
+
+lastFetchedMapRef.current[selectedTrail] = { data, fetchedAt: now };
+
+                            
                         }
                     }
                 } catch (error) {
