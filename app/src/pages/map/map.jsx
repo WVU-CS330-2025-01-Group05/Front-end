@@ -5,13 +5,14 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap} from 'rea
 import 'leaflet/dist/leaflet.css';
 import { default as rain } from './icons/rain.svg';
 import { default as thermometer } from './icons/thermometer.png';
+import { default as wind } from './icons/wind.png';
 import { default as humidity } from './icons/humidity.svg';
 import L from 'leaflet';
 import { GeoJSON } from 'react-leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-import { getTrailClimateData } from './request.js';
+import { getTrailClimateData, getTrailClimateDataByCounty } from './request.js';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -442,7 +443,7 @@ function Map() {
                           }
 
                          else {
-                            const data = await getTrailClimateData(selectedFeature);
+                            const data = await getTrailClimateDataByCounty(selectedFeature);
                             console.log(" Received new trail climate data:", data);
 
                             setTrailClimateData(data);
@@ -854,7 +855,7 @@ lastFetchedMapRef.current[selectedTrail] = { data, fetchedAt: now };
                                     ) : trailClimateData ? (
                                         <div className='trail-weather-data'>
                                             <div className='weather-section'>
-                                                <h4>Weather ({trailClimateData.month} Monthly Average)</h4>
+                                                <h4>Recent Weather Data:</h4>
                                                 
                                                 <div className='weather-item'>
                                                     <img src={rain} className='weather-icon' alt="Rain" />
@@ -865,18 +866,23 @@ lastFetchedMapRef.current[selectedTrail] = { data, fetchedAt: now };
                                                 <div className='weather-item'>
                                                     <img src={thermometer} className='weather-icon' alt="Temperature" />
                                                     <span className='weather-label'>Temperature:</span>
-                                                    <span className='weather-value'>{trailClimateData.temperature.average}°C</span>
+                                                    <span className='weather-value'>{trailClimateData.temperature.average}°F</span>
                                                 </div>
                                                 
                                                 <div className='weather-item'>
                                                     <span className='weather-label'>Range:</span>
-                                                    <span className='weather-value'>{trailClimateData.temperature.min}°C - {trailClimateData.temperature.max}°C</span>
+                                                    <span className='weather-value'>{trailClimateData.temperature.min}°F - {trailClimateData.temperature.max}°F</span>
                                                 </div>
                                                 
                                                 <div className='weather-item'>
                                                     <img src={humidity} className='weather-icon' alt="Humidity" />
                                                     <span className='weather-label'>Humidity:</span>
                                                     <span className='weather-value'>{trailClimateData.humidity}%</span>
+                                                </div>
+                                                <div className='weather-item'>
+                                                    <img src={wind} className='weather-icon' alt="Humidity" />
+                                                    <span className='weather-label'>Wind Speed:</span>
+                                                    <span className='weather-value'>{trailClimateData.windSpeed} mph</span>
                                                 </div>
                                             </div>
                                             
@@ -984,15 +990,15 @@ function getHikingRecommendation(weatherData) {
     const humidity = parseFloat(weatherData.humidity);
     const precip = parseFloat(weatherData.precipitation);
     
-    if (precip > 10) {
+    if (precip > 7.5) {
         return "High precipitation expected. Consider waterproof gear or choosing another day.";
-    } else if (temp > 30) {
+    } else if (temp > 80) {
         return "Very hot conditions. Bring plenty of water and sun protection.";
-    } else if (temp < 5) {
+    } else if (temp < 40) {
         return "Cold conditions. Dress in layers and bring extra warm clothing.";
-    } else if (humidity > 80) {
+    } else if (humidity > 70) {
         return "High humidity. Stay hydrated and take breaks as needed.";
-    } else if (temp >= 15 && temp <= 25 && humidity < 70 && precip < 5) {
+    } else if (temp >= 55 && temp <= 70 && humidity < 60 && humidity > 45 && precip < 5) {
         return "Excellent hiking conditions! Enjoy your trek.";
     } else {
         return "Moderate conditions. Prepare appropriately for your hike.";

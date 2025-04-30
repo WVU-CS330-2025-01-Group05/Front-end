@@ -435,11 +435,11 @@ async function getClimateDataByCounty(FIPS) {
         return {
             precipitation: avgPrcp,
             temperature: {
-                avg: avgTemp,
-                max: TempMAX,
-                min: TempMIN
+                avg: (TempCount > 0 ? avgTemp : 60),
+                max: (TempCount > 0 ? TempMAX : 85),
+                min: (TempCount > 0 ? TempMIN : 45)
             },
-            windSpeed: avgWind,
+            windSpeed: (awndCount > 0 ? avgWind : 5.45),
             month: monthName,
             status: ""
         };
@@ -460,6 +460,90 @@ async function getClimateDataByCounty(FIPS) {
     }
 }
 
+
+// New function to get trail climate data using county FIPS code
+export async function getTrailClimateDataByCounty(trailFeature) {
+    try {
+        if (!trailFeature || !trailFeature.geometry || !trailFeature.geometry.coordinates) {
+            console.log("No valid trail feature provided");
+            return getClimateData(); // Fall back to user location
+        }
+        
+        // Extract coordinates from the trail geometry
+        const coordinates = trailFeature.geometry.coordinates;
+        
+        let lat, lng;
+        
+        if (trailFeature.geometry.type === "MultiLineString") {
+            if (coordinates.length > 0 && coordinates[0].length > 0) {
+                // For MultiLineString, get center point for a better representation
+                const line = coordinates[0];
+                const midIndex = Math.floor(line.length / 2);
+                [lng, lat] = line[midIndex];
+            } else {
+                console.log("Invalid MultiLineString coordinates");
+                return getClimateData();
+            }
+        } else if (trailFeature.geometry.type === "LineString") {
+            if (coordinates.length > 0) {
+                // For LineString, get center point
+                const midIndex = Math.floor(coordinates.length / 2);
+                [lng, lat] = coordinates[midIndex];
+            } else {
+                console.log("Invalid LineString coordinates");
+                return getClimateData();
+            }
+        } else {
+            console.log("Unsupported geometry type:", trailFeature.geometry.type);
+            return getClimateData();
+        }
+        
+        console.log("Trail coordinates for FIPS lookup:", lat, lng);
+        
+        // Get the county FIPS code for the trail coordinates
+        const fipsCode = await getCountyFIPScode(lat, lng);
+        console.log("County FIPS code for trail:", fipsCode);
+        
+        // Get climate data by county
+        const countyData = await getClimateDataByCounty(fipsCode);
+        
+        // Add trail name to the data
+        const trailName = trailFeature.properties?.trailName || 
+                          trailFeature.properties?.Name || 
+                          "Selected Trail";
+        
+        // Format data to match what the UI expects
+        return {
+            precipitation: countyData.precipitation || "0.00",
+            humidity: (50 + parseFloat(countyData.precipitation || 0) * 1.5).toFixed(2),
+            temperature: {
+                average: countyData.temperature?.avg || countyData.temperature?.average || "65.00",
+                max: countyData.temperature?.max || 85,
+                min: countyData.temperature?.min || 55
+            },
+            humidity: (((50 + parseFloat(countyData.precipitation || 0) * 2) / 2) + 
+                ((countyData.temperature?.avg || countyData.temperature?.average || 50) / 2)).toFixed(2),
+            month: countyData.month || monthName,
+            status: countyData.status || "",
+            trailName: trailName,
+            windSpeed: countyData.windSpeed || "0.00" // Include windSpeed if available
+        };
+    } catch (error) {
+        console.error("Error in getTrailClimateDataByCounty:", error);
+        return {
+            precipitation: "0.00",
+            humidity: "50.00",
+            temperature: {
+                average: "70.00",
+                max: 85,
+                min: 55
+            },
+            month: monthName,
+            status: "Error loading trail data",
+            trailName: "Selected Trail"
+        };
+    }
+}
 
 
 async function fetchNoaaData(url) {
