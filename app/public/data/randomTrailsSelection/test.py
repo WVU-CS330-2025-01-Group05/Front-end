@@ -3,8 +3,6 @@ from flask_cors import CORS
 import subprocess
 
 app = Flask(__name__)
-csrf = CSRFProtect()
-csrf.init_app(app) # Compliant
 CORS(app)  # Allow requests from different origins (React runs on another port)
 
 @app.route("/run-script", methods=["POST"])

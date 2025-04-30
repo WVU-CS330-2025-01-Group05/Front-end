@@ -248,9 +248,7 @@ const handleStarClick = (stars) => {
           onMouseEnter={() => setHoverRating(num)}
           onMouseLeave={() => setHoverRating(0)}
           onClick={() => handleStarClick(num)}
-          //onKeyDown={() => this.handleKeyDown}
           style={{ cursor: 'pointer', fontSize: '30px' }}
-          //role='button'
         >
           {(hoverRating || selectedRating) >= num ? '★' : '☆'}
         </span>

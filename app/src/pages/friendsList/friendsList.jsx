@@ -199,7 +199,6 @@ function FriendsList() {
                     setSelectedUser(user);
                     setRequestSent(false);
                   }}
-                  onKeyDown={() => this.handleKeyDown}
                 >
                   <div>{user.username}</div>
                 </div>
