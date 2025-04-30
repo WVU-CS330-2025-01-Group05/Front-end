@@ -363,14 +363,25 @@ function Map() {
     
 
     useEffect(() => {
-        fetch('/data/randomTrailsSelection/trail_lines_full.geojson')
-            .then((res) => res.json())
-            .then((data) => setGeojsonData(data))
-            .catch((err) => {
-                console.error('GeoJSON load error:', err);
-            });
 
+        async function fetchClimateData() {
+            try {
+                setIsLoading(true);
+                setError(null);
+                const data = await getClimateData(trailData);
+                setClimateData(data);
+            } catch (error) {
+                console.error("Error fetching climate data:", error);
+                setError("Failed to load climate data");
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        
+        fetchClimateData();
     }, []);
+
+    useEffect(() => {
 
     useEffect(() => {
         async function assignTrailIds() {
@@ -751,7 +762,7 @@ lastFetchedMapRef.current[selectedTrail] = { data, fetchedAt: now };
                                 id="search-radius-slider"
                                 type="range"
                                 min="5"
-                                max="100"
+                                max="400"
                                 step="5"
                                 value={searchRadiusMiles}
                                 onChange={(e) => setSearchRadiusMiles(Number(e.target.value))}
