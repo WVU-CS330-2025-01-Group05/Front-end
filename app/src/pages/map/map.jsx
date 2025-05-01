@@ -792,9 +792,9 @@ lastFetchedMapRef.current[selectedTrail] = { data, fetchedAt: now };
                            selectedTrail={selectedTrail}
                            onTrailSelect={(idx) => {
                              if (filteredTrailIndexes.length > 0) {
-                               setSelectedTrail(filteredTrailIndexes[idx]);
+                               handleTrailSelect(filteredTrailIndexes[idx]);
                              } else {
-                               setSelectedTrail(idx);
+                               handleTrailSelect(idx);
                              }
                            }}
                        />
