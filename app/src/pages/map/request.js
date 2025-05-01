@@ -110,6 +110,7 @@ export async function getTrailClimateData(trailFeature) {
 }
 
 // Get climate data based on user location (no coordinates provided)
+//Used as fallback in case of error
 export async function getClimateData() {
     const zip = await getZipCode();
     return getClimateDataByZip(zip);
@@ -139,14 +140,15 @@ async function getMonthlyAverageWeather(lat, lng) {
         
         // Humidity is related to precipitation and temperature so do math for it
         const humidity = (50 + parseFloat(precip) * 5 - (baseTempC - 20)).toFixed(2);
+        console.log("Current month for synthetic data: " + month);
         
         return {
             precipitation: precip,
             humidity: humidity,
             temperature: {
-                average: avgTemp,
-                max: maxTemp,
-                min: minTemp
+                average: ((avgTemp < 0 ? -avgTemp : avgTemp) * 1.8 +32),
+                max: ((maxTemp < 0 ? -maxTemp : maxTemp) * 1.8 +32),
+                min: ((minTemp < 0 ? -minTemp : minTemp) * 1.8 +32)
             },
             month: monthName,
             status: "Monthly average data"
@@ -166,6 +168,7 @@ async function getMonthlyAverageWeather(lat, lng) {
         };
     }
 }
+
 
 //gets by zip code for NOAA 
 async function getClimateDataByZip(zip) {
@@ -256,7 +259,7 @@ async function getClimateDataByZip(zip) {
 
         //ensure theres some sort of data if u cant fetch so app doesnt crash again!
         if (dataCount === 0) {
-            console.warn("No climate data found, returning default values");
+            console.warn("No climate data found, returning synthetic values");
             return {
                 precipitation: "0.00",
                 humidity: "50.00",
@@ -339,21 +342,33 @@ async function getCountyFIPScode(lat, lng) {
 
 
 //gets by zip code for NOAA 
-async function getClimateDataByCounty(FIPS) {
+async function getClimateDataByCounty(FIPS, latitude, longitude) {
+    // Start the timer at the beginning of the function
+    const startTime = Date.now();
+    
     console.log("Using FIPS code: " + FIPS);
     const today = new Date();
 
     const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 2);
+    yesterday.setDate(today.getDate() - 3);
 
     const tenDaysBefore = new Date(today);
-    tenDaysBefore.setDate(today.getDate() - 8);
+    tenDaysBefore.setDate(today.getDate() - 6);
 
     const formattedYesterday = formatDate(yesterday);
     const formattedTenDaysBefore = formatDate(tenDaysBefore);
 
     console.log("Yesterday:", formattedYesterday);
     console.log("Ten days before yesterday:", formattedTenDaysBefore);
+
+    const syntheticFeature = {
+        geometry: {
+            type: "LineString",
+            coordinates: [[latitude, longitude]]
+        }
+    };
+    // Get synthetic weather data
+    const syntheticData = await getTrailClimateData(syntheticFeature);
 
     try {
         let TempMIN = 100;
@@ -374,7 +389,8 @@ async function getClimateDataByCounty(FIPS) {
         const url = `https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GHCND&locationid=FIPS:${FIPS}&datatypeid=TMAX,TMIN,PRCP,AWND&units=standard&startdate=${formattedTenDaysBefore}&enddate=${formattedYesterday}&limit=100`;
         console.log(url);
         const results = await fetchNoaaData(url);
-            if (results && Array.isArray(results) && results.length >= 1) {
+        const elapsedTime = Date.now() - startTime;
+            if (results && Array.isArray(results) && results.length >= 1 && elapsedTime < 20000) {
                 for (const entry of results) {
                     switch (entry.datatype) {
                         case "PRCP":
@@ -399,26 +415,32 @@ async function getClimateDataByCounty(FIPS) {
                 }
             }
 
-
-        //ensure theres some sort of data if u cant fetch so app doesnt crash again!
-        if (dataCount === 0) {
-            console.warn("No climate data found, returning default values");
+        if (dataCount === 0 || results.length === 0 || results === null || elapsedTime > 20000) {
+            console.warn(dataCount === 0 || results.length === 0 ? 
+                "No climate data found, generating synthetic values" : 
+                `Request took too long (${elapsedTime}ms), using synthetic data instead`);
+                
+            // Create a simple synthetic feature with default coordinates
+            // We'll use coordinates for Morgantown, WV as a fallback
+                
             return {
-                precipitation: "0.00",
+                precipitation: syntheticData.precipitation.toFixed(2),
                 temperature: {
-                    average: "70.00",
-                    max: 85,
-                    min: 55
+                    avg: syntheticData.temperature.average.toFixed(2),
+                    max: syntheticData.temperature.max.toFixed(2),
+                    min: syntheticData.temperature.min.toFixed(2)
                 },
-                windSpeed: "5.00",
+                windSpeed: (Math.random() * (8 - 3) + 3).toFixed(2), 
                 month: monthName,
-                status: "No data available - using defaults"
+                status: elapsedTime > 20000 ? 
+                    "Using synthetic weather model - request timeout" : 
+                    "Using synthetic weather model - no actual data available"
             };
         }
 
         
         //datacount instead of weird hardcoded stuff
-        const avgPrcp = (25.4 * (prcpTOT / prcpCount)).toFixed(4);
+        const avgPrcp = (25.4 * (prcpTOT / prcpCount)).toFixed(2);
         const avgWind = (awndTOT / awndCount).toFixed(2);
         const avgTemp = (TempTOT / TempCount).toFixed(2);
 
@@ -433,13 +455,13 @@ async function getClimateDataByCounty(FIPS) {
 
         //return as a data object
         return {
-            precipitation: avgPrcp,
+            precipitation: prcpCount > 0 ? avgPrcp : syntheticData.precipitation.toFixed(2),
             temperature: {
-                avg: (TempCount > 0 ? avgTemp : 60),
-                max: (TempCount > 0 ? TempMAX : 85),
-                min: (TempCount > 0 ? TempMIN : 45)
+                avg: (TempCount > 0 ? avgTemp : syntheticData.temperature.average.toFixed(2)),
+                max: (TempCount > 0 ? TempMAX : syntheticData.temperature.max.toFixed(2)),
+                min: (TempCount > 0 ? TempMIN : syntheticData.temperature.min.toFixed(2))
             },
-            windSpeed: (awndCount > 0 ? avgWind : 5.45),
+            windSpeed: (awndCount > 0 ? avgWind : (Math.random() * (8 - 3) + 3).toFixed(2)),
             month: monthName,
             status: ""
         };
@@ -448,21 +470,30 @@ async function getClimateDataByCounty(FIPS) {
         console.error("Error in getClimateData:", error);
         // fallback incase an issue occurs so app wont crash lol
         return {
-            precipitation: "0.00",
+            precipitation: syntheticData.precipitation.toFixed(2),
             temperature: {
-                average: "70.00",
-                max: 85,
-                min: 55
+                avg: syntheticData.temperature.average.toFixed(2),
+                max: syntheticData.temperature.max.toFixed(2),
+                min: syntheticData.temperature.min.toFixed(2)
             },
+            windSpeed: (Math.random() * (8 - 3) + 3).toFixed(2), 
             month: monthName,
-            status: "Error loading data - using defaults"
+            status: "Using synthetic weather model - no actual data available"
         };
     }
 }
 
-
 // New function to get trail climate data using county FIPS code
 export async function getTrailClimateDataByCounty(trailFeature) {
+    const syntheticFeature = {
+        geometry: {
+            type: "LineString",
+            coordinates: [[-79.9559, 39.6295]] // Default Morgantown coordinates
+        }
+    };
+        // Get synthetic weather data
+    const syntheticData = await getTrailClimateData(syntheticFeature);
+    
     try {
         if (!trailFeature || !trailFeature.geometry || !trailFeature.geometry.coordinates) {
             console.log("No valid trail feature provided");
@@ -505,7 +536,7 @@ export async function getTrailClimateDataByCounty(trailFeature) {
         console.log("County FIPS code for trail:", fipsCode);
         
         // Get climate data by county
-        const countyData = await getClimateDataByCounty(fipsCode);
+        const countyData = await getClimateDataByCounty(fipsCode, lat, lng);
         
         // Add trail name to the data
         const trailName = trailFeature.properties?.trailName || 
@@ -515,29 +546,29 @@ export async function getTrailClimateDataByCounty(trailFeature) {
         // Format data to match what the UI expects
         return {
             precipitation: countyData.precipitation || "0.00",
-            humidity: (50 + parseFloat(countyData.precipitation || 0) * 1.5).toFixed(2),
             temperature: {
                 average: countyData.temperature?.avg || countyData.temperature?.average || "65.00",
                 max: countyData.temperature?.max || 85,
                 min: countyData.temperature?.min || 55
             },
-            humidity: (((50 + parseFloat(countyData.precipitation || 0) * 2) / 2) + 
-                ((countyData.temperature?.avg || countyData.temperature?.average || 50) / 2)).toFixed(2),
             month: countyData.month || monthName,
             status: countyData.status || "",
             trailName: trailName,
-            windSpeed: countyData.windSpeed || "0.00" // Include windSpeed if available
+            windSpeed: countyData.windSpeed || "5.40" ,
+            humidity: (((50 + parseFloat(countyData.precipitation || 0) * 2) / 2) + 
+                ((countyData.temperature?.avg || countyData.temperature?.average || 50) / 2)).toFixed(2)
         };
     } catch (error) {
         console.error("Error in getTrailClimateDataByCounty:", error);
         return {
-            precipitation: "0.00",
-            humidity: "50.00",
+            precipitation: (Math.random() * (7 - 1) + 3).toFixed(2),
+            humidity: (Math.random() * (70 - 40) + 40).toFixed(2),
             temperature: {
-                average: "70.00",
-                max: 85,
-                min: 55
+                average: (Math.random() * (70 - 55) + 55).toFixed(2),
+                max: (Math.random() * (85 - 70) + 70).toFixed(2),
+                min: (Math.random() * (55 - 40) + 40).toFixed(2)
             },
+            windSpeed: (Math.random() * (8 - 3) + 3).toFixed(2),
             month: monthName,
             status: "Error loading trail data",
             trailName: "Selected Trail"
@@ -548,12 +579,23 @@ export async function getTrailClimateDataByCounty(trailFeature) {
 
 async function fetchNoaaData(url) {
     try {
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                token: tokenFromNoaa
-            }
+        // Create a promise that rejects after 20 seconds
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => {
+                reject(new Error('Request timed out after 20 seconds'));
+            }, 20000);
         });
+
+        // Race the fetch against the timeout
+        const response = await Promise.race([
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    token: tokenFromNoaa
+                }
+            }),
+            timeoutPromise
+        ]);
 
         if (!response.ok) {
             console.error(`NOAA API error: ${response.status}`);
@@ -563,7 +605,7 @@ async function fetchNoaaData(url) {
         const data = await response.json();
         return data.results || [];
     } catch (error) {
-        console.error("Error fetching NOAA data:", error);
-        return [];
+        console.error("Error fetching NOAA data:", error.message || error);
+        return null;
     }
 }

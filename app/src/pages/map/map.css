@@ -212,15 +212,21 @@
     }
 
     .therm-icon {
-        height: 50px !important;
+        height: 52px !important;
     }
 
     .prcp-icon {
-        height: 43px !important;
+        height: 45px !important;
     }
 
     .hum-icon{
-        height: 38px !important;
+        height: 14px !important;
+        margin-right: 5px;
+    }
+
+    .wind-icon{
+        height: 12px !important;
+        margin-right: 5px;
     }
 
     .label-text {
@@ -367,8 +373,8 @@
 
 /* NEW STYLES FOR WEATHER ICONS - making them smaller */
 .weather-icon {
-    width: 16px;
-    height: 16px;
+    width: 17px;
+    height: 17px;
     margin-right: 5px;
 }
 
