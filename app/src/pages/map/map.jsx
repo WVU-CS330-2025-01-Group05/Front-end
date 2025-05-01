@@ -257,6 +257,9 @@ function Map() {
               selectedIdx = findTrailByTemperature("lowest");
               break;
             case "highest-temp":
+              selectedIdx = findTrailByTemperature("lowest");
+              break;
+            case "lowest-humidty":
               selectedIdx = findTrailByHumidity("lowest");
               break;
             case "highest-humidity":
