@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from 'react';
-import Clock from './clock';
 import './map.css';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -14,7 +13,6 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { getTrailClimateData, getTrailClimateDataByCounty } from './request.js';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const API_URL = process.env.REACT_APP_BACKEND_API_URL;
