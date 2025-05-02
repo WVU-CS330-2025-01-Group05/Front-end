@@ -47,7 +47,7 @@ function FriendsList() {
 
     window.addEventListener("friendsUpdated", fetchFriends);
     return () => window.removeEventListener("friendsUpdated", fetchFriends);
-  }, [API_URL]);
+  }, [API_URL, fetchFriends]);
 
   useEffect(() => {
     const fetchUsername = async () => {
