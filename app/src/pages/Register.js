@@ -41,6 +41,11 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    if (password.length < 8) {
+      triggerAlert("✖️ Password must be at least 8 characters.");
+      return;
+    }
+
     try { 
       const response = await axios.post(
         API_URL + '/auth/register',
