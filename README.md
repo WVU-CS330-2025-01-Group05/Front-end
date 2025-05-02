@@ -44,7 +44,7 @@ This application was built as a **group project** during **CS330 at West Virgini
 - [Lauren Taylor](https://github.com/laurentay04)
 
 ### 🎨 Frontend Developers
-- [Kierstyn Doescher](https://github.com/kiersdoes)
+- [Kiersten Doescher](https://github.com/kiersdoes)
 - [Julian Hays](https://github.com/JHays222)
 - [Blake Rogers](https://github.com/BlakeR4)
 - [Mark Khairullah](https://github.com/MarkKhairullah)
