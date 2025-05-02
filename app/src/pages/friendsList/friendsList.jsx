@@ -31,23 +31,22 @@ function FriendsList() {
     }, 2500);
   };
 
-  const fetchFriends = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/auth/friends`, {
-        withCredentials: true,
-      });
-      setFriends(response.data);
-    } catch (err) {
-      console.error("Error loading friends list:", err);
-    }
-  };
 
   useEffect(() => {
-    fetchFriends();
-
-    window.addEventListener("friendsUpdated", fetchFriends);
-    return () => window.removeEventListener("friendsUpdated", fetchFriends);
-  }, [API_URL, fetchFriends]);
+    const fetchFriends = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/auth/friends`, {
+          withCredentials: true,
+        });
+        setFriends(response.data);
+      } catch (err) {
+        console.error("Error loading friends list:", err);
+      }
+    };
+    
+    window.addEventListener("friendsUpdated", fetchFriends());
+    return () => window.removeEventListener("friendsUpdated", fetchFriends());
+  }, [API_URL]);
 
   useEffect(() => {
     const fetchUsername = async () => {
