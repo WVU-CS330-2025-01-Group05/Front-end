@@ -222,6 +222,14 @@ function Map() {
             .map((feature, idx) => {
               if (feature.properties.miles !== undefined) {
                 const { label } = getTrailDifficulty(feature.properties.miles);
+
+                // Radius checking
+                const coords = getTrailCenterCoordinates(feature); 
+                if (!coords) return null; 
+                const distance = calculateDistance(position.lat, position.lng, coords[0], coords[1]);
+                if (distance > searchRadiusMiles) return null; 
+
+                
                 if (
                   (filterValue === "easy" && label === "Easy") ||
                   (filterValue === "medium" && label === "Medium") ||
