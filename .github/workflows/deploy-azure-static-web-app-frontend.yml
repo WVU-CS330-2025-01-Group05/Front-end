@@ -29,6 +29,6 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}  # Auth token for Azure
           repo_token:                                ${{ secrets.GITHUB_TOKEN }}              # GitHub token for status updates
           action:                                    upload                                 # Deploy build output
-          app_location:                              Front-end                              # Folder containing your SPA source
+          app_location:                              app                              # Folder containing your SPA source
           output_location:                           build                                 # Folder with production build artifacts
 
