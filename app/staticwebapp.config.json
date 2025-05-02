@@ -1,0 +1,14 @@
+{
+    "routes": [
+    {
+      "route": "/pages/map/map.jsx",
+      "allowedRoles": ["authenticated"]
+    }
+  ],
+  "responseOverrides": {
+    "401": {
+      "statusCode": 302,
+      "redirect": "/pages/Login/Login.js"
+    }
+  }
+}
