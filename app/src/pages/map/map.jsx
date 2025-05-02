@@ -13,7 +13,6 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { getTrailClimateData, getTrailClimateDataByCounty } from './request.js';
 import axios from 'axios';
-import 'react-toastify/dist/ReactToastify.css';
 
 const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 
@@ -187,15 +186,11 @@ function Map() {
     const [position, setPosition] = useState(null);
     const [geojsonData, setGeojsonData] = useState(null);
     const [selectedTrail, setSelectedTrail] = useState(null);
-    const [climateData, setClimateData] = useState(null);
     const [trailClimateData, setTrailClimateData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [showStartTrailModal, setShowStartTrailModal] = useState(false);
     const [trailClimateDataMap, setTrailClimateDataMap] = useState({});
     const [activeFilter, setActiveFilter] = useState(""); 
-    const [status, setStatus] = useState(1);
-    const [rating, setRating] = useState(0);
     const [trailData, setTrailData] = useState(null);
     const [userData, setUserData] = useState({});
     const [selectedTrailName, setSelectedTrailName] = useState('');
