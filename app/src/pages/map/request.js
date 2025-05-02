@@ -470,13 +470,13 @@ async function getClimateDataByCounty(FIPS, latitude, longitude) {
         console.error("Error in getClimateData:", error);
         // fallback incase an issue occurs so app wont crash lol
         return {
-            precipitation: syntheticData.precipitation.toFixed(2),
+            precipitation: 0.0, //syntheticData.precipitation.toFixed(2),
             temperature: {
-                avg: syntheticData.temperature.average.toFixed(2),
-                max: syntheticData.temperature.max.toFixed(2),
-                min: syntheticData.temperature.min.toFixed(2)
+                avg: 50.0, //syntheticData.temperature.average.toFixed(2),
+                max: 0, //syntheticData.temperature.max.toFixed(2),
+                min: 80//syntheticData.temperature.min.toFixed(2)
             },
-            windSpeed: (Math.random() * (8 - 3) + 3).toFixed(2), 
+            windSpeed: 30, //(Math.random() * (8 - 3) + 3).toFixed(2), 
             month: monthName,
             status: "Using synthetic weather model - no actual data available"
         };
