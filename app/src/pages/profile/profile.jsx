@@ -42,8 +42,6 @@ function Profile() {
   });
 
   const [completedHikes, setCompletedHikes] = useState([]);
-
-  const trailId = trailData.trail_id;
   const [trailName, setTrailName] = useState('');
 
   useEffect(() => {
@@ -124,7 +122,7 @@ function Profile() {
     if (trailId) {
       fetchTrailName();
     }
-  }, [API_URL, trailId]);
+  }, [API_URL, trailData.trail_id]);
 
   useEffect(() => {
     const fetchCompletedHikes = async () => {
