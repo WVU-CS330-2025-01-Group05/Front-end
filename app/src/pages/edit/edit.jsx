@@ -36,7 +36,7 @@ function Edit() {
     };
 
     fetchUserData();
-  }, []);
+  }, [API_URL]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

@@ -37,7 +37,7 @@ function FriendProfile() {
     };
 
     fetchCompletedHikes();
-  }, [API_URL]);
+  }, [API_URL, id]);
 
   if (!friendData) {
     return <div>Loading...</div>;

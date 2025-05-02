@@ -43,7 +43,7 @@ function FriendsList() {
         console.error("Error loading friends list:", err);
       }
     };
-
+    
     window.addEventListener("friendsUpdated", fetchFriends());
     return () => window.removeEventListener("friendsUpdated", fetchFriends());
   }, [API_URL]);
