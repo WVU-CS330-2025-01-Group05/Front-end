@@ -5,11 +5,10 @@
       "allowedRoles": ["authenticated"]
     },
     {
-      "navigationFallback": {
+        "route": "/*",
         "rewrite": "/index.html",
         "statusCode": 200
       }
-    }
   ],
   "responseOverrides": {
     "401": {
