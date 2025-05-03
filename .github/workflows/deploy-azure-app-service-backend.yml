@@ -27,6 +27,6 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: wv-temperature-map-backend   # <— replace with your App Service name
+          app-name: CS330-2025-01-Group05-backend   # <— replace with your App Service name
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: backend
