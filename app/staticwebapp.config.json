@@ -1,14 +1,9 @@
 {
-  "routes": [
+    "routes": [
     {
-      "route": "/pages/*",
+      "route": "/pages/map/map.jsx",
       "allowedRoles": ["authenticated"]
-    },
-    {
-        "route": "/*",
-        "rewrite": "/index.html",
-        "statusCode": 200
-      }
+    }
   ],
   "responseOverrides": {
     "401": {
