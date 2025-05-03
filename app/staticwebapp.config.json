@@ -1,15 +1,16 @@
 {
-    "routes": [
+  "routes": [
     {
       "route": "/pages/*",
       "allowedRoles": ["authenticated"]
     },
     {
-    "navigationFallback": {
-    "rewrite": "/index.html",
-    "statusCode": 200
+      "navigationFallback": {
+        "rewrite": "/index.html",
+        "statusCode": 200
+      }
     }
-        ],
+  ],
   "responseOverrides": {
     "401": {
       "statusCode": 302,
