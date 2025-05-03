@@ -7,8 +7,9 @@
     {
     "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/static/*", "/assets/*"]
-    },
+    "statusCode": 200
+    }
+    ],
   "responseOverrides": {
     "401": {
       "statusCode": 302,
