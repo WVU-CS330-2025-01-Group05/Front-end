@@ -577,6 +577,11 @@ function Map() {
             if (trailId) {
                 fetchTrailRating(trailId);
             }
+            else {
+                //makes sure ratings default to 0 if trailId doesn't exist
+                setSelectedTrailRating(0);
+                setSelectedTrailRatingCount(0);
+            }
             if (feature.properties?.Name) {
                 setSelectedTrailName(feature.properties.Name);
             } else {
