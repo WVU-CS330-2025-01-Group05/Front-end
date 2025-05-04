@@ -309,6 +309,11 @@ function Map() {
       };
       
       const fetchTrailRating = async (trailId) => {
+
+
+        setSelectedTrailRating(null);
+        setSelectedTrailRatingCount(null);
+        
   if (!trailId) {
     console.warn('Trail ID is undefined, not fetching rating.');
     return;
