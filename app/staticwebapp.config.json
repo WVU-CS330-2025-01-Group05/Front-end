@@ -1,14 +1,6 @@
 {
-    "routes": [
-    {
-      "route": "/pages/map/map.jsx",
-      "allowedRoles": ["authenticated"]
-    }
-  ],
-  "responseOverrides": {
-    "401": {
-      "statusCode": 302,
-      "redirect": "/pages/Login.js"
-    }
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/images/*.{png,jpg,gif}", "/static/*"]
   }
 }
