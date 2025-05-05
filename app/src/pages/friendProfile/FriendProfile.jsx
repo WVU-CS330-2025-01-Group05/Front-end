@@ -9,7 +9,7 @@ function FriendProfile() {
   const [friendData, setFriendData] = useState(null);
   const [completedHikes, setCompletedHikes] = useState([]);
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_BACKEND_API_URL || '';
+  const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'https://cs330-2025-01-group05-backend-fceefzc8c5gfemc7.eastus2-01.azurewebsites.net';
 
   useEffect(() => {
     const fetchFriendData = async () => {

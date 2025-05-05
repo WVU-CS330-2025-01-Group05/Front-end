@@ -46,6 +46,7 @@ function Profile() {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      console.log("Trying to fetch user data...");
       try {
         const response = await axios.get(`${API_URL}/auth/profile`, {
           withCredentials: true,
