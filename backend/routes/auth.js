@@ -16,7 +16,7 @@ router.post('/logout', (req, res) => {
 
 router.post('/register', async (req, res) => {
   const { username, password, bio = 'No Bio', nameVar = 'John Doe' } = req.body;
-
+  console.log("User is registering...");
   
   try {
     // Hash the user's password
