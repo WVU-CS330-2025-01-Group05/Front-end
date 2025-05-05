@@ -60,6 +60,7 @@ const Register = () => {
         triggerAlert("✖️ Registration failed. Try different username.");
       }
     } catch (error) {
+      console.log("Attempted to post to API_URL/auth/register");
       console.error('Registration failed:', error);
       triggerAlert('✖️ Error registering user.');
     }
