@@ -9,24 +9,34 @@ on:
 jobs:
   deploy-backend:
     runs-on: ubuntu-latest
+
     steps:
-      # 1) Checkout your code
+      # 1) Checkout code
       - uses: actions/checkout@v3
 
-      # 2) Install Node & your dependencies
+      # 2) Setup Node
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
 
+      # 3) Install backend dependencies
       - name: Install dependencies
         working-directory: backend
         run: npm ci
 
-      # 3) Deploy straight from the backend folder
+      # 4) Zip the backend folder with node_modules
+      - name: Zip backend
+        run: |
+          cd backend
+          zip -r ../backend.zip .
+
+      # 5) Deploy ZIP to Azure App Service
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: CS330-2025-01-Group05-backend   # <— replace with your App Service name
+          app-name: CS330-2025-01-Group05-backend
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ./backend
+          package: backend.zip
+
+
