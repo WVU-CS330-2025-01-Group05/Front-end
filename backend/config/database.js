@@ -16,7 +16,7 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-   ssl: {ca: fs.readFileSync(__dirname + '\\AzureMySQLRootCert.pem')}
+   ssl: {ca: fs.readFileSync(__dirname + '/AzureMySQLRootCert.pem')}
 });
 
 
