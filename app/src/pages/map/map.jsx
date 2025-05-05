@@ -128,6 +128,7 @@ function LocationHandler({ setPosition }) {
 // Center map based on selected trail
 function TrailCenterHandler({ selectedTrail, geojsonData }) {
     const map = useMap();
+    console.log(`using ${API_URL}`);
    
     useEffect(() => {
         if (selectedTrail !== null && geojsonData && geojsonData.features) {
