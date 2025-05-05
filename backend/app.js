@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: 'https://gentle-river-0a6ef060f.6.azurestaticapps.net',
   credentials: true
 }));
 
