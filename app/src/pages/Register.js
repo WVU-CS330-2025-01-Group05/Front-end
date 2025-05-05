@@ -20,7 +20,7 @@ const Register = () => {
   const [bio] = useState('No Bio');
   const [img] = useState('/default pfp.jpg');
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_BACKEND_API_URL || ''; // Fallback for local development
+  const API_URL = process.env.REACT_APP_BACKEND_API_URL; // Fallback for local development
   
   const [alertMessage, setAlertMessage] = useState('');
     const [showAlert, setShowAlert] = useState(false);
