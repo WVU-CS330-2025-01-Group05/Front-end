@@ -19,7 +19,7 @@ const Login = ({ setAuthenticated }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_BACKEND_API_URL || ''; // Fallback for local development
+  const API_URL = process.env.REACT_APP_BACKEND_API_URL || 'https://cs330-2025-01-group05-backend-fceefzc8c5gfemc7.eastus2-01.azurewebsites.net'; // Fallback for local development
 
   const [alertMessage, setAlertMessage] = useState('');
   const [showAlert, setShowAlert] = useState(false);
@@ -60,6 +60,7 @@ const Login = ({ setAuthenticated }) => {
         triggerAlert('✖️ Login failed. Please check your credentials.');
       }
     } catch (error) {
+      console.log(`Attempting to post to ${API_URL}/auth/login`);
       console.error('Login failed:', error);
       triggerAlert('✖️ Invalid credentials');
     }
