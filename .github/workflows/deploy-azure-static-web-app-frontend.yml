@@ -5,7 +5,7 @@ name: Azure Static Web Apps CI/CD
 on:
   push:
     branches:
-      - Azure-backend          # Only fire this workflow when demo2 branch is pushed
+      - main          # Only fire this workflow when demo2 branch is pushed
   workflow_dispatch:   # Allow manual triggering from the Actions UI
 
 jobs:
