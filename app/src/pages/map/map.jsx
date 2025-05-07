@@ -799,38 +799,38 @@ function Map() {
     const findTrailByTemperature = useCallback((type) => {
         if (!syntheticClimateDataMap || Object.keys(syntheticClimateDataMap).length === 0 ||
             !position || !geojsonData) return null;
-       
+    
         let selectedIdx = null;
         let compareTemp = type === "lowest" ? Infinity : -Infinity;
-       
+    
         Object.entries(syntheticClimateDataMap).forEach(([idx, data]) => {
             if (data && data.temperature &&
                 (data.temperature.average || data.temperature.avg)) {
-               
+            
                 const temp = parseFloat(data.temperature.average || data.temperature.avg);
-               
+            
                 // Check within radius
                 const feature = geojsonData.features[idx];
                 const coords = getTrailCenterCoordinates(feature);
                 if (!coords) return;
-               
+            
                 const distance = calculateDistance(
                     position.lat, position.lng,
                     coords[0], coords[1]
                 );
-               
+            
                 if (distance > searchRadiusMiles) return;
-                /*
-                if ((type === "lowest" && humidity < compareHumidity) ||
-                    (type === "highest" && humidity > compareHumidity)) {
-                    compareHumidity = humidity;
+                
+                if ((type === "lowest" && temp < compareTemp) ||
+                    (type === "highest" && temp > compareTemp)) {
+                    compareTemp = temp;
                     selectedIdx = parseInt(idx);
-                }*/
+                }
             }
         });
-       
         return selectedIdx;
     }, [geojsonData, position, searchRadiusMiles, syntheticClimateDataMap]);
+
 
 
     // Helper to get trail center coordinates
@@ -970,8 +970,6 @@ function Map() {
                                 <option value="farthest">Farthest from me</option>
                                 <option value="lowest-temp">Lowest temperature</option>
                                 <option value="highest-temp">Highest temperature</option>
-                                <option value="lowest-humidity">Lowest humidity</option>
-                                <option value="highest-humidity">Highest humidity</option>
                                 <option value="Best-Views">Best-Views</option>
                                 <option value="easy">Easy Difficulty</option>
                                 <option value="medium">Medium Difficulty</option>

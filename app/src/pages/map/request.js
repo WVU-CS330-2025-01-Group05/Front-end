@@ -98,41 +98,51 @@ export function generateSyntheticWeatherData(feature, index = 0) {
         "August", "September", "October", "November", "December"];
     const monthName = monthList[month];
     
-    // Add some day-to-day variation with a deterministic seed based on date and trail
+    // Add proper variation with a deterministic seed based on trail location, ID, and date
     const trailId = feature.properties?.trail_id || index;
     const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-    const seed = (trailId + dayOfYear) / 100;
     
-    // Random function that gives consistent results for the same seed
-    const getRandomValue = (min, max) => {
-        const x = Math.sin(seed) * 10000;
+    // Include location data in the seed calculation
+    const locationFactor = (lng) / 40;
+    const baseSeed = trailId + dayOfYear + locationFactor;
+    
+    // Improved random function that produces different values for different properties
+    const getRandomValue = (min, max, offset = 0) => {
+        const seedWithOffset = baseSeed + offset;
+        const x = Math.sin(seedWithOffset * 12345) * 10000;
         const rand = x - Math.floor(x); // value between 0-1
         return min + rand * (max - min);
     };
     
     try {
-
-        const baseTempC = 25 - Math.abs(lat - 30) * 0.5;
+        const baseC = 58 - Math.abs(lng);
+        const baseTempC = baseC < 0 ? -baseC : baseC;
         
         // Month affects temperature (seasonal variation)
         const monthFactor = Math.cos((month - 6) * Math.PI / 6);
         const tempAdjustment = 10 * monthFactor;
         
-        // Calculate temp values
+        // Calculate temp values with different offsets for variation
         const avgTemp = (baseTempC + tempAdjustment);
-        const minTemp = (baseTempC + tempAdjustment - 5 - getRandomValue(0, 3));
-        const maxTemp = (baseTempC + tempAdjustment + 5 + getRandomValue(0, 3));
+        const minTemp = (baseTempC + tempAdjustment - (10 - getRandomValue(0, 3, 1)));
+        const maxTemp = (baseTempC + tempAdjustment + (5 + getRandomValue(0, 3, 2)));
         
-        // Precipitation varies by month and location
-        let precip = (2 + Math.sin(month * Math.PI / 6) * 2 + getRandomValue(0, 2));
+        // Precipitation varies by month and location - use a different offset
+        let precip = (2 + Math.sin(month * Math.PI / 6) * 2 + getRandomValue(0, 2, 3));
         if (month >= 5 && month <= 8) precip = (precip * 1.5); // More rain in summer
         
-        // Humidity is related to precipitation and temperature
-        const humidity = (50 + precip - (2 * (12.8 - avgTemp)));
+        // Humidity is related to precipitation and temperature - use another offset
+        const humidity = (40 + precip - (2 * (12.8 - avgTemp)) + getRandomValue(-5, 5, 4));
         
-        // Wind speed calculation (in mph)
+        // Wind speed calculation with its own offset
         const baseWind = 8 - monthFactor * 2; // More wind in winter
-        const windSpeed = baseWind + getRandomValue(-3, 5);
+        const windSpeed = baseWind + getRandomValue(-3, 5, 5);
+        
+        // Ensure min and max temperatures are properly ordered
+        const maxy = maxTemp < 0 ? -maxTemp : maxTemp;
+        const miny = minTemp < 0 ? -minTemp : minTemp;
+        const finalMinTemp = Math.min(miny, maxy);
+        const finalMaxTemp = Math.max(miny, maxy);
         
         // Convert temps to Fahrenheit and format all values
         return {
@@ -140,15 +150,14 @@ export function generateSyntheticWeatherData(feature, index = 0) {
             humidity: humidity.toFixed(2),
             temperature: {
                 average: ((avgTemp < 0 ? -avgTemp : avgTemp) * 1.8 + 32).toFixed(2),
-                max: ((maxTemp < 0 ? -maxTemp : maxTemp) * 1.8 + 32).toFixed(2),
-                min: ((minTemp < 0 ? -minTemp : minTemp) * 1.8 + 32).toFixed(2)
+                max: ((finalMaxTemp < 0 ? -finalMaxTemp : finalMaxTemp) * 1.8 + 32).toFixed(2),
+                min: ((finalMinTemp < 0 ? -finalMinTemp : finalMinTemp) * 1.8 + 32).toFixed(2)
             },
             windSpeed: windSpeed.toFixed(2),
             month: monthName,
             status: "Monthly average data",
             trailName: feature.properties?.Name || `Trail ${index + 1}`,
             isSynthetic: true,
-            //generatedOn: today.toISOString(),
         };
     } catch (error) {
         console.error("Error generating weather data:", error);
@@ -168,7 +177,6 @@ export function generateSyntheticWeatherData(feature, index = 0) {
         };
     }
 }
-
 
 // Get zip code from IP with caching
 async function getZipCode() {
@@ -231,7 +239,7 @@ export async function getTrailClimateData(trailFeature) {
         
         if (trailFeature.geometry.type === "MultiLineString") {
             if (coordinates.length > 0 && coordinates[0].length > 0) {
-                [lng, lat] = coordinates[0][0];
+                [lng, lat] = coordinates[0][1];
             } else {
                 console.log("Invalid MultiLineString coordinates");
                 return getClimateData();
@@ -361,7 +369,7 @@ async function getMonthlyAverageWeather(lat, lng) {
     }
 }
 
-// Gets by zip code for NOAA with improved caching
+// Gets by zip code for NOAA with improved caching (used only in case of complete error)
 async function getClimateDataByZip(zip) {
     const cacheKey = createCacheKey('zipClimate', { zip });
     const cachedData = getValidCachedData(cacheKey);
@@ -597,7 +605,7 @@ async function getClimateDataByCounty(FIPS, latitude, longitude) {
         const results = await fetchNoaaData(url);
         const elapsedTime = Date.now() - startTime;
         
-        if (results && Array.isArray(results) && results.length >= 1 && elapsedTime < 20000) {
+        if (results && Array.isArray(results) && results.length >= 1 && elapsedTime < 15000) {
             for (const entry of results) {
                 switch (entry.datatype) {
                     case "PRCP":
@@ -622,7 +630,7 @@ async function getClimateDataByCounty(FIPS, latitude, longitude) {
             }
         }
 
-        if (dataCount === 0 || results?.length === 0 || elapsedTime > 20000) {
+        if (dataCount === 0 || results?.length === 0 || elapsedTime > 15000) {
             console.warn(dataCount === 0 || results?.length === 0 ? 
                 "No climate data found, using synthetic values" : 
                 `Request took too long (${elapsedTime}ms), using synthetic data instead`);
@@ -637,7 +645,7 @@ async function getClimateDataByCounty(FIPS, latitude, longitude) {
                 windSpeed: syntheticData.windSpeed,
                 humidity: syntheticData.humidity,
                 month: monthName,
-                status: elapsedTime > 20000 ? 
+                status: elapsedTime > 15000 ? 
                     "Using synthetic weather model - request timeout" : 
                     "Using synthetic weather model - no actual data available"
             };
@@ -836,7 +844,7 @@ async function fetchNoaaData(url) {
                     abortControllers[requestKey].abort();
                 }
                 reject(new Error('Request timed out after 20 seconds'));
-            }, 20000);
+            }, 15000);
         });
 
         const response = await Promise.race([
