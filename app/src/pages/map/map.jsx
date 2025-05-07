@@ -970,7 +970,7 @@ function Map() {
                                 <option value="farthest">Farthest from me</option>
                                 <option value="lowest-temp">Lowest temperature</option>
                                 <option value="highest-temp">Highest temperature</option>
-                                <option value="Best-Views">Best-Views</option>
+                                <option value="Best-Views">Best Views</option>
                                 <option value="easy">Easy Difficulty</option>
                                 <option value="medium">Medium Difficulty</option>
                                 <option value="hard">Hard Difficulty</option>
