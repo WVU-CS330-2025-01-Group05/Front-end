@@ -532,7 +532,28 @@ function Map() {
                
                 setFilteredTrailIndexes(indexes);
                 setSelectedTrail(null);
-            } else {
+
+            } else if (filterValue === "Best-Views") {
+              const indexes = geojsonData.features
+                  .map((feature, idx) => {
+                      if (feature.properties.goodView === true) {
+                          // Radius checking
+                          const coords = getTrailCenterCoordinates(feature);
+                          if (!coords) return null;
+                          const distance = calculateDistance(position.lat, position.lng, coords[0], coords[1]);
+                          if (distance > searchRadiusMiles) return null;
+          
+                          return idx; // Only return index if within radius
+                      }
+                      return null;
+                  })
+                  .filter((idx) => idx !== null); // Remove non-matches
+          
+              setFilteredTrailIndexes(indexes);
+              setSelectedTrail(null);
+          }
+          
+           else {
                 setFilteredTrailIndexes([]);
                 let selectedIdx = null;
                
@@ -550,6 +571,8 @@ function Map() {
                         selectedIdx = findTrailByTemperature("highest");
                         break;
                     case "lowest-humidty":
+                        break;
+                    case "Best-Views":
                         break;
                     case "highest-humidity":
                         break;
@@ -769,6 +792,8 @@ function Map() {
         return farthestIdx;
     }, [geojsonData, position, searchRadiusMiles]);
 
+    
+
 
     // Find trail by temperature helper - USES SYNTHETIC DATA
     const findTrailByTemperature = useCallback((type) => {
@@ -947,6 +972,7 @@ function Map() {
                                 <option value="highest-temp">Highest temperature</option>
                                 <option value="lowest-humidity">Lowest humidity</option>
                                 <option value="highest-humidity">Highest humidity</option>
+                                <option value="Best-Views">Best-Views</option>
                                 <option value="easy">Easy Difficulty</option>
                                 <option value="medium">Medium Difficulty</option>
                                 <option value="hard">Hard Difficulty</option>
