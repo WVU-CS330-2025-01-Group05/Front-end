@@ -3,22 +3,9 @@
         {
             "mysqlOptions": {
                 "authProtocol": "default",
-                "enableSsl": "Disabled"
-            },
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 3306,
-            "driver": "MySQL",
-            "name": "Local MySQL",
-            "database": "authdb",
-            "username": "root"
-        },
-        {
-            "mysqlOptions": {
-                "authProtocol": "default",
                 "enableSsl": "Enabled",
                 "ssl": {
-                    "ca": "C:\\Users\\grace\\OneDrive\\Documents\\GitHub\\Front-end\\backend\\config\\AzureMySQLRootCert.pem"
+                    "ca": "C:\\Users\\lktay\\OneDrive\\Desktop\\hotd\\Front-end-main\\backend\\config\\AzureMySQLRootCert.pem"
                 }
             },
             "previewLimit": 50,
@@ -29,6 +16,20 @@
             "database": "authdb",
             "username": "mysqladmin",
             "password": "EatShitPitt!2025.01"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "Local MySQL",
+            "database": "authdb",
+            "username": "root",
+            "password": "hikeoftheday"
         }
     ]
 }
